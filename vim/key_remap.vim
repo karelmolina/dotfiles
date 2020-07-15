@@ -1,9 +1,9 @@
 " leader key to space
-let mapleader=" "
+let mapleader=","
 
-nnoremap<C-s> :w<CR>
-inoremap<C-s> :w<CR>
-vnoremap<C-s> :w!<CR>
+nnoremap<C-s> <ESC>:w<CR>
+inoremap<C-s> <ESC>:w<CR>
+vnoremap<C-s> <ESC>:w!<CR>
 
 " remap splitting windows
 nnoremap <C-h> <C-w>h
