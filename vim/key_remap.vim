@@ -44,3 +44,7 @@ inoremap <leader>t <Esc>:tabnext<CR>
 nnoremap <C-t> :tabnew<CR>
 inoremap <C-t> :tabnew<CR>
 
+" resize pane
+nnoremap <silent> <Leader>+ :exe "vertical resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "vertical resize " . (winheight(0) * 2/3)<CR>
+

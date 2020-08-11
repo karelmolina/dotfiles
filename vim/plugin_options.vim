@@ -26,7 +26,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:suntastic_ruby_checkers= ['rubocop']
+let g:syntastic_ruby_checkers= ['rubocop']
 " set statusline+=%#warningmsg#
 " set statusline+=%{SyntasticStatuslineFlag()}
 " set statusline+=%*
@@ -103,10 +103,10 @@ noremap \c :Commentary<CR
 autocmd FileType ruby setlocal commentstring=#\ %s
 
 " rubocop
+nmap <Leader>ru :RuboCop<CR>
 " especificar la ruta del yml:
 " let g:vimrubocop_config = 'path'
 "let g:vimrubocop_keymap = 0
-"nmap <Leader>r :RuboCop<CR>
 
 " Fzf
 
@@ -126,7 +126,7 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 nnoremap <C-p> :Files <CR>
 execute "set <M-f>=\ef"
 nnoremap <M-f> f
-nnoremap <M-f> :RG<CR>  
+nnoremap <M-f> :RG<CR>
 
 " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
 let g:fzf_layout = { 'window': 'enew' }
@@ -145,7 +145,7 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 " Si se genera un error al iniciar vim es porque no esta
 " configurado correctamente esta ruta
 let $RUBYHOME="$HOME/.rvm/rubies/default"
-set rubydll=$HOME/.rvm/rubies/default/lib/libruby.so.2.6
+set rubydll=$HOME/.rvm/rubies/default/lib/libruby.so
 " buscar metodo dentro de las ventanas abiertas
 nmap <leader>sd <Plug>(rubyjump)
 nmap <leader>sl <Plug>(rubyjump_local)
@@ -167,7 +167,7 @@ function! s:check_back_space() abort
 endfunction
 
 " use <c-space>for trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent> <NUL> coc#refresh()
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -175,6 +175,13 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+let g:coc_global_extensions = [
+  \ 'coc-snippets',
+  \ 'coc-pairs',
+  \ 'coc-tsserver',
+  \ 'coc-json',
+  \ 'coc-css',
+  \ ]
 
 " Emmet
 
@@ -187,3 +194,8 @@ if has("persistent_undo")
     set undodir=$HOME."/.vim/.undodir"
     set undofile
 endif
+
+" vim workspace
+let g:workspace_autosave = 0
+let g:workspace_session_directory = $HOME . '/.vim/sessions/'
+nnoremap <leader>s :ToggleWorkspace<CR>

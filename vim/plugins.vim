@@ -106,4 +106,7 @@ Plugin 'mattn/emmet-vim'
 "  undotree
 Plugin 'mbbill/undotree'
 
+" vim workspace
+Plugin 'thaerkh/vim-workspace'
+
 call vundle#end()            " required
