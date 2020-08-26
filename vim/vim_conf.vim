@@ -10,6 +10,7 @@ set shortmess-=S
 set number
 set t_Co=256
 set updatetime=100
+set nowrap
 
 " Do not redraw screen in the middle of a macro. Makes them complete faster.
 set lazyredraw

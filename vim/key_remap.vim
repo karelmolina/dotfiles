@@ -48,3 +48,7 @@ inoremap <C-t> :tabnew<CR>
 nnoremap <silent> <Leader>+ :exe "vertical resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "vertical resize " . (winheight(0) * 2/3)<CR>
 
+" copy
+inoremap <C-v> <ESC>"+pa
+vnoremap <C-c> "+y
+vnoremap <C-x> "+d
