@@ -7,7 +7,7 @@ let g:airline_theme='oceanicnext'
 
 " NerdTree
 let NERDTreeShowHidden=1
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
     \ "Untracked" : "✭",
