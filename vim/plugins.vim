@@ -109,4 +109,7 @@ Plugin 'mbbill/undotree'
 " vim workspace
 Plugin 'thaerkh/vim-workspace'
 
+" Oceanic theme
+Plugin 'mhartington/oceanic-next'
+
 call vundle#end()            " required
