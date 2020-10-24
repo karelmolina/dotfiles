@@ -1,9 +1,10 @@
 " colorscheme jellybeans
-let g:gruvbox_contrast_dark = 'hard'
+"let g:gruvbox_contrast_dark = 'hard'
 " SCHEME
 colorscheme OceanicNext
 
 let g:airline_theme='oceanicnext'
+let g:oceanic_next_terminal_bold = 1
 
 " NerdTree
 let NERDTreeShowHidden=1
@@ -53,9 +54,6 @@ let g:ruby_indent_access_modifier_style = 'normal'
 let g:ruby_indent_assignment_style = 'variable'
 let g:ruby_indent_block_style = 'do'
 
-" vim-pasta
-let g:pasta_enabled_filetypes = ['ruby', 'javascript', 'css', 'sh', 'erb']
-
 " gitgutter
 let g:gitgutter_highlight_linenrs = 1
 nmap <leader>n <Plug>(GitGutterNextHunk)
@@ -67,14 +65,9 @@ let g:gitgutter_sign_removed = '--'
 nmap ghs <Plug>(GitGutterStageHunk)
 nmap ghu <Plug>(GitGutterUndoHunk)
 
-" Vimux
-let g:VimuxHeight = "30"
-let g:VimuxOrientation = "v"
-let g:VimuxUseNearest = 0
-map <leader>vp :VimuxPromptCommand<CR>
-
-" vim airliniie
-let g:airline_theme= 'base16'
+" vim airlinie
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme= 'wombat'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -108,12 +101,8 @@ autocmd FileType ruby setlocal commentstring=#\ %s
 
 " rubocop
 nmap <Leader>ru :RuboCop<CR>
-" especificar la ruta del yml:
-" let g:vimrubocop_config = 'path'
-"let g:vimrubocop_keymap = 0
 
 " Fzf
-
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
@@ -142,20 +131,6 @@ let g:fzf_layout = { 'window': '10new' }
 " - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
 "   'previous-history' instead of 'down' and 'up'.
 let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" Ruby Jump
-" Se tiene que especificar la ruta de ruby y la el rubylibs
-" para poder usar este plugin
-" Si se genera un error al iniciar vim es porque no esta
-" configurado correctamente esta ruta
-let $RUBYHOME="$HOME/.rvm/rubies/default"
-set rubydll=$HOME/.rvm/rubies/default/lib/libruby.so
-" buscar metodo dentro de las ventanas abiertas
-nmap <leader>sd <Plug>(rubyjump)
-nmap <leader>sl <Plug>(rubyjump_local)
-" mover al metodo previo o siguiente
-nmap <silent> <C-n> <Plug>(rubyjump_next_forward)
-nmap <silent> <C-m> <Plug>(rubyjump_prev_backward)
 
 " Coc Vim
 " use <tab> for trigger completion and navigate to the next complete item
@@ -186,20 +161,3 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-css',
   \ ]
-
-" Emmet
-
-" try complete html tag
-" inoremap <buffer> > ></<C-x><C-o><C-y><C-o>%<CR><C-o>O
-
-"  UndoTree
-nnoremap <F5> :UndotreeToggle<cr>
-if has("persistent_undo")
-    set undodir=$HOME."/.vim/.undodir"
-    set undofile
-endif
-
-" vim workspace
-let g:workspace_autosave = 0
-let g:workspace_session_directory = $HOME . '/.vim/sessions/'
-nnoremap <leader>s :ToggleWorkspace<CR>
