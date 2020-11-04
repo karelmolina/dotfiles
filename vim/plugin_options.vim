@@ -1,10 +1,6 @@
-" colorscheme jellybeans
-"let g:gruvbox_contrast_dark = 'hard'
 " SCHEME
-colorscheme OceanicNext
-
-let g:airline_theme='oceanicnext'
-let g:oceanic_next_terminal_bold = 1
+"colorscheme railscasts
+colorscheme hybrid
 
 " NerdTree
 let NERDTreeShowHidden=1
@@ -23,18 +19,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 map <C-b> :NERDTreeToggle %<CR>
 let g:NERDTreeDirArrowExpandable = '->'
 let g:NERDTreeDirArrowCollapsible = '➘'
-
-" Syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_ruby_checkers= ['rubocop']
-let g:syntastic_aggregate_errors = 1
-let g:syntastic_quiet_messages = { "type": "style" }
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
 
 " Multicursor config keybinding
 let g:multi_cursor_use_default_mapping=0
@@ -100,6 +84,7 @@ noremap \c :Commentary<CR
 autocmd FileType ruby setlocal commentstring=#\ %s
 
 " rubocop
+let g:vimrubocop_keymap = 0
 nmap <Leader>ru :RuboCop<CR>
 
 " Fzf

@@ -5,7 +5,6 @@ syntax enable
 set shell=bash\ -l
 syntax on
 set clipboard=unnamedplus
-set background=dark " Setting dark mode"
 set shortmess-=S
 set number
 set t_Co=256

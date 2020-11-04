@@ -38,9 +38,6 @@ Plugin 'terryma/vim-multiple-cursors'
 " Ident Line
 Plugin 'Yggdroot/indentLine'
 
-" Syntax checker
-Plugin 'scrooloose/syntastic'
-
 " Additional syntaxes and markup/programming languages
 Plugin 'sheerun/vim-polyglot'
 
@@ -79,5 +76,9 @@ Plugin 'mattn/emmet-vim'
 
 " Oceanic theme
 Plugin 'mhartington/oceanic-next'
+
+Plugin 'jpo/vim-railscasts-theme'
+
+Plugin 'w0ng/vim-hybrid'
 
 call vundle#end()            " required
