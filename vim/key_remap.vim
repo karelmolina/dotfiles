@@ -52,3 +52,7 @@ nnoremap <silent> <Leader>- :exe "vertical resize " . (winheight(0) * 2/3)<CR>
 inoremap <C-v> <ESC>"+pa
 vnoremap <C-c> "+y
 vnoremap <C-x> "+d
+
+" copy filename and filepath
+nmap <leader>cn :let @*=expand("%")<CR>
+nmap <leader>cp :let @*=expand("%:p")<CR>

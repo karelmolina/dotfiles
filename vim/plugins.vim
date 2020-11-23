@@ -74,6 +74,9 @@ Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 " emmet -- javascript
 Plugin 'mattn/emmet-vim'
 
+" surround
+Plugin 'tpope/vim-surround'
+
 " Oceanic theme
 Plugin 'mhartington/oceanic-next'
 

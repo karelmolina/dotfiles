@@ -10,6 +10,7 @@ set number
 set t_Co=256
 set updatetime=100
 set nowrap
+set background=dark
 
 " Do not redraw screen in the middle of a macro. Makes them complete faster.
 set lazyredraw
@@ -43,6 +44,9 @@ set splitright
 
 " max text length
 set textwidth=120
+
+" search for visual select
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " get rid of trailing whitespace on :w
 autocmd BufWritePre * %s/\s\+$//e
