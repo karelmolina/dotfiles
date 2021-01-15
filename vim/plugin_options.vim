@@ -1,6 +1,6 @@
 " SCHEME
-"colorscheme railscasts
-colorscheme hybrid
+ colorscheme railscasts
+" colorscheme hybrid
 
 " NerdTree
 let NERDTreeShowHidden=1
@@ -148,5 +148,6 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-css',
   \ 'coc-eslint',
-  \ 'coc-prettier'
+  \ 'coc-prettier',
+  \ 'coc-solargraph'
   \ ]

@@ -77,7 +77,7 @@ Plugin 'mattn/emmet-vim'
 " surround
 Plugin 'tpope/vim-surround'
 
-" Oceanic theme
+" themes
 Plugin 'mhartington/oceanic-next'
 
 Plugin 'jpo/vim-railscasts-theme'
