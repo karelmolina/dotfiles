@@ -56,3 +56,8 @@ vnoremap <C-x> "+d
 " copy filename and filepath
 nmap <leader>cn :let @*=expand("%")<CR>
 nmap <leader>cp :let @*=expand("%:p")<CR>
+
+" close
+nnoremap<C-q> <ESC>:q!<CR>
+inoremap<C-q> <ESC>:q!<CR>
+vnoremap<C-q> <ESC>:q!<CR>
