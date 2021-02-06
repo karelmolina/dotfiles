@@ -45,7 +45,8 @@ nmap <leader>p <Plug>(GitGutterPrevHunk)
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_sign_added = '++'
 let g:gitgutter_sign_modified = '~~'
-let g:gitgutter_sign_removed = '--'
+let g:gitgutter_sign_removed = '^^'
+nmap ghp <Plug>(GitGutterPreviewHunk)
 nmap ghs <Plug>(GitGutterStageHunk)
 nmap ghu <Plug>(GitGutterUndoHunk)
 
@@ -151,3 +152,8 @@ let g:coc_global_extensions = [
   \ 'coc-prettier',
   \ 'coc-solargraph'
   \ ]
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces

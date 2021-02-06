@@ -84,4 +84,10 @@ Plugin 'jpo/vim-railscasts-theme'
 
 Plugin 'w0ng/vim-hybrid'
 
+Plugin 'kien/rainbow_parentheses.vim'
+
+Plugin 'valloric/matchtagalways'
+
+Plugin 'itchyny/vim-cursorword'
+
 call vundle#end()            " required
