@@ -1,9 +1,12 @@
 " SCHEME
- colorscheme railscasts
+ colorscheme OceanicNext
 " colorscheme hybrid
 
 " NerdTree
 let NERDTreeShowHidden=1
+let NERDTreeQuitOnOpen=1
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -32,23 +35,6 @@ let g:multi_cursor_next_key            = '<C-d>'
 let g:multi_cursor_prev_key            = '<C-S-d>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
-
-" vim-ruby
-let g:ruby_indent_access_modifier_style = 'normal'
-let g:ruby_indent_assignment_style = 'variable'
-let g:ruby_indent_block_style = 'do'
-
-" gitgutter
-let g:gitgutter_highlight_linenrs = 1
-nmap <leader>n <Plug>(GitGutterNextHunk)
-nmap <leader>p <Plug>(GitGutterPrevHunk)
-let g:gitgutter_override_sign_column_highlight = 0
-let g:gitgutter_sign_added = '++'
-let g:gitgutter_sign_modified = '~~'
-let g:gitgutter_sign_removed = '^^'
-nmap ghp <Plug>(GitGutterPreviewHunk)
-nmap ghs <Plug>(GitGutterStageHunk)
-nmap ghu <Plug>(GitGutterUndoHunk)
 
 " vim airlinie
 let g:airline#extensions#tabline#enabled = 1
@@ -84,13 +70,13 @@ autocmd VimEnter * call AirlineInit()
 noremap \c :Commentary<CR
 autocmd FileType ruby setlocal commentstring=#\ %s
 
-" rubocop
-let g:vimrubocop_keymap = 0
-nmap <Leader>ru :RuboCop<CR>
-
 " Fzf
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+command! -bang -nargs=? -complete=dir GFiles
+  \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
@@ -101,11 +87,6 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-nnoremap <C-p> :Files <CR>
-execute "set <M-f>=\ef"
-nnoremap <M-f> f
-nnoremap <M-f> :RG<CR>
 
 " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
 let g:fzf_layout = { 'window': 'enew' }
@@ -150,10 +131,23 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-eslint',
   \ 'coc-prettier',
-  \ 'coc-solargraph'
+  \ 'coc-solargraph',
+  \ 'coc-pyright'
   \ ]
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
 
+" RainbowParentheses
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+" HTML, JSX
+let g:closetag_filenames = '*.html,*.js,*.jsx,*.ts,*.tsx'
+
+" fugitive always vertical diffing
+set diffopt+=vertical
+
+" Easymotion
+let g:EasyMotion_smartcase = 1

@@ -17,17 +17,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'preservim/nerdtree'
 
 " Git
-Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
-
-" Ruby
-Plugin 'ngmy/vim-rubocop'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'tpope/vim-rails'
-Plugin 'tpope/vim-endwise'
-
-" vim Theme
-Plugin 'morhetz/gruvbox'
+Plugin 'mhinz/vim-signify'
 
 "" Quick comment toggling
 Plugin 'tpope/vim-commentary'
@@ -41,8 +32,8 @@ Plugin 'Yggdroot/indentLine'
 " Additional syntaxes and markup/programming languages
 Plugin 'sheerun/vim-polyglot'
 
-" provides automatic closing of quotes, parenthesis, brackets, etc..
-Plugin 'Raimondi/delimitMate'
+" Insert or delete brackets, parens, quotes in pair.
+Plugin 'jiangmiao/auto-pairs'
 
 " highlight trailing whitespace
 Plugin 'bronson/vim-trailing-whitespace'
@@ -77,17 +68,32 @@ Plugin 'mattn/emmet-vim'
 " surround
 Plugin 'tpope/vim-surround'
 
+" colorize surroundings
+Plugin 'kien/rainbow_parentheses.vim'
+
+" underline word matches
+Plugin 'itchyny/vim-cursorword'
+
+" highlight tag
+Plugin 'valloric/matchtagalways'
+
+" complete html tags
+Plugin 'alvan/vim-closetag'
+
+" run test from vim
+Plugin 'vim-test/vim-test'
+
+" search and move faster
+Plugin 'easymotion/vim-easymotion'
+
+" Repeat vim actions
+Plugin 'tpope/vim-repeat'
+
 " themes
 Plugin 'mhartington/oceanic-next'
 
 Plugin 'jpo/vim-railscasts-theme'
 
 Plugin 'w0ng/vim-hybrid'
-
-Plugin 'kien/rainbow_parentheses.vim'
-
-Plugin 'valloric/matchtagalways'
-
-Plugin 'itchyny/vim-cursorword'
 
 call vundle#end()            " required

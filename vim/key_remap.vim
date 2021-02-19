@@ -31,7 +31,7 @@ vnoremap <M-k> :m '<-2<CR>gv=gv
 vnoremap <M-j> :m '>+1<CR>gv=gv
 
 " turn off search highlights
-nnoremap <leader> h :nohlsearch<CR>
+nnoremap <leader>h :nohlsearch<CR>
 
 " Reload Vim config
 nnoremap <Leader>r :so ~/.vimrc<CR>
@@ -61,3 +61,34 @@ nmap <leader>cp :let @*=expand("%:p")<CR>
 nnoremap<C-q> <ESC>:q!<CR>
 inoremap<C-q> <ESC>:q!<CR>
 vnoremap<C-q> <ESC>:q!<CR>
+
+" fzf
+nnoremap <C-p> :GFiles <CR>
+nnoremap <Leader>p :Files<CR>
+execute "set <M-f>=\ef"
+nnoremap <M-f> f
+nnoremap <M-f> :RG<CR>
+map <Leader>ag :Ag<CR>
+
+" testing
+nnoremap <Leader>t :TestNearest<CR>
+nnoremap <Leader>T :TestFile<CR>
+nnoremap <Leader>TT :TestSuite<CR>
+
+" buffers
+map <Leader>ob :Buffers<cr>
+
+" run current file
+nnoremap <Leader>x :!node %<cr>
+
+" Easy motion
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+" Signify
+nnoremap ghu :SignifyHunkUndo<CR>
+nnoremap ghd :SignifyHunkDiff<CR>
+nmap <leader>n <plug>(signify-next-hunk)
+nmap <leader>p <plug>(signify-prev-hunk)
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
