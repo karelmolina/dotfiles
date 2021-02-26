@@ -64,7 +64,7 @@ vnoremap<C-q> <ESC>:q!<CR>
 
 " fzf
 nnoremap <C-p> :GFiles <CR>
-nnoremap <Leader>p :Files<CR>
+nnoremap <C-S-P> :Files<CR>
 execute "set <M-f>=\ef"
 nnoremap <M-f> f
 nnoremap <M-f> :RG<CR>
@@ -92,3 +92,17 @@ nmap <leader>n <plug>(signify-next-hunk)
 nmap <leader>p <plug>(signify-prev-hunk)
 omap ic <plug>(signify-motion-inner-pending)
 xmap ic <plug>(signify-motion-inner-visual)
+
+" Coc
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap gp :silent %!prettier --stdin-filepath %<CR>
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>ca <Plug>(coc-codeaction)
+nmap <leader>af :CocCommand eslint.executeAutofix<CR>

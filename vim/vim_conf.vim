@@ -51,5 +51,3 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 " get rid of trailing whitespace on :w
 autocmd BufWritePre * %s/\s\+$//e
-
-au BufRead,BufNewFile,BufReadPost *.json set syntax=json
