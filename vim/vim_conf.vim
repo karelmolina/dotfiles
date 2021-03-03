@@ -12,7 +12,8 @@ set updatetime=100
 set nowrap
 set background=dark
 set hlsearch
-
+set wildmenu
+set wildmode=longest:full,full
 " Do not redraw screen in the middle of a macro. Makes them complete faster.
 set lazyredraw
 
