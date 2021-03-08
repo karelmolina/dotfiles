@@ -89,6 +89,9 @@ Plugin 'easymotion/vim-easymotion'
 " Repeat vim actions
 Plugin 'tpope/vim-repeat'
 
+" editor config
+Plugin 'editorconfig/editorconfig-vim'
+
 " themes
 Plugin 'mhartington/oceanic-next'
 

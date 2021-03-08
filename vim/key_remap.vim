@@ -106,3 +106,6 @@ nnoremap gp :silent %!prettier --stdin-filepath %<CR>
 nmap <leader>qf  <Plug>(coc-fix-current)
 nmap <leader>ca <Plug>(coc-codeaction)
 nmap <leader>af :CocCommand eslint.executeAutofix<CR>
+
+" Use jq to format a json file -> (insatll jq)
+nmap <leader>fj :%!jq .<CR>
