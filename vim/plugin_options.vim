@@ -1,6 +1,6 @@
 " SCHEME
- colorscheme OceanicNext
-" colorscheme hybrid
+let g:material_theme_style = 'darker'
+colorscheme material
 
 " NerdTree
 let NERDTreeShowHidden=1
@@ -38,7 +38,7 @@ let g:multi_cursor_quit_key            = '<Esc>'
 
 " vim airlinie
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme= 'wombat'
+let g:airline_theme = 'material'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -119,7 +119,6 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-eslint',
   \ 'coc-prettier',
-  \ 'coc-solargraph',
   \ 'coc-pyright'
   \ ]
 " Apply AutoFix to problem on the current line.
@@ -139,3 +138,14 @@ set diffopt+=vertical
 
 " Easymotion
 let g:EasyMotion_smartcase = 1
+
+" lognroll
+let g:lognroll#enable_insert_mode = 0
+let g:lognroll_js_actions = [ 'log', 'error', 'dir' ]
+
+" markdown (dont hide character)
+set conceallevel=1
+let g:instant_markdown_slow = 1
+"You can always manually trigger preview via the command
+" InstantMarkdownPreview and stop it via InstantMarkdownStop
+let g:instant_markdown_autostart = 0

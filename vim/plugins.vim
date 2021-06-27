@@ -38,9 +38,6 @@ Plugin 'jiangmiao/auto-pairs'
 " highlight trailing whitespace
 Plugin 'bronson/vim-trailing-whitespace'
 
-" Mark lines for quick access
-Plugin 'kshenoy/vim-signature'
-
 " Configure tab labels within Terminal Vim with a very succinct output.
 Plugin 'mkitt/tabline.vim'
 
@@ -92,11 +89,21 @@ Plugin 'tpope/vim-repeat'
 " editor config
 Plugin 'editorconfig/editorconfig-vim'
 
+" console log utils
+Plugin 'glippi/lognroll-vim'
+
+" markdown
+Plugin 'instant-markdown/vim-instant-markdown'
+
 " themes
 Plugin 'mhartington/oceanic-next'
 
 Plugin 'jpo/vim-railscasts-theme'
 
 Plugin 'w0ng/vim-hybrid'
+
+Plugin 'sonph/onehalf', { 'rtp': 'vim'  }
+
+Plugin 'kaicataldo/material.vim', { 'branch': 'main' }
 
 call vundle#end()            " required

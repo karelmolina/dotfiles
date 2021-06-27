@@ -58,9 +58,13 @@ nmap <leader>cn :let @*=expand("%")<CR>
 nmap <leader>cp :let @*=expand("%:p")<CR>
 
 " close
-nnoremap<C-q> <ESC>:q!<CR>
-inoremap<C-q> <ESC>:q!<CR>
-vnoremap<C-q> <ESC>:q!<CR>
+nnoremap<C-w> <ESC>:q!<CR>
+inoremap<C-w> <ESC>:q!<CR>
+vnoremap<C-w> <ESC>:q!<CR>
+
+nnoremap<C-q> <ESC>:qa!<CR>
+inoremap<C-q> <ESC>:qa!<CR>
+vnoremap<C-q> <ESC>:qa!<CR>
 
 " fzf
 nnoremap <C-p> :GFiles <CR>
@@ -109,3 +113,7 @@ nmap <leader>af :CocCommand eslint.executeAutofix<CR>
 
 " Use jq to format a json file -> (insatll jq)
 nmap <leader>fj :%!jq .<CR>
+
+" start markdown preview
+nmap <leader>mdst :InstantMarkdownPreview<CR>
+nmap <leader>mdsp :InstantMarkdownStop<CR>
