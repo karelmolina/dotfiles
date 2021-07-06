@@ -95,6 +95,22 @@ Plugin 'glippi/lognroll-vim'
 " markdown
 Plugin 'instant-markdown/vim-instant-markdown'
 
+" smooth scroll
+Plugin 'psliwka/vim-smoothie'
+
+" JSdoc
+Plugin 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+  \}
+
+" format files
+Plugin 'Chiel92/vim-autoformat'
+
+" autocomplete
+Plugin 'sirver/ultisnips'
+Plugin 'honza/vim-snippets'
+
 " themes
 Plugin 'mhartington/oceanic-next'
 

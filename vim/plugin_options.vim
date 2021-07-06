@@ -121,6 +121,7 @@ let g:coc_global_extensions = [
   \ 'coc-prettier',
   \ 'coc-pyright'
   \ ]
+
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
@@ -149,3 +150,25 @@ let g:instant_markdown_slow = 1
 "You can always manually trigger preview via the command
 " InstantMarkdownPreview and stop it via InstantMarkdownStop
 let g:instant_markdown_autostart = 0
+
+" vim smooth scroll
+let g:smoothie_no_default_mappings = 'true'
+silent! nmap <unique> <C-U> <Plug>(SmoothieUpwards)
+silent! nmap <unique> <C-F> <Plug>(SmoothieDownwards)
+
+" auto pairs
+execute "set <M-e>=\ee"
+nnoremap <M-e> e
+let g:AutoPairsShortcutFastWrap = '<M-e>'
+
+" JsDoc
+let g:jsdoc_lehre_path = '~/.nvm/versions/node/v12.22.1/bin/lehre'
+let g:jsdoc_templates_path = '~/dotfiles/utils/template.js'
+
+" Utilsnippet
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsSnippetDirectories=['~/.vim/bundle/vim-snippets/UltiSnips']
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+
