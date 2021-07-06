@@ -66,3 +66,11 @@ if &term =~ '^tmux'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 endif
+
+" adds different curson when editing in tmux
+if !empty($TMUX)
+    let &t_SI .= "\e[3 q"
+    let &t_SR .= "\e[5 q"
+    let &t_EI .= "\e[4 q"
+endif
+
