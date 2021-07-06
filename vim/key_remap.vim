@@ -31,7 +31,7 @@ vnoremap <M-k> :m '<-2<CR>gv=gv
 vnoremap <M-j> :m '>+1<CR>gv=gv
 
 " turn off search highlights
-nnoremap <leader> h :nohlsearch<CR>
+nnoremap <leader>h :nohlsearch<CR>
 
 " Reload Vim config
 nnoremap <Leader>r :so ~/.vimrc<CR>
@@ -58,6 +58,62 @@ nmap <leader>cn :let @*=expand("%")<CR>
 nmap <leader>cp :let @*=expand("%:p")<CR>
 
 " close
-nnoremap<C-q> <ESC>:q!<CR>
-inoremap<C-q> <ESC>:q!<CR>
-vnoremap<C-q> <ESC>:q!<CR>
+nnoremap<C-w> <ESC>:q!<CR>
+inoremap<C-w> <ESC>:q!<CR>
+vnoremap<C-w> <ESC>:q!<CR>
+
+nnoremap<C-q> <ESC>:qa!<CR>
+inoremap<C-q> <ESC>:qa!<CR>
+vnoremap<C-q> <ESC>:qa!<CR>
+
+" fzf
+nnoremap <C-p> :GFiles <CR>
+nnoremap <C-S-P> :Files<CR>
+execute "set <M-f>=\ef"
+nnoremap <M-f> f
+nnoremap <M-f> :RG<CR>
+map <Leader>ag :Ag<CR>
+
+" testing
+nnoremap <Leader>t :TestNearest<CR>
+nnoremap <Leader>T :TestFile<CR>
+nnoremap <Leader>TT :TestSuite<CR>
+
+" buffers
+map <Leader>ob :Buffers<cr>
+
+" run current file
+nnoremap <Leader>x :!node %<cr>
+
+" Easy motion
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+" Signify
+nnoremap ghu :SignifyHunkUndo<CR>
+nnoremap ghd :SignifyHunkDiff<CR>
+nmap <leader>n <plug>(signify-next-hunk)
+nmap <leader>p <plug>(signify-prev-hunk)
+omap ic <plug>(signify-motion-inner-pending)
+xmap ic <plug>(signify-motion-inner-visual)
+
+" Coc
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap gp :silent %!prettier --stdin-filepath %<CR>
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>ca <Plug>(coc-codeaction)
+nmap <leader>af :CocCommand eslint.executeAutofix<CR>
+
+" Use jq to format a json file -> (insatll jq)
+nmap <leader>fj :%!jq .<CR>
+
+" start markdown preview
+nmap <leader>mdst :InstantMarkdownPreview<CR>
+nmap <leader>mdsp :InstantMarkdownStop<CR>

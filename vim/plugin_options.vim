@@ -1,9 +1,12 @@
 " SCHEME
- colorscheme railscasts
-" colorscheme hybrid
+let g:material_theme_style = 'darker'
+colorscheme material
 
 " NerdTree
 let NERDTreeShowHidden=1
+let NERDTreeQuitOnOpen=1
+let NERDTreeShowLineNumbers=1
+let NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -33,26 +36,9 @@ let g:multi_cursor_prev_key            = '<C-S-d>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-" vim-ruby
-let g:ruby_indent_access_modifier_style = 'normal'
-let g:ruby_indent_assignment_style = 'variable'
-let g:ruby_indent_block_style = 'do'
-
-" gitgutter
-let g:gitgutter_highlight_linenrs = 1
-nmap <leader>n <Plug>(GitGutterNextHunk)
-nmap <leader>p <Plug>(GitGutterPrevHunk)
-let g:gitgutter_override_sign_column_highlight = 0
-let g:gitgutter_sign_added = '++'
-let g:gitgutter_sign_modified = '~~'
-let g:gitgutter_sign_removed = '^^'
-nmap ghp <Plug>(GitGutterPreviewHunk)
-nmap ghs <Plug>(GitGutterStageHunk)
-nmap ghu <Plug>(GitGutterUndoHunk)
-
 " vim airlinie
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme= 'wombat'
+let g:airline_theme = 'material'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -84,13 +70,13 @@ autocmd VimEnter * call AirlineInit()
 noremap \c :Commentary<CR
 autocmd FileType ruby setlocal commentstring=#\ %s
 
-" rubocop
-let g:vimrubocop_keymap = 0
-nmap <Leader>ru :RuboCop<CR>
-
 " Fzf
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+command! -bang -nargs=? -complete=dir GFiles
+  \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 function! RipgrepFzf(query, fullscreen)
   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
@@ -101,11 +87,6 @@ function! RipgrepFzf(query, fullscreen)
 endfunction
 
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-nnoremap <C-p> :Files <CR>
-execute "set <M-f>=\ef"
-nnoremap <M-f> f
-nnoremap <M-f> :RG<CR>
 
 " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
 let g:fzf_layout = { 'window': 'enew' }
@@ -131,29 +112,63 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" use <c-space>for trigger completion
-inoremap <silent> <NUL> call coc#refresh()<CR>
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-nnoremap gp :silent %!prettier --stdin-filepath %<CR>
-
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
-  \ 'coc-tsserver',
   \ 'coc-json',
   \ 'coc-css',
   \ 'coc-eslint',
   \ 'coc-prettier',
-  \ 'coc-solargraph'
+  \ 'coc-pyright'
   \ ]
 
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" RainbowParentheses
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+
+" HTML, JSX
+let g:closetag_filenames = '*.html,*.js,*.jsx,*.ts,*.tsx'
+
+" fugitive always vertical diffing
+set diffopt+=vertical
+
+" Easymotion
+let g:EasyMotion_smartcase = 1
+
+" lognroll
+let g:lognroll#enable_insert_mode = 0
+let g:lognroll_js_actions = [ 'log', 'error', 'dir' ]
+
+" markdown (dont hide character)
+set conceallevel=1
+let g:instant_markdown_slow = 1
+"You can always manually trigger preview via the command
+" InstantMarkdownPreview and stop it via InstantMarkdownStop
+let g:instant_markdown_autostart = 0
+
+" vim smooth scroll
+let g:smoothie_no_default_mappings = 'true'
+silent! nmap <unique> <C-U> <Plug>(SmoothieUpwards)
+silent! nmap <unique> <C-F> <Plug>(SmoothieDownwards)
+
+" auto pairs
+execute "set <M-e>=\ee"
+nnoremap <M-e> e
+let g:AutoPairsShortcutFastWrap = '<M-e>'
+
+" JsDoc
+let g:jsdoc_lehre_path = '~/.nvm/versions/node/v12.22.1/bin/lehre'
+let g:jsdoc_templates_path = '~/dotfiles/utils/template.js'
+
+" Utilsnippet
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsSnippetDirectories=['~/.vim/bundle/vim-snippets/UltiSnips']
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
+
