@@ -59,7 +59,6 @@ nmap <leader>cp :let @*=expand("%:p")<CR>
 
 " close
 nnoremap<C-w> <ESC>:q!<CR>
-inoremap<C-w> <ESC>:q!<CR>
 vnoremap<C-w> <ESC>:q!<CR>
 
 nnoremap<C-q> <ESC>:qa!<CR>
