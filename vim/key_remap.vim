@@ -116,3 +116,7 @@ nmap <leader>fj :%!jq .<CR>
 " start markdown preview
 nmap <leader>mdst :InstantMarkdownPreview<CR>
 nmap <leader>mdsp :InstantMarkdownStop<CR>
+
+" formatter
+vmap <leader>ff  <Plug>(coc-format-selected)
+nmap <leader>ff  <Plug>(coc-format-selected)
