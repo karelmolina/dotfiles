@@ -1,0 +1,208 @@
+#!/bin/bash
+
+# EXECUTE
+# sudo chmod +x install
+# ./install
+REQUIRED=false
+UPDATE=false
+UPGRADE=false
+NVM=false
+FZF=false
+FONT=false
+BASH=false
+MONGO=false
+REDIS=false
+TMUX=false
+VIM=false
+SLACK=true
+SPOTIFY=true
+BARRIER=false
+POSTGRES=false
+POSTMAN=true
+RVM=false
+
+# paths
+BASEDIR=/home/karelmolina
+echo $BASEDIR
+SSH_FOLDER=$BASEDIR/.ssh
+SHHCONFIG="$SSH_FOLDER/config"
+BASHRC=$BASEDIR/.bashrc
+LOG_SCRIPT=./log_script.txt
+DOWNLOADS=$BASEDIR/Downloads/
+
+function dependencies_install {
+    sudo apt -y install diodon curl git xclip vim-gtk ripgrep gawk autoconf \
+    automake bison libffi-dev gnupg2 libgdbm-dev libncurses5-dev libsqlite3-dev libtool \
+    libyaml-dev sqlite3 zlib1g-dev libgmp-dev libreadline-dev libssl-dev g++ \
+    mono-complete golang default-jdk \
+    build-essential cmake vim-nox python3-dev \
+    libpng-dev tmux git-cola >$LOG_SCRIPT 2>$LOG_SCRIPT
+}
+
+function snapinstall {
+    echo installing $1
+    shift
+    sudo snap install "$@" >$LOG_SCRIPT 2>$LOG_SCRIPT
+}
+
+if $UPDATE
+then
+    echo "*** UPDATING ***"
+    sudo apt update
+fi
+
+if $UPGRADE
+then
+    echo "*** UPGRADING ***"
+    sudo apt -y upgrade
+fi
+
+
+# installing dependencies
+
+echo "Installing dependencies"
+if $REQUIRED
+then
+    dependencies_install
+fi
+
+
+if $NVM
+then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    source $BASEDIR/.bashrc
+    nvm install 14
+    source $BASEDIR/.bashrc
+    npm -g install yarn
+fi
+
+
+if $FZF
+then
+    echo "installing fzf"
+    git clone --depth 1 https://github.com/junegunn/fzf.git $BASEDIR/.fzf
+    cd $BASEDIR/.fzf
+    echo "N N Y" | ./install
+    cd
+fi
+
+
+if $FONT
+then
+    cd $DOWNLOADS
+    wget https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip
+    unzip JetBrainsMono-2.242.zip -d $BASEDIR/.local/share/fonts
+    fc-cache -f -v
+    cd
+fi
+
+if $BASH
+then
+    git clone git://github.com/ohmybash/oh-my-bash.git ~/.oh-my-bash
+    cp ~/.bashrc ~/.bashrc.orig
+    cp ~/.oh-my-bash/templates/bashrc.osh-template ~/.bashrc
+    source ~/.bashrc
+fi
+
+if $MONGO
+then
+    curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+    sudo apt update -y
+    sudo apt install -y mongodb-org
+fi
+
+if $REDIS
+then
+    sudo apt install redis-server -y
+    sudo echo "supervised systemd" >> /etc/redis/redis.conf
+    sudo systemctl restart redis.service
+fi
+
+
+if $TMUX
+then
+    cd
+    git clone https://github.com/gpakosz/.tmux.git
+    ln -s -f .tmux/.tmux.conf
+    mkdir $BASEDIR/tmux-plugins
+    git clone https://github.com/tmux-plugins/tmux-resurrect.git $BASEDIR/tmux-plugins/tmux-resurrect/
+fi
+
+
+if $VIM
+then
+    cd
+    echo -n "Installing  Pathogen, vundle and Coc"
+    mkdir -p $BASEDIR/.vim/autoload $BASEDIR/.vim/bundle && \
+    curl -LSso $BASEDIR/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+
+    if grep -q YouCompleteMe $BASEDIR/dotfiles/vim/plugins.vim
+    then
+        git clone https://github.com/ycm-core/YouCompleteMe.git  $BASEDIR/.vim/bundle/YouCompleteMe/
+        cd  $BASEDIR/.vim/bundle/YouCompleteMe
+        python3 install.py --all
+    else
+        git clone https://github.com/neoclide/coc.nvim.git $BASEDIR/.vim/bundle/coc.nvim/
+        cd $BASEDIR/.vim/bundle/coc.nvim/
+        env yarn
+    fi
+
+    git clone https://github.com/VundleVim/Vundle.vim.git $BASEDIR/.vim/bundle/Vundle.vim
+    ln -s $BASEDIR/dotfiles/vim/vimrc $BASEDIR/.vimrc
+    ln -s $BASEDIR/dotfiles/tmux/tmux.conf $BASEDIR/.tmux.conf.local
+    INSTALL=true vim +PluginInstall +q
+fi
+
+
+if $SLACK
+then
+    snapinstall "Slack" slack --classic
+fi
+
+if $SPOTIFY
+then
+    snapinstall "Spotify" spotify
+fi
+
+if $BARRIER
+then
+    snapinstall "Barrier" barrier
+    sed -i 's/^serverHostname=/serverHostname=192.168.10.109/' $BASEDIR/snap/barrier/current/.config/Debauchee/Barrier.conf
+fi
+
+if $POSTMAN
+then
+	snapinstall "Postman" postman
+fi
+
+if $POSTGRES
+then
+    echo "Installing Postgresql latest"
+    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+    sudo apt update -y
+    sudo apt -y install postgresql libpq-dev
+fi
+
+if $PGADMIN
+then
+    # Install the public key for the repository (if not done previously):
+    sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
+
+    # Create the repository configuration file:
+    sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
+    # Install for both desktop and web modes:
+    sudo apt install pgadmin4 -y
+fi
+
+if $RVM
+then
+    gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+    \curl -sSL https://get.rvm.io | bash -s stable
+    source $BASEDIR/.bashrc
+    rvm install 2.7.2
+fi
+
+#echo "*** remove packages"
+#sudo apt-get clean
