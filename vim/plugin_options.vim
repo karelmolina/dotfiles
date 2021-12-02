@@ -101,17 +101,6 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 " Coc Vim
 " use <tab> for trigger completion and navigate to the next complete item
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 let g:coc_global_extensions = [
   \ 'coc-snippets',
   \ 'coc-pairs',
@@ -165,14 +154,19 @@ let g:AutoPairsShortcutFastWrap = '<M-e>'
 let g:jsdoc_lehre_path = '~/.nvm/versions/node/v12.22.1/bin/lehre'
 let g:jsdoc_templates_path = '~/dotfiles/utils/template.js'
 
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
 " Utilsnippet
 " Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
 " - https://github.com/Valloric/YouCompleteMe
 " - https://github.com/nvim-lua/completion-nvim
-let g:UltiSnipsExpandTrigger="<c-tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 

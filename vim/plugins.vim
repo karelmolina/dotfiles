@@ -59,7 +59,10 @@ Plugin 'junegunn/fzf.vim'
 " to use coc.vim install nodejs and yarn
 Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 
-" emmet -- javascript
+" You complete Me
+Plugin 'ycm-core/YouCompleteMe'
+
+"emmet -- javascript
 Plugin 'mattn/emmet-vim'
 
 " surround
@@ -110,6 +113,7 @@ Plugin 'Chiel92/vim-autoformat'
 " autocomplete
 Plugin 'sirver/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'ervandew/supertab'
 
 " themes
 Plugin 'mhartington/oceanic-next'
