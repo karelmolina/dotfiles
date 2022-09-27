@@ -141,6 +141,7 @@ then
     then
         git clone https://github.com/ycm-core/YouCompleteMe.git  $BASEDIR/.vim/bundle/YouCompleteMe/
         cd  $BASEDIR/.vim/bundle/YouCompleteMe
+	    git submodule update --init --recursive
         python3 install.py --all
     else
         git clone https://github.com/neoclide/coc.nvim.git $BASEDIR/.vim/bundle/coc.nvim/
