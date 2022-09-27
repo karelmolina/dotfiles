@@ -15,6 +15,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Files stucture tree
 Plugin 'preservim/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " Git
 Plugin 'tpope/vim-fugitive'
@@ -116,13 +117,9 @@ Plugin 'honza/vim-snippets'
 Plugin 'ervandew/supertab'
 
 " themes
-Plugin 'mhartington/oceanic-next'
-
 Plugin 'jpo/vim-railscasts-theme'
 
 Plugin 'w0ng/vim-hybrid'
-
-Plugin 'sonph/onehalf', { 'rtp': 'vim'  }
 
 Plugin 'kaicataldo/material.vim', { 'branch': 'main' }
 
