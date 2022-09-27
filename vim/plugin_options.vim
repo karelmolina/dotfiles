@@ -1,12 +1,15 @@
 " SCHEME
-let g:material_theme_style = 'darker'
-colorscheme material
+let g:hybrid_custom_term_colors = 1
+let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+colorscheme hybrid
 
 " NerdTree
 let NERDTreeShowHidden=1
 let NERDTreeQuitOnOpen=1
 let NERDTreeShowLineNumbers=1
 let NERDTreeAutoDeleteBuffer=1
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusShowClean = 1
 let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
@@ -19,7 +22,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ 'Ignored'   : '☒',
     \ "Unknown"   : "?"
     \}
-map <C-b> :NERDTreeToggle %<CR>
 let g:NERDTreeDirArrowExpandable = '->'
 let g:NERDTreeDirArrowCollapsible = '➘'
 
@@ -38,7 +40,7 @@ let g:multi_cursor_quit_key            = '<Esc>'
 
 " vim airlinie
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'material'
+let g:airline_theme = 'jellybeans'
 let g:airline#extensions#tabline#formatter = 'unique_tail'
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
@@ -108,7 +110,8 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-eslint',
   \ 'coc-prettier',
-  \ 'coc-pyright'
+  \ 'coc-pyright',
+  \ 'coc-tsserver'
   \ ]
 
 " Apply AutoFix to problem on the current line.
@@ -119,6 +122,7 @@ au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
+let g:rbpt_max = 16
 
 " HTML, JSX
 let g:closetag_filenames = '*.html,*.js,*.jsx,*.ts,*.tsx'
@@ -128,9 +132,9 @@ set diffopt+=vertical
 
 " Easymotion
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
 " lognroll
-let g:lognroll#enable_insert_mode = 0
 let g:lognroll_js_actions = [ 'log', 'error', 'dir' ]
 
 " markdown (dont hide character)
@@ -146,9 +150,7 @@ silent! nmap <unique> <C-U> <Plug>(SmoothieUpwards)
 silent! nmap <unique> <C-F> <Plug>(SmoothieDownwards)
 
 " auto pairs
-execute "set <M-e>=\ee"
-nnoremap <M-e> e
-let g:AutoPairsShortcutFastWrap = '<M-e>'
+let g:AutoPairsShortcutFastWrap = '<C-e>'
 
 " JsDoc
 let g:jsdoc_lehre_path = '~/.nvm/versions/node/v12.22.1/bin/lehre'
@@ -164,11 +166,8 @@ let g:SuperTabDefaultCompletionType = '<C-n>'
 " - https://github.com/Valloric/YouCompleteMe
 " - https://github.com/nvim-lua/completion-nvim
 " better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+" let g:UltiSnipsExpandTrigger = "<tab>"
+" let g:UltiSnipsJumpForwardTrigger = "<tab>"
+" let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
-
-" lognroll-vim
-let g:lognroll#enable_brackets = 0
