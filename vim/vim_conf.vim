@@ -2,7 +2,7 @@ set encoding=UTF-8
 set nocompatible              " be iMproved, required
 filetype off                    " required
 syntax enable
-set shell=bash\ -l
+set shell=zsh\ -l
 syntax on
 set clipboard=unnamedplus
 set shortmess-=S
