@@ -11,24 +11,19 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Map Alt key
-" en la terminal ALT+J era igual al ^[j
-" con este mapeo se cambia a \ej
-execute "set <M-j>=\ej"
-nnoremap <M-j> j
-execute "set <M-k>=\ek"
-nnoremap <M-k> k
+" NERDTree
+map <C-b> :NERDTreeToggle %<CR>
 
 " Move lines
 " Normal Mode
-nnoremap <M-k> :m .-2<CR>==
-nnoremap <M-j> :m .+1<CR>==
+nnoremap <leader>k :m .-2<CR>==
+nnoremap <leader>j :m .+1<CR>==
 " Insert Mode
-inoremap <M-k> <Esc>:m .-2<CR>==gi
-inoremap <M-j> <Esc>:m .+1<CR>==gi
+inoremap <leader>k <Esc>:m .-2<CR>==gi
+inoremap <leader>j <Esc>:m .+1<CR>==gi
 " Visual Mode
-vnoremap <M-k> :m '<-2<CR>gv=gv
-vnoremap <M-j> :m '>+1<CR>gv=gv
+vnoremap <leader>k :m '<-2<CR>gv=gv
+vnoremap <leader>j :m '>+1<CR>gv=gv
 
 " turn off search highlights
 nnoremap <leader>h :nohlsearch<CR>
@@ -50,7 +45,7 @@ nnoremap <silent> <Leader>- :exe "vertical resize " . (winheight(0) * 2/3)<CR>
 
 " copy
 inoremap <C-v> <ESC>"+pa
-vnoremap <C-c> "+y
+vnoremap y "+y
 vnoremap <C-x> "+d
 
 " copy filename and filepath
@@ -68,15 +63,8 @@ vnoremap<C-q> <ESC>:qa!<CR>
 " fzf
 nnoremap <C-p> :GFiles <CR>
 nnoremap <C-S-P> :Files<CR>
-execute "set <M-f>=\ef"
-nnoremap <M-f> f
-nnoremap <M-f> :RG<CR>
+nnoremap <leader>f :RG<CR>
 map <Leader>ag :Ag<CR>
-
-" testing
-nnoremap <Leader>t :TestNearest<CR>
-nnoremap <Leader>T :TestFile<CR>
-nnoremap <Leader>TT :TestSuite<CR>
 
 " buffers
 map <Leader>ob :Buffers<cr>
@@ -93,8 +81,8 @@ nnoremap ghu :SignifyHunkUndo<CR>
 nnoremap ghd :SignifyHunkDiff<CR>
 nmap <leader>n <plug>(signify-next-hunk)
 nmap <leader>p <plug>(signify-prev-hunk)
-omap ic <plug>(signify-motion-inner-pending)
-xmap ic <plug>(signify-motion-inner-visual)
+omap ghv <plug>(signify-motion-inner-pending)
+xmap ghv <plug>(signify-motion-inner-visual)
 
 " Coc
 " GoTo code navigation.
