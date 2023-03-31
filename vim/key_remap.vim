@@ -108,3 +108,6 @@ nmap <leader>mdsp :InstantMarkdownStop<CR>
 " formatter
 vmap <leader>ff  <Plug>(coc-format-selected)
 nmap <leader>ff  <Plug>(coc-format-selected)
+
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)

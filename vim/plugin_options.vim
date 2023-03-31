@@ -114,9 +114,6 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver'
   \ ]
 
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-
 " RainbowParentheses
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
