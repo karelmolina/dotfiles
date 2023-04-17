@@ -1,4 +1,10 @@
-require("gitsigns").setup({
+-- import gitsigns plugin safely
+local setup, gitsigns = pcall(require, "gitsigns")
+if not setup then
+	return
+end
+
+gitsigns.setup({
 	on_attach = function(bufnr)
 		local gs = package.loaded.gitsigns
 
