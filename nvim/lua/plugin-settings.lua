@@ -12,10 +12,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	--colorscheme
-	"w0ng/vim-hybrid",
 	--helper functions
 	"nvim-lua/plenary.nvim",
+	--colorscheme
+	{ "bluz71/vim-moonfly-colors", name = "moonfly", lazy = true, priority = 1000 },
 	-- tree view
 	"nvim-tree/nvim-tree.lua",
 	"nvim-tree/nvim-web-devicons",

@@ -1,52 +1,107 @@
-vim.g.mapleader = " "
+local map = vim.keymap
 
-local remap = vim.keymap
+-- Normal --
+-- Common Operations
 
--- common
-remap.set("i", "<C-s>", "<ESC>:w<CR>")
-remap.set("n", "<C-s>", "<ESC>:w<CR>")
-remap.set("v", "<C-s>", "<ESC>:w<CR>")
+map.set("n", "<C-s>", "<cmd>w!<cr>", { desc = "Save" })
+map.set("n", "<C-q>", "<cmd>q!<cr>", { desc = "Quit" })
 
-remap.set("n", "<C-q>", "<ESC>:qa!<CR>")
-remap.set("v", "<C-q>", "<ESC>:qa!<CR>")
+-- better up/down
+map.set(
+	"n",
+	"j",
+	"v:count == 0 || mode(1)[0:1] == 'no' ? 'j' : 'gj'",
+	{ expr = true, silent = true, desc = "Move cursor down" }
+)
+map.set(
+	"n",
+	"k",
+	"v:count == 0 || mode(1)[0:1] == 'no' ? 'k' : 'gk'",
+	{ expr = true, silent = true, desc = "Move cursor up" }
+)
 
-remap.set("n", "<c-w>", "<ESC>:q!<CR>")
-remap.set("v", "<c-w>", "<ESC>:q!<CR>")
-
--- window movement
-remap.set("n", "<C-h>", "<C-w>h")
-remap.set("n", "<C-j>", "<C-w>j")
-remap.set("n", "<C-k>", "<C-w>k")
-remap.set("n", "<C-l>", "<C-w>l")
-
--- numbers increase - decrease
-remap.set("n", "<leader>+", "<C-a>")
-remap.set("n", "<leader>-", "<C-x>")
-
---buffer
-remap.set("n", "<leader>b", ":Buffers<cr>")
-
---move lines
-remap.set("n", "<leader>k", ":m .-2<CR>==")
-remap.set("i", "<leader>k", ":m .-2<CR>==gi")
-remap.set("v", "<leader>k", ":m '<-2<CR>==gv")
-
-remap.set("n", "<leader>j", ":m .+1<CR>==")
-remap.set("i", "<leader>j", ":m .+1<CR>==")
-remap.set("v", "<leader>j", ":m '>+1<CR>==")
+--better indent
+map.set("v", "<", "<gv")
+map.set("v", ">", ">gv")
 
 --nvim-tree
-remap.set("n", "<c-b>", ":NvimTreeFindFileToggle<CR>")
+map.set("n", "<C-b>", ":NvimTreeFindFileToggle<CR>")
+
+-- Lazy
+local lazy = require("lazy")
+--map.set("n", "<leader>p", { desc = "Lazy" })
+map.set("n", "<leader>li", function()
+	lazy.install()
+end, { desc = "Lazy Install" })
+map.set("n", "<leader>ls", function()
+	lazy.home()
+end, { desc = "Lazy Status" })
+map.set("n", "<leader>lS", function()
+	lazy.sync()
+end, { desc = "Lazy Sync" })
+map.set("n", "<leader>lu", function()
+	lazy.check()
+end, { desc = "Lazy Check Update" })
+map.set("n", "<leader>lU", function()
+	lazy.udpate()
+end, { desc = "Lazy Update" })
+
+--move lines
+map.set("n", "<leader>k", ":m .-2<CR>==")
+map.set("i", "<leader>k", ":m .-2<CR>==gi")
+map.set("v", "<leader>k", ":m '<-2<CR>==gv")
+
+map.set("n", "<leader>j", ":m .+1<CR>==")
+map.set("i", "<leader>j", ":m .+1<CR>==")
+map.set("v", "<leader>j", ":m '>+1<CR>==")
 
 --telescope
-remap.set("n", "<c-p>", "<cmd>Telescope find_files<cr>") -- find files within current working directory, respects .gitignore
-remap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>") -- find string in current working directory as you type
-remap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>") -- find string under cursor in current working directory
-remap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>") -- list open buffers in current neovim instance
-remap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>") -- list available help tags
 
--- telescope git commands
-remap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>") -- list all git commits (use <cr> to checkout) ["gc" for git commits]
-remap.set("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>") -- list git commits for current file/buffer (use <cr> to checkout) ["gfc" for git file commits]
-remap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>") -- list git branches (use <cr> to checkout) ["gb" for git branch]
-remap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>") -- list current changes per file with diff preview ["gs" for git status]
+map.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Git Branches" })
+map.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Git Commits" })
+map.set("n", "<leader>gt", "<cmd>Telescope git_status<cr>", { desc = "Git Status" })
+map.set("n", "<leader>gfc", "<cmd>Telescope git_bcommits<cr>", { desc = "Git Commit in current file/buffer" })
+map.set("n", "<leader>gg", "<cmd>Telescope git_commits<cr>", { desc = "Git Commits" })
+
+map.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find Files" })
+map.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string" })
+map.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find word under Cursor" })
+map.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find Buffers" })
+map.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Help Tags" })
+map.set("n", "<leader>fC", "<cmd>Telescope commands<cr>", { desc = "Find Commnads" })
+map.set("n", "<leader>fF", function()
+	require("telescope.builtin").find_files({ hidden = true, no_ignore = true })
+end, { desc = "Find All Files" })
+map.set("n", "<leader>fk", "<cmd>Telescope keymaps<cr>", { desc = "Find Keymaps" })
+map.set("n", "<leader>fm", "<cmd>Telescope man_pages<cr>", { desc = "Find Man" })
+map.set("n", "<leader>fW", function()
+	require("telescope.builtin").live_grep({
+		additional_args = function(args)
+			return vim.list_extend(args, { "--hidden", "--no-ignore" })
+		end,
+	})
+end, { desc = "Find word in all Files" })
+
+local Terminal = require("toggleterm.terminal").Terminal
+
+map.set("n", "<leader>tn", function()
+	Terminal:new({
+		cmd = "node",
+		hidden = true,
+	})
+end, { desc = "ToggleTerm Node " })
+
+map.set("n", "<leader>gg", "<cmd>lua _lazygit_toggle()`<cr>", { desc = "LazyGit " })
+
+map.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm Float" })
+map.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "ToggleTerm Horizontal" })
+map.set("n", "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", { desc = "ToggleTerm Vertical" })
+
+--- Global mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+map.set("n", "<leader>e", vim.diagnostic.open_float)
+map.set("n", "[d", vim.diagnostic.goto_prev)
+map.set("n", "]d", vim.diagnostic.goto_next)
+map.set("n", "<leader>q", vim.diagnostic.setloclist)
+
+map.set("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>")
