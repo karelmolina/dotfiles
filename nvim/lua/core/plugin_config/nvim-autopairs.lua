@@ -4,7 +4,7 @@ if not setup then
 	return
 end
 
-autopairs.setup({
+nvimautopairs.setup({
 	check_ts = true,
 	ts_config = { java = false },
 	fast_wrap = {

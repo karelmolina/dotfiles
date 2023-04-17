@@ -71,6 +71,15 @@ local plugins = {
 
 	-- autopairs
 	"windwp/nvim-autopairs",
+
+	-- toggle term
+	"akinsho/toggleterm.nvim",
+
+	-- multiline cursor
+	"mg979/vim-visual-multi",
+
+	-- Add indentation guides even on blank lines
+	"lukas-reineke/indent-blankline.nvim",
 }
 
 local opts = {}

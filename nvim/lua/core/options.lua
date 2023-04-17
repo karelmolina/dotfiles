@@ -8,8 +8,8 @@ g.highlighturl_enabled = true
 g.ui_notifications_enabled = true
 
 -- visual-multi
-g.VM_maps["Add Cusor Up"] = "<C-S-up>"
-g.VM_maps["Add Cusor Down"] = "<C-S-down>"
+--g.VM_maps["Add Cusor Up"] = "<C-S-up>"
+--g.VM_maps["Add Cusor Down"] = "<C-S-down>"
 
 --line numers
 opt.shell = "zsh -l"
