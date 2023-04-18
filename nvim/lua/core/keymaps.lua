@@ -91,7 +91,7 @@ map.set("n", "<leader>tn", function()
 	})
 end, { desc = "ToggleTerm Node " })
 
-map.set("n", "<leader>gg", "<cmd>lua _lazygit_toggle()`<cr>", { desc = "LazyGit " })
+map.set("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<cr>", { desc = "LazyGit " })
 
 map.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "ToggleTerm Float" })
 map.set("n", "<leader>th", "<cmd>ToggleTerm size=10 direction=horizontal<cr>", { desc = "ToggleTerm Horizontal" })
@@ -105,3 +105,23 @@ map.set("n", "]d", vim.diagnostic.goto_next)
 map.set("n", "<leader>q", vim.diagnostic.setloclist)
 
 map.set("n", "<leader>lf", "<cmd>lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>")
+
+--- spectre
+local status, spectre = pcall(require, "spectre")
+if status then
+	map.set("n", "<leader>S", function()
+		spectre.open()
+	end, { desc = "Open Spectre" })
+
+	map.set("n", "<leader>Sw", function()
+		spectre.open_visual({ select_word = true })
+	end, { desc = "Search current word" })
+
+	map.set("n", "<leader>sw", function()
+		spectre.open_visual()
+	end, { desc = "Search current word" })
+
+	map.set("n", "<leader>sp", function()
+		spectre.open_file_search({ select_word = true })
+	end, { desc = "Search on current file" })
+end

@@ -80,6 +80,12 @@ local plugins = {
 
 	-- Add indentation guides even on blank lines
 	"lukas-reineke/indent-blankline.nvim",
+
+	-- display keybidings
+	"folke/which-key.nvim",
+
+	-- search and replace
+	"nvim-pack/nvim-spectre",
 }
 
 local opts = {}
