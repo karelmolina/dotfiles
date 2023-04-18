@@ -25,5 +25,9 @@ whichKey.register({
 		g = { desc = " Git" },
 		t = { desc = " Terminal" },
 		l = { desc = " Lazy" },
+        n = { desc = "Next Hunk"},
+        p = { desc = "Prev Hunk"},
+        h = { desc = "Hunk Actions"},
+        s = { desc = "Spectre Actions"},
 	},
 })
