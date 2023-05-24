@@ -86,6 +86,31 @@ local plugins = {
 
 	-- search and replace
 	"nvim-pack/nvim-spectre",
+
+	-- nvim-dap,
+	"mfussenegger/nvim-dap",
+	"microsoft/vscode-js-debug",
+	"mxsdev/nvim-dap-vscode-js",
+	"theHamsta/nvim-dap-virtual-text",
+	"rcarriga/nvim-dap-ui",
+	-- mason.nvim integration
+	"jay-babu/mason-nvim-dap.nvim",
+	--ruby
+	"tpope/vim-rails",
+	{
+		"folke/trouble.nvim",
+		cmd = "TroubleToggle",
+	},
+	{
+		"max397574/better-escape.nvim",
+		config = function()
+			require("better_escape").setup({
+				mapping = { "jj" }, -- a table with mappings to use
+				timeout = 200, -- the time in which the keys must be hit in ms. clear_empty_lines = false, keys = '<ESC>', -- keys used for escaping
+			})
+		end,
+	},
+    "vim-test/vim-test",
 }
 
 local opts = {}

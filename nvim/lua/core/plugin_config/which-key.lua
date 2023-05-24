@@ -29,5 +29,6 @@ whichKey.register({
         p = { desc = "Prev Hunk"},
         h = { desc = "Hunk Actions"},
         s = { desc = "Spectre Actions"},
+        d = { desc = "Debug"}
 	},
 })

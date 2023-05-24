@@ -7,6 +7,8 @@ g.highlighturl_enabled = true
 -- disable notifications when toggling UI elements
 g.ui_notifications_enabled = true
 
+g.closetag_filenames = '*.html,*.erb'
+
 -- visual-multi
 --g.VM_maps["Add Cusor Up"] = "<C-S-up>"
 --g.VM_maps["Add Cusor Down"] = "<C-S-down>"
@@ -61,3 +63,8 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	pattern = { "*" },
 	command = [[%s/\s\+$//e]],
 })
+
+-- Enable logging
+vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
+local logFilePath = vim.fn.expand(vim.g.nvim_logfile)
+vim.api.nvim_command('redir! >> ' .. logFilePath .. ' | silent! set verbosefile=' .. logFilePath .. ' | set verbose=15 | redir END')
