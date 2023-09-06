@@ -8,9 +8,90 @@ if not uistatus then
 	return
 end
 
-local virutalStatus, virtualText = pcall(require, "nvim-dap-virtual-text")
-if not virutalStatus then
+local vscodeStatus, dap_vscode = pcall(require, "dap-vscode-js")
+if not vscodeStatus then
 	return
+end
+
+dap_vscode.setup({
+  node_path = 'node',
+  debugger_path = os.getenv('HOME') .. '/.DAP/vscode-js-debug',
+  adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
+})
+
+vim.g.dap_nodejs_path = vim.fn.system('volta which node'):gsub('\n', '')
+
+local exts = {
+  'javascript',
+  'typescript',
+  'javascriptreact',
+  'typescriptreact',
+}
+
+for i, ext in ipairs(exts) do
+  dap.configurations[ext] = {
+    {
+      type = 'pwa-node',
+      request = 'launch',
+      name = 'Launch Current File with tsconfig-path',
+      cwd = vim.fn.getcwd(),
+      runtimeArgs = { '-r', 'tsconfig-paths/register' },
+      runtimeExecutable = 'ts-node',
+      args = { '${file}' },
+      sourceMaps = true,
+      protocol = 'inspector',
+      skipFiles = { '<node_internals>/**', 'node_modules/**' },
+      resolveSourceMapLocations = {
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+      },
+      env = {
+          FZ_NODE_ENV = "local"
+      }
+    },
+    {
+      type = 'pwa-node',
+      request = 'launch',
+      name = 'Launch Current File (pwa-node with ts-node)',
+      cwd = vim.fn.getcwd(),
+      runtimeArgs = { '--loader', 'ts-node/esm' },
+      runtimeExecutable = 'node',
+      args = { '${file}' },
+      sourceMaps = true,
+      protocol = 'inspector',
+      skipFiles = { '<node_internals>/**', 'node_modules/**' },
+      resolveSourceMapLocations = {
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+      },
+    },
+    {
+      type = 'pwa-node',
+      request = 'launch',
+      name = 'Launch Test Current File (pwa-node with jest)',
+      cwd = vim.fn.getcwd(),
+      runtimeArgs = { '${workspaceFolder}/node_modules/.bin/jest' },
+      runtimeExecutable = 'node',
+      args = { '${file}', '--coverage', 'false'},
+      rootPath = '${workspaceFolder}',
+      sourceMaps = true,
+      console = 'integratedTerminal',
+      internalConsoleOptions = 'neverOpen',
+      skipFiles = { '<node_internals>/**', 'node_modules/**' },
+    },
+    {
+      type = 'pwa-node',
+      request = 'launch',
+      name = 'Launch Test Current File (pwa-node with vitest)',
+      cwd = vim.fn.getcwd(),
+      program = '${workspaceFolder}/node_modules/vitest/vitest.mjs',
+      args = { '--inspect-brk', '--threads', 'false', 'run', '${file}' },
+      autoAttachChildProcesses = true,
+      smartStep = true,
+      console = 'integratedTerminal',
+      skipFiles = { '<node_internals>/**', 'node_modules/**' },
+    },
+  }
 end
 
 -- Signs
@@ -20,9 +101,8 @@ vim.fn.sign_define("DapBreakpointRejected", { text = "🚫", texthl = "", linehl
 vim.fn.sign_define("DapBreakpointCondition", { text = "❓", texthl = "", linehl = "", numhl = "" })
 vim.fn.sign_define("DapLogPoint", { text = "💬", texthl = "", linehl = "", numhl = "" })
 
-virtualText.setup({})
-
 dapui.setup({
+  floating = { border = "rounded" },
 	icons = { expanded = "▾", collapsed = "▸" },
 	layouts = {
 		{
@@ -46,47 +126,56 @@ dapui.setup({
 	},
 })
 
-dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open({})
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-	dapui.close({})
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close({})
-end
-
-require("dap-vscode-js").setup({
-    debugger_path = "~/.local/share/nvim/lazy/vscode-js-debug",
-	debugger_cmd = { "js-debug-adapter" },
-	adapters = { "pwa-node", "pwa-chrome", "node-terminal" },
-    log_file_path = "~/dap_vscode_js.log",
-})
-
-local masonDap = require('mason-nvim-dap')
-masonDap.setup {
-    automatic_setup = true,
-    handlers = {},
-    ensure_installed = {
-        "js-debug-adapter",
+dapui.setup {
+  floating = { border = "rounded" },
+  controls = {
+    icons = {
+      disconnect = "*️⃣",
+      pause = "⏸️",
+      play = "▶️",
+      run_last = "↪️",
+      step_back = "⬅️",
+      step_into = "⬇️",
+      step_out = "⤴️",
+      step_over = "⤵️",
+      terminate = "⏹️"
     }
+  },
+  layouts = { {
+    elements = {
+      {
+        id = "breakpoints",
+        size = 0.25
+      },
+      {
+        id = "scopes",
+        size = 0.25
+      }, {
+        id = "stacks",
+        size = 0.25
+      }, {
+        id = "watches",
+        size = 0.25
+      } },
+    position = "left",
+    size = 40
+  },
+  {
+    elements = { {
+        id = "repl",
+        size = 1
+      } },
+    position = "bottom",
+    size = 6
+  },
+  {
+    elements = { {
+        id = "console",
+        size = 1
+      } },
+    position = "right",
+    size = 60
+  } }
 }
 
-for _, language in ipairs({ "javascript", "typescript" }) do
-	dap.configurations[language] = {
-		{
-			type = "pwa-node",
-			request = "launch",
-			name = "Launch file",
-			program = "${file}",
-			cwd = "${workspaceFolder}",
-		},
-		{
-			type = "pwa-node",
-			request = "attach",
-			name = "Attach",
-			processId = require("dap.utils").pick_process,
-			cwd = "${workspaceFolder}",
-		},
-	}
-end
+dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
