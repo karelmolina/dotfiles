@@ -1,2 +1,1 @@
-vim.cmd([[colorscheme moonfly]])
-vim.g.moonflyCursorColor = true
+vim.cmd('colorscheme rose-pine')
