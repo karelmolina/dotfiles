@@ -24,13 +24,11 @@ mason_lspconfig.setup({
   ensure_installed = {
     "tsserver",
     "html",
-    "cssls",
     "lua_ls",
     "emmet_ls",
     "jsonls",
     "pyright",
     "yamlls",
-    "ruby_ls",
   },
   -- auto-install configured servers (with lspconfig)
   automatic_installation = true, -- not the same as ensure_installed
