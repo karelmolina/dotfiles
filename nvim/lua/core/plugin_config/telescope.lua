@@ -22,6 +22,7 @@ telescope.setup {
     }
   },
   defaults = {
+    git_worktrees = vim.g.git_worktrees,
     prompt_prefix = "?",
     selection_caret = "*",
             path_display = { "truncate" },
@@ -51,4 +52,10 @@ telescope.setup {
   },
 }
 
-telescope.load_extension("fzf")
+local utils = require "core.utils"
+local notify = pcall(require, "notify")
+local aerial = pcall(require, "aerial")
+
+if notify then telescope.load_extension("notify") end
+if aerial then telescope.load_extension("aerial") end
+if utils.is_available "telescope-fzf-native.nvim" then telescope.load_extension("fzf") end
