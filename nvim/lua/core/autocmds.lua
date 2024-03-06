@@ -41,3 +41,13 @@ cmd(
   end,
   { desc = "Update Plugins and Mason" }
 )
+
+autocmd('FileType', {
+  pattern = 'sh',
+  callback = function()
+    vim.lsp.start({
+      name = 'bash-language-server',
+      cmd = { 'bash-language-server', 'start' },
+    })
+  end,
+})
