@@ -15,6 +15,7 @@ treesitter.setup({
   -- enable autotagging (w/ nvim-ts-autotag plugin)
   autotag = { enable = true },
   -- ensure these language parsers are installed
+  sync_install = false,
   ensure_installed = {
     "json",
     "javascript",
@@ -32,7 +33,11 @@ treesitter.setup({
     "vim",
     "dockerfile",
     "gitignore",
+    "gomod",
+    "go"
   },
+  modules = {},
+  ignore_install = {},
   -- auto install above language parsers
   auto_install = true,
 })
