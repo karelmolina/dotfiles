@@ -38,6 +38,9 @@ null_ls.setup({
 		diagnostics.hadolint,
 		diagnostics.rubocop,
 		diagnostics.tsc,
+		null_ls.builtins.formatting.gofumpt,
+		null_ls.builtins.formatting.goimports_reviser,
+		null_ls.builtins.formatting.golines,
 	},
 	on_attach = on_attach,
 })
