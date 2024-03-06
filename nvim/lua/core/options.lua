@@ -22,6 +22,7 @@ local options = {
     foldenable = true, -- enable fold for nvim-ufo
     foldlevel = 99, -- set high foldlevel for nvim-ufo
     foldlevelstart = 99, -- start with all code unfolded
+    foldmethod = "manual",
     foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
     hlsearch = false, -- Make line numbers default
     history = 100, -- number of commands to remember in a history table

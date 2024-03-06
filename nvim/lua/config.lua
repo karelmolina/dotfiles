@@ -39,7 +39,7 @@ local plugins = {
     "nvim-lualine/lualine.nvim",
 
     -- Add indentation guides even on blank lines
-    "lukas-reineke/indent-blankline.nvim",
+    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 
     { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -145,6 +145,24 @@ local plugins = {
     "jay-babu/mason-nvim-dap.nvim",
 
     "wakatime/vim-wakatime",
+    {
+        "dreamsofcode-io/nvim-dap-go",
+        ft = "go",
+        dependencies = "mfussenegger/nvim-dap",
+        config = function(_, opts)
+          require("dap-go").setup(opts)
+        end
+    },
+    {
+        "olexsmir/gopher.nvim",
+        ft = "go",
+        config = function(_, opts)
+          require("gopher").setup(opts)
+        end,
+        build = function()
+          vim.cmd [[silent! GoInstallDeps]]
+        end,
+    },
 }
 
 local opts = {}
