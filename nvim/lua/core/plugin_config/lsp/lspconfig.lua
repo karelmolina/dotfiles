@@ -10,6 +10,12 @@ if not cmp_nvim_lsp_status then
 	return
 end
 
+
+local util_status, util = pcall(require, "lspconfig/util")
+if not util_status then
+	return
+end
+
 -- enable keybinds only for when lsp server available
 local on_attach = function (client, bufr)
 	require("core.utils.lsp").on_attach(client, bufr)
@@ -85,3 +91,29 @@ lspconfig["jsonls"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
+
+lspconfig["bashls"].setup({
+	default_config = {
+		cmd = {"bash-language-server", "start"};
+		filetypes = {"sh"};
+	},
+	capabilities = capabilities,
+	on_attach = on_attach,
+})
+
+lspconfig["gopls"].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = {"gopls"},
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  settings = {
+    gopls = {
+      completeUnimported = true,
+      usePlaceholders = true,
+      analyses = {
+        unusedparams = true,
+      },
+    },
+  },
+}
