@@ -28,8 +28,8 @@ maps.n["|"] = { "<cmd>vsplit<cr>", desc = "Vertical Split" }
 maps.n["-"] = { "<cmd>split<cr>", desc = "Horizontal Split" }
 maps.n["<leader>k"] = { ":m .-2<CR>==", desc = "Move Line 1 line up" }
 maps.n["<leader>j"] = { ":m .+1<CR>==", desc = "Move Line 1 line down" }
-maps.n["<leader>k"] = { ":m '<-2<CR>==gv", desc = "Move Lines 1 line up" }
-maps.n["<leader>j"] = { ":m '>+1<CR>==gv", desc = "Move Lines 1 line down" }
+maps.v["<leader>k"] = { ":m '<-2<CR>==gv", desc = "Move Lines 1 line up" }
+maps.v["<leader>j"] = { ":m '>+1<CR>==gv", desc = "Move Lines 1 line down" }
 
 -- Plugin Manager
 maps.n["<leader>p"] = sections.p
@@ -355,7 +355,6 @@ if is_available("toggleterm.nvim") then
 			"<cmd>lua _lazygit_toggle() <CR>",
 			desc = "ToggleTerm lazygit",
 		}
-		maps.n["<leader>tl"] = maps.n["<leader>gg"]
 	end
 	if vim.fn.executable("node") == 1 then
 		maps.n["<leader>tn"] = {
@@ -521,5 +520,7 @@ if is_available("nvim-ufo") then
 		desc = "Peek fold",
 	}
 end
+
+maps.n["<C-l>"] = false
 
 util.set_mappings(maps)
