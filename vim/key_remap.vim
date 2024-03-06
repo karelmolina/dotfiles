@@ -1,5 +1,5 @@
 " leader key to space
-let mapleader=","
+let mapleader="\\"
 
 nnoremap<C-s> <ESC>:w<CR>
 inoremap<C-s> <ESC>:w<CR>
@@ -12,7 +12,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 " NERDTree
-map <C-b> :NERDTreeToggle %<CR>
+map <leader>e :NERDTreeToggle %<CR>
 
 " Move lines
 " Normal Mode
@@ -53,28 +53,24 @@ nmap <leader>cn :let @*=expand("%")<CR>
 nmap <leader>cp :let @*=expand("%:p")<CR>
 
 " close
-nnoremap<C-w> <ESC>:q!<CR>
-vnoremap<C-w> <ESC>:q!<CR>
+nnoremap<leader>w <ESC>:w<CR>
+vnoremap<leader>w <ESC>:w<CR>
 
+nnoremap<leader>q <ESC>:q<CR>
+inoremap<leader>q <ESC>:q<CR>
+vnoremap<leader>q <ESC>:q<CR>
 nnoremap<C-q> <ESC>:qa!<CR>
 inoremap<C-q> <ESC>:qa!<CR>
 vnoremap<C-q> <ESC>:qa!<CR>
 
 " fzf
-nnoremap <C-p> :GFiles <CR>
-nnoremap <C-S-P> :Files<CR>
-nnoremap <leader>f :RG<CR>
+nnoremap <leader>ff :GFiles <CR>
+nnoremap <leader>fF :Files<CR>
+nnoremap <leader>fr :RG<CR>
 map <Leader>ag :Ag<CR>
 
 " buffers
 map <Leader>ob :Buffers<cr>
-
-" run current file
-nnoremap <Leader>x :!node %<cr>
-
-" Easy motion
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
 
 " Signify
 nnoremap ghu :SignifyHunkUndo<CR>
@@ -83,31 +79,3 @@ nmap <leader>n <plug>(signify-next-hunk)
 nmap <leader>p <plug>(signify-prev-hunk)
 omap ghv <plug>(signify-motion-inner-pending)
 xmap ghv <plug>(signify-motion-inner-visual)
-
-" Coc
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-nnoremap gp :silent %!prettier --stdin-filepath %<CR>
-
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-nmap <leader>ca <Plug>(coc-codeaction)
-nmap <leader>af :CocCommand eslint.executeAutofix<CR>
-
-" Use jq to format a json file -> (insatll jq)
-nmap <leader>fj :%!jq .<CR>
-
-" start markdown preview
-nmap <leader>mdst :InstantMarkdownPreview<CR>
-nmap <leader>mdsp :InstantMarkdownStop<CR>
-
-" formatter
-vmap <leader>ff  <Plug>(coc-format-selected)
-nmap <leader>ff  <Plug>(coc-format-selected)
-
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)

@@ -42,12 +42,6 @@ Plugin 'bronson/vim-trailing-whitespace'
 " Configure tab labels within Terminal Vim with a very succinct output.
 Plugin 'mkitt/tabline.vim'
 
-" Go to line from vim file:n
-Plugin 'bogado/file-line'
-
-" Match tags
-Plugin 'gregsexton/MatchTag'
-
 " status/tabline for vim
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -55,16 +49,6 @@ Plugin 'vim-airline/vim-airline-themes'
 " Fzf
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'
-
-" Coc Vim
-" to use coc.vim install nodejs and yarn
-Plugin 'neoclide/coc.nvim', {'branch': 'release'}
-
-" You complete Me
-Plugin 'ycm-core/YouCompleteMe'
-
-"emmet -- javascript
-Plugin 'mattn/emmet-vim'
 
 " surround
 Plugin 'tpope/vim-surround'
@@ -78,49 +62,7 @@ Plugin 'itchyny/vim-cursorword'
 " highlight tag
 Plugin 'valloric/matchtagalways'
 
-" complete html tags
-Plugin 'alvan/vim-closetag'
-
-" run test from vim
-Plugin 'vim-test/vim-test'
-
-" search and move faster
-Plugin 'easymotion/vim-easymotion'
-
-" Repeat vim actions
-Plugin 'tpope/vim-repeat'
-
-" editor config
-Plugin 'editorconfig/editorconfig-vim'
-
-" console log utils
-Plugin 'glippi/lognroll-vim'
-
-" markdown
-Plugin 'instant-markdown/vim-instant-markdown'
-
-" smooth scroll
-Plugin 'psliwka/vim-smoothie'
-
-" JSdoc
-Plugin 'heavenshell/vim-jsdoc', {
-  \ 'for': ['javascript', 'javascript.jsx','typescript'],
-  \ 'do': 'make install'
-  \}
-
-" format files
-Plugin 'Chiel92/vim-autoformat'
-
-" autocomplete
-Plugin 'sirver/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'ervandew/supertab'
-
 " themes
-Plugin 'jpo/vim-railscasts-theme'
-
 Plugin 'w0ng/vim-hybrid'
-
-Plugin 'kaicataldo/material.vim', { 'branch': 'main' }
 
 call vundle#end()            " required
