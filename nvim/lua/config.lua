@@ -76,6 +76,7 @@ local plugins = {
         }
     },
     "stevearc/dressing.nvim",
+    "nvim-telescope/telescope-dap.nvim",
 
     -- toggle term
     "akinsho/toggleterm.nvim",
