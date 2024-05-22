@@ -165,6 +165,10 @@ local plugins = {
           vim.cmd [[silent! GoInstallDeps]]
         end,
     },
+    {
+      'Exafunction/codeium.vim',
+      event = 'BufEnter'
+    },
 }
 
 local opts = {}
