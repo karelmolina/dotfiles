@@ -169,6 +169,7 @@ local plugins = {
       'Exafunction/codeium.vim',
       event = 'BufEnter'
     },
+    { "ellisonleao/glow.nvim", config = true, cmd = "Glow"}
 }
 
 local opts = {}
