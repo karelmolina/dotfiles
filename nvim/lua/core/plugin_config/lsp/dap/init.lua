@@ -111,6 +111,16 @@ for i, ext in ipairs(exts) do
       console = "integratedTerminal",
       skipFiles = { "<node_internals>/**", "node_modules/**" },
     },
+    {
+        type = 'node2',
+        request = 'launch',
+        name = 'Launch Command',
+        program = '${file}',
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = 'inspector',
+        skipFiles = {'<node_internals>/**/*.js'},
+    },
   }
 end
 
