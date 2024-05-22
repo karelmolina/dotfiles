@@ -55,7 +55,9 @@ telescope.setup {
 local utils = require "core.utils"
 local notify = pcall(require, "notify")
 local aerial = pcall(require, "aerial")
+local dap = pcall(require, "dap")
 
 if notify then telescope.load_extension("notify") end
 if aerial then telescope.load_extension("aerial") end
+if dap then telescope.load_extension("dap") end
 if utils.is_available "telescope-fzf-native.nvim" then telescope.load_extension("fzf") end
