@@ -46,8 +46,20 @@ local plugins = {
       dependencies = {
         "JoosepAlviste/nvim-ts-context-commentstring",
         "nvim-treesitter/nvim-treesitter-textobjects",
-        { "windwp/nvim-ts-autotag", opts = { autotag = { enable_close_on_slash = false } } },
       },
+    },
+    {
+
+        "windwp/nvim-ts-autotag",
+        ft = {
+          "javascript", "typescript", 'javascriptreact', 'typescriptreact'
+        },
+        dependencies = "nvim-treesitter/nvim-treesitter",
+        config = function ()
+        require('nvim-ts-autotag').setup({})
+        end,
+        lazy = true,
+        event = "VeryLazy"
     },
      -- neo-tree
     {
