@@ -24,10 +24,15 @@ local plugins = {
 
     --colorscheme
     {'rose-pine/neovim', name = 'rose-pine'},
+    {
+      "folke/tokyonight.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {},
+    },
 
     -- git
     "lewis6991/gitsigns.nvim",
-    "tpope/vim-fugitive",
 
     -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
@@ -74,12 +79,8 @@ local plugins = {
     -- autopairs
     "windwp/nvim-autopairs",
 
-    -- autoclose tags
-    "windwp/nvim-ts-autotag",
-
     -- add, delete, change surroundings
     "tpope/vim-surround",
-
     -- telescope
     {
         "nvim-telescope/telescope.nvim",
@@ -96,16 +97,16 @@ local plugins = {
     -- multiline cursor
     "mg979/vim-visual-multi",
 
-    -- snippets
-    {
-        "L3MON4D3/LuaSnip", -- snippet engine
-        dependencies = {
-            "rafamadriz/friendly-snippets", -- useful snippets
-        }
-    },
     {
         "hrsh7th/nvim-cmp",
         dependencies = {
+            {
+              "L3MON4D3/LuaSnip",
+              -- follow latest release.
+              version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+              -- install jsregexp (optional!).
+              build = "make install_jsregexp",
+            },
             "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
@@ -117,7 +118,6 @@ local plugins = {
     -- managing & installing lsp servers, linters & formatters
     "williamboman/mason.nvim", -- in charge of managing lsp servers, linters & formatters
     "williamboman/mason-lspconfig.nvim", -- bridges gap b/w mason & lspconfig
-    "onsails/lspkind.nvim", -- vs-code like icons for autocompletion
 
     -- configuring lsp servers
     "stevearc/aerial.nvim",
@@ -155,8 +155,6 @@ local plugins = {
         { "folke/neodev.nvim", opts = {} }
       },
     },
-    -- mason.nvim integration
-    "jay-babu/mason-nvim-dap.nvim",
 
     "wakatime/vim-wakatime",
     {
