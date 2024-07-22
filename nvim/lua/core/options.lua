@@ -11,6 +11,7 @@ vim.opt.backspace:append { "nostop" } -- don't stop backspace at insert
 
 local options = {
   opt = {
+    backspace = "indent,eol,start", -- allow backspace on indent, end of line or insert mode start position
     breakindent = true, -- wrap indent to match  line start
     clipboard = "unnamedplus", -- connection to the system clipboard
     cmdheight = 0, -- hide command line unless needed
@@ -24,7 +25,7 @@ local options = {
     foldlevelstart = 99, -- start with all code unfolded
     foldmethod = "manual",
     foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
-    hlsearch = false, -- Make line numbers default
+    hlsearch = true, -- Make line numbers default
     history = 100, -- number of commands to remember in a history table
     ignorecase = true, -- case insensitive searching
     infercase = true, -- infer cases in keyword completion
