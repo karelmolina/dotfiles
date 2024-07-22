@@ -42,7 +42,6 @@ mason_null_ls.setup({
     "eslint_d", -- ts/js linter
     "djlint",
     "rubocop",
-    "erb_lint",
     "hadolint",
   },
   -- auto-install configured formatters & linters (with null-ls)
