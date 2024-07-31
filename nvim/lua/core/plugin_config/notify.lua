@@ -1,5 +1,9 @@
 local notify = require("notify")
 notify.setup({
+  background_colour = "NotifyBackground",
+  fps = 30,
+  level = 2,
+  timeout = 5000,
   on_open = function(win)
     vim.api.nvim_win_set_config(win, { zindex = 175 })
     if not vim.g.ui_notifications_enabled then
