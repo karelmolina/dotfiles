@@ -31,6 +31,9 @@ maps.n["<leader>k"] = { ":m .-2<CR>==", desc = "Move Line 1 line up" }
 maps.n["<leader>j"] = { ":m .+1<CR>==", desc = "Move Line 1 line down" }
 maps.v["<leader>k"] = { ":m '<-2<CR>==gv", desc = "Move Lines 1 line up" }
 maps.v["<leader>j"] = { ":m '>+1<CR>==gv", desc = "Move Lines 1 line down" }
+maps.n["<leader>+"] = { "<C-a>", desc = "Increase number" }
+maps.n["<leader>-"] = { "<C-x>", desc = "Decrease number" }
+maps.n["<leader>h"] = { "<cmd>nohlsearch<cr>", desc = "No Highlight" }
 
 -- Plugin Manager
 maps.n["<leader>p"] = sections.p
@@ -78,6 +81,13 @@ maps.n["[t"] = {
     vim.cmd.tabprevious()
   end,
   desc = "Previous tab",
+}
+
+maps.n["]nt"] = {
+  function()
+    vim.cmd.tabnew()
+  end,
+  desc = "New tab",
 }
 
 -- Comment
@@ -162,6 +172,12 @@ if is_available("gitsigns.nvim") then
       require("gitsigns").diffthis()
     end,
     desc = "View Git diff",
+  }
+  maps.n["<leader>gB"] = {
+    function()
+      require("gitsigns").toggle_current_line_blame()
+    end,
+    desc = "Toggle Git blame",
   }
 end
 
