@@ -13,6 +13,11 @@ if not vscodeStatus then
   return
 end
 
+-- git clone https://github.com/microsoft/vscode-js-debug
+-- cd vscode-js-debug
+-- npm install --legacy-peer-deps
+-- npx gulp vsDebugServerBundle
+-- mv dist out
 dap_vscode.setup({
   node_path = "node",
   debugger_path = os.getenv("HOME") .. "/.DAP/vscode-js-debug",
