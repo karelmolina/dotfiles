@@ -30,6 +30,7 @@ local plugins = {
       priority = 1000,
       opts = {},
     },
+    {'bignimbus/pop-punk.vim'},
 
     -- git
     "lewis6991/gitsigns.nvim",
@@ -156,7 +157,6 @@ local plugins = {
       },
     },
 
-    "wakatime/vim-wakatime",
     {
         "dreamsofcode-io/nvim-dap-go",
         ft = "go",
