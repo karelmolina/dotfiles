@@ -23,14 +23,12 @@ local plugins = {
     { "rcarriga/nvim-notify" },
 
     --colorscheme
-    {'rose-pine/neovim', name = 'rose-pine'},
     {
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
       opts = {},
     },
-    {'bignimbus/pop-punk.vim'},
 
     -- git
     "lewis6991/gitsigns.nvim",

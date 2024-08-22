@@ -34,4 +34,4 @@ require("tokyonight").setup({
     colors.fg_sidebar = fg_dark
   end,
 })
-vim.cmd('colorscheme pop-punk')
+vim.cmd[[colorscheme tokyonight-night]]
