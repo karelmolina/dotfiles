@@ -87,6 +87,7 @@ local plugins = {
             { "nvim-telescope/telescope-fzf-native.nvim", enabled = vim.fn.executable "make" == 1, build = "make" },
         }
     },
+    "nvim-telescope/telescope-file-browser.nvim",
     "stevearc/dressing.nvim",
     "nvim-telescope/telescope-dap.nvim",
 

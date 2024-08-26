@@ -19,7 +19,11 @@ telescope.setup {
       override_file_sorter = true,      -- override the file sorter
       case_mode = "smart_case",         -- or "ignore_case" or "respect_case"
       -- the default case_mode is "smart_case"
-    }
+    },
+    file_browser = {
+      theme = "dropdown",
+      hijack_netrw = true,
+    },
   },
   defaults = {
     git_worktrees = vim.g.git_worktrees,
@@ -38,8 +42,6 @@ telescope.setup {
           height = 0.80,
           preview_cutoff = 120,
         },
-
-
     mappings = {
       i = {
           ["<C-n>"] = actions.cycle_history_next,
@@ -56,8 +58,10 @@ local utils = require "core.utils"
 local notify = pcall(require, "notify")
 local aerial = pcall(require, "aerial")
 local dap = pcall(require, "dap")
+local file_browser = pcall(require, "telescope._extensions.file_browser")
 
 if notify then telescope.load_extension("notify") end
 if aerial then telescope.load_extension("aerial") end
 if dap then telescope.load_extension("dap") end
 if utils.is_available "telescope-fzf-native.nvim" then telescope.load_extension("fzf") end
+if file_browser then telescope.load_extension("file_browser") end
