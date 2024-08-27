@@ -26,107 +26,16 @@ dap_vscode.setup({
 
 vim.g.dap_nodejs_path = vim.fn.system("volta which node"):gsub("\n", "")
 
-local exts = {
-  "javascript",
-  "typescript",
-  "javascriptreact",
-  "typescriptreact",
-}
+local dap_config_json = vim.fn.stdpath("config") .. "/dap-config.json"
+if vim.fn.filereadable(dap_config_json) == 1 then
+  local json = vim.fn.readfile(dap_config_json)
+  local dap_configs = vim.fn.json_decode(table.concat(json, "\n"))
 
-for i, ext in ipairs(exts) do
-  dap.configurations[ext] = {
-    {
-      type = "pwa-node",
-      request = "launch",
-      name = "Launch Current File with tsconfig-path with deployment",
-      cwd = vim.fn.getcwd(),
-      runtimeArgs = { "-r", "tsconfig-paths/register" },
-      runtimeExecutable = "ts-node",
-      args = { "${file}" },
-      sourceMaps = true,
-      protocol = "inspector",
-      skipFiles = { "<node_internals>/**", "node_modules/**" },
-      resolveSourceMapLocations = {
-        "${workspaceFolder}/**",
-        "!**/node_modules/**",
-      },
-      env = {
-        FZ_NODE_ENV = "local",
-      },
-    },
-    {
-      type = "pwa-node",
-      request = "launch",
-      name = "Launch Current File with tsconfig-path",
-      cwd = vim.fn.getcwd(),
-      runtimeArgs = { "-r", "tsconfig-paths/register" },
-      runtimeExecutable = "ts-node",
-      args = { "${file}" },
-      sourceMaps = true,
-      protocol = "inspector",
-      skipFiles = { "<node_internals>/**", "node_modules/**" },
-      resolveSourceMapLocations = {
-        "${workspaceFolder}/**",
-        "!**/node_modules/**",
-      },
-      env = {
-        FZ_NODE_ENV = "local",
-      },
-    },
-    {
-      type = "pwa-node",
-      request = "launch",
-      name = "Launch Current File (pwa-node with node)",
-      cwd = vim.fn.getcwd(),
-      runtimeArgs = { },
-      runtimeExecutable = "node",
-      args = { "${file}" },
-      sourceMaps = true,
-      protocol = "inspector",
-      console = "integratedTerminal",
-      skipFiles = { "<node_internals>/**", "node_modules/**" },
-      resolveSourceMapLocations = {
-        "${workspaceFolder}/**",
-        "!**/node_modules/**",
-      },
-    },
-    {
-      type = "pwa-node",
-      request = "launch",
-      name = "Launch Test Current File (pwa-node with jest)",
-      cwd = vim.fn.getcwd(),
-      runtimeArgs = { "${workspaceFolder}/node_modules/.bin/jest" },
-      runtimeExecutable = "node",
-      args = { "${file}", "--coverage", "false" },
-      rootPath = "${workspaceFolder}",
-      sourceMaps = true,
-      console = "integratedTerminal",
-      internalConsoleOptions = "neverOpen",
-      skipFiles = { "<node_internals>/**", "node_modules/**" },
-    },
-    {
-      type = "pwa-node",
-      request = "launch",
-      name = "Launch Test Current File (pwa-node with vitest)",
-      cwd = vim.fn.getcwd(),
-      program = "${workspaceFolder}/node_modules/vitest/vitest.mjs",
-      args = { "--inspect-brk", "--threads", "false", "run", "${file}" },
-      autoAttachChildProcesses = true,
-      smartStep = true,
-      console = "integratedTerminal",
-      skipFiles = { "<node_internals>/**", "node_modules/**" },
-    },
-    {
-        type = 'node2',
-        request = 'launch',
-        name = 'Launch Command',
-        program = '${file}',
-        cwd = vim.fn.getcwd(),
-        sourceMaps = true,
-        protocol = 'inspector',
-        skipFiles = {'<node_internals>/**/*.js'},
-    },
-  }
+  for lang, configs in pairs(dap_configs) do
+    dap.configurations[lang] = configs
+  end
+else
+  print("DAP configuration file not found: " .. dap_config_json)
 end
 
 -- Signs
