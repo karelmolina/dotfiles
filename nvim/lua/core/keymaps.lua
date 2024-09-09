@@ -86,14 +86,16 @@ end
 
 -- GitSigns Mappings
 if is_available("gitsigns.nvim") then
+  local gitsigns = require("gitsigns")
+
   wk.add({
     { "<leader>g", group = "Git" },
-    { "]g", function() require("gitsigns").next_hunk() end, desc = "Next Git hunk", mode = "n" },
-    { "[g", function() require("gitsigns").prev_hunk() end, desc = "Previous Git hunk", mode = "n" },
+    { "]g", function() gitsigns.next_hunk() end, desc = "Next Git hunk", mode = "n" },
+    { "[g", function() gitsigns.prev_hunk() end, desc = "Previous Git hunk", mode = "n" },
     {
       "<leader>gl",
       function()
-        require("gitsigns").blame_line({ full = true })
+        gitsigns.blame_line({ full = true })
       end,
       desc = "Blame line",
       mode = "n",
@@ -101,7 +103,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gL",
       function()
-        require("gitsigns").blame_line({ full = true })
+        gitsigns.blame_line({ full = true })
       end,
       desc = "Blame line",
       mode = "n",
@@ -109,7 +111,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gp",
       function()
-        require("gitsigns").preview_hunk()
+        gitsigns.preview_hunk()
       end,
       desc = "Preview Git hunk",
       mode = "n",
@@ -117,7 +119,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gh",
       function()
-        require("gitsigns").reset_hunk()
+        gitsigns.reset_hunk()
       end,
       desc = "Reset Git hunk",
       mode = "n",
@@ -125,7 +127,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gR",
       function()
-        require("gitsigns").reset_buffer()
+        gitsigns.reset_buffer()
       end,
       desc = "Reset buffer",
       mode = "n",
@@ -133,7 +135,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gs",
       function()
-        require("gitsigns").stage_hunk()
+        gitsigns.stage_hunk()
       end,
       desc = "Stage Git hunk",
       mode = "n",
@@ -141,7 +143,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gS",
       function()
-        require("gitsigns").stage_buffer()
+        gitsigns.stage_buffer()
       end,
       desc = "Stage buffer",
       mode = "n",
@@ -149,7 +151,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gu",
       function()
-        require("gitsigns").undo_stage_hunk()
+        gitsigns.undo_stage_hunk()
       end,
       desc = "Undo stage Git hunk",
       mode = "n",
@@ -157,7 +159,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gd",
       function()
-        require("gitsigns").diffthis()
+        gitsigns.diffthis()
       end,
       desc = "Diff",
       mode = "n",
@@ -165,7 +167,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gB",
       function()
-        require("gitsigns").toggle_current_line_blame()
+        gitsigns.toggle_current_line_blame()
       end,
       desc = "Toggle git Blame",
       mode = "n",
