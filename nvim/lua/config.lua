@@ -1,3 +1,4 @@
+local projects = require("core.utils.projects")
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -19,6 +20,7 @@ local plugins = {
         "kevinhwang91/nvim-ufo",
         event = { "InsertEnter" },
         dependencies = { "kevinhwang91/promise-async" },
+        run = 'yarn install --frozen-lockfile',
     },
     { "rcarriga/nvim-notify" },
 
@@ -152,7 +154,8 @@ local plugins = {
           "rcarriga/cmp-dap",
           dependencies = { "nvim-cmp" },
         },
-        { "folke/neodev.nvim", opts = {} }
+        { "folke/neodev.nvim", opts = {} },
+        "mfussenegger/nvim-dap-python",
       },
     },
 
@@ -178,7 +181,32 @@ local plugins = {
       'Exafunction/codeium.vim',
       event = 'BufEnter',
     },
-    { "ellisonleao/glow.nvim", config = true, cmd = "Glow"}
+    { "ellisonleao/glow.nvim", config = true, cmd = "Glow"},
+    {
+      "romgrk/barbar.nvim",
+      dependencies = {
+        'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+        'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+      },
+    },
+    {
+      "coffebar/neovim-project",
+      opts = {
+        projects = projects.get_project_path(),
+        datapath = vim.fn.stdpath("data"),
+        last_session_on_startup = true,
+      },
+      init = function()
+        vim.opt.sessionoptions:append("globals")
+      end,
+      dependencies = {
+        { "nvim-lua/plenary.nvim" },
+        { "nvim-telescope/telescope.nvim", tag = "0.1.4" },
+        { "Shatur/neovim-session-manager" },
+      },
+      lazy = true,
+      priority = 100,
+    }
 }
 
 local opts = {}
