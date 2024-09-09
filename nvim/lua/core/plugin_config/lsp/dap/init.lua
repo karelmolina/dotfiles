@@ -13,6 +13,11 @@ if not vscodeStatus then
   return
 end
 
+local pythondapstatus, dap_python = pcall(require, "dap-python")
+if not pythondapstatus then
+  return
+end
+
 -- git clone https://github.com/microsoft/vscode-js-debug
 -- cd vscode-js-debug
 -- npm install --legacy-peer-deps
@@ -23,6 +28,12 @@ dap_vscode.setup({
   debugger_path = os.getenv("HOME") .. "/.DAP/vscode-js-debug",
   adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
 })
+
+-- mkdir .virtualenvs
+-- cd .virtualenvs
+-- python -m venv debugpy
+-- debugpy/bin/python -m pip install debugpy
+dap_python.setup("~/.virtualenvs/debugpy/bin/python")
 
 vim.g.dap_nodejs_path = vim.fn.system("volta which node"):gsub("\n", "")
 
