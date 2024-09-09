@@ -359,7 +359,22 @@ if is_available("telescope.nvim") then
       "<leader>fn",
       ":Telescope file_browser path=./node_modules<CR>",
       desc = "Find node_modules",
-    }
+    },
+    {
+      "<leader>fp",
+      ":Telescope neovim-project discover<CR>",
+      desc = "Find project root",
+    },
+    {
+      "<leader>fhp",
+      ":Telescope neovim-project history<CR>",
+      desc = "Find sessions",
+    },
+    {
+      "<leader>f\\",
+      ":NeovimProjectLoadRecent<CR>",
+      desc = "Load recent projects",
+    },
   })
 
   if is_available("nvim-notify") then
