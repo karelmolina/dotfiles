@@ -31,9 +31,8 @@ toggleterm.setup({
   },
 })
 
-local Terminal = terminal.Terminal
-local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
-
 function _lazygit_toggle()
+  local Terminal = terminal.Terminal
+  local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
   lazygit:toggle()
 end
