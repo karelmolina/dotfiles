@@ -119,14 +119,14 @@ dapui.setup({
       position = "left",
       size = 40,
     },
-    {
-      elements = { {
-        id = "repl",
-        size = 1,
-      } },
-      position = "bottom",
-      size = 6,
-    },
+    -- {
+    --   elements = { {
+    --     id = "repl",
+    --     size = 1,
+    --   } },
+    --   position = "bottom",
+    --   size = 6,
+    -- },
     {
       elements = { {
         id = "console",
