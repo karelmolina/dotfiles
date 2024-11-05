@@ -483,35 +483,6 @@ if is_available("nvim-ufo") then
   })
 end
 
--- barbar.nvim
-wk.add({
-  -- Move to previous/next
-  { "<leader>bh", "<cmd>BufferPrevious<cr>", desc = "Previous buffer", mode = "n" },
-  { "<leader>bl", "<cmd>BufferNext<cr>", desc = "Next buffer", mode = "n" },
-  -- Goto buffer in position...
-  { "<leader>b1", "<cmd>BufferGoto 1<cr>", desc = "Buffer 1", mode = "n" },
-  { "<leader>b2", "<cmd>BufferGoto 2<cr>", desc = "Buffer 2", mode = "n" },
-  { "<leader>b3", "<cmd>BufferGoto 3<cr>", desc = "Buffer 3", mode = "n" },
-  { "<leader>b4", "<cmd>BufferGoto 4<cr>", desc = "Buffer 4", mode = "n" },
-  { "<leader>b5", "<cmd>BufferGoto 5<cr>", desc = "Buffer 5", mode = "n" },
-  { "<leader>b6", "<cmd>BufferGoto 6<cr>", desc = "Buffer 6", mode = "n" },
-  { "<leader>b7", "<cmd>BufferGoto 7<cr>", desc = "Buffer 7", mode = "n" },
-  { "<leader>b8", "<cmd>BufferGoto 8<cr>", desc = "Buffer 8", mode = "n" },
-  { "<leader>b9", "<cmd>BufferGoto 9<cr>", desc = "Buffer 9", mode = "n" },
-  { "<leader>b0", "<cmd>BufferLast<cr>", desc = "Last buffer", mode = "n" },
-  -- Pin/unpin buffer
-  { "<leader>bp", "<cmd>BufferPin<cr>", desc = "Pin buffer", mode = "n" },
-  -- Close buffer
-  { "<leader>c", "<cmd>BufferClose<cr>", desc = "Close buffer", mode = "n" },
-  -- Sort automatically by...
-  { "<leader>bb", "<cmd>BufferOrderByBufferNumber<cr>", desc = "Sort by buffer number", mode = "n" },
-  { "<leader>bd", "<cmd>BufferOrderByDirectory<cr>", desc = "Sort by directory", mode = "n" },
-  { "<leader>bL", "<cmd>BufferOrderByLanguage<cr>", desc = "Sort by language", mode = "n" },
-  { "<leader>bw", "<cmd>BufferOrderByWindowNumber<cr>", desc = "Sort by window number", mode = "n" },
-  { "<leader>bc", "<cmd>BufferCloseAllButCurrentOrPinned<cr>", desc = "Close all but current", mode = "n" },
-  { "<C-p>", "<cmd>BufferPick<cr>", desc = "Pick buffer", mode = "n" },
-})
-
 -- Vim Mappings
 vim.keymap.set("n", "<C-l>", 'false')
 -- wk.add({

@@ -31,6 +31,7 @@ local plugins = {
       priority = 1000,
       opts = {},
     },
+    { "rebelot/kanagawa.nvim" },
 
     -- git
     "lewis6991/gitsigns.nvim",
@@ -182,13 +183,6 @@ local plugins = {
       event = 'BufEnter',
     },
     { "ellisonleao/glow.nvim", config = true, cmd = "Glow"},
-    {
-      "romgrk/barbar.nvim",
-      dependencies = {
-        'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-        'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-      },
-    },
     {
       "coffebar/neovim-project",
       opts = {
