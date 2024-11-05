@@ -408,11 +408,11 @@ end
 
 -- DAP Mappings
 if is_available("nvim-dap") then
+  local dap = require("dap")
   wk.add({
     { "<leader>d", group = "Debugger", mode = { "n", "v" } },
     { "<leader>da",
       function()
-        local dap = require('dap')
         local command = vim.fn.input('Enter Command to Run: ')
         if command then
           dap.run({
@@ -425,29 +425,31 @@ if is_available("nvim-dap") then
         end
       end
     },
-    { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint", mode = "n" },
-    { "<leader>dB", function() require("dap").clear_breakpoints() end, desc = "Clear Breakpoints", mode = "n" },
-    { "<leader>dc", function() require("dap").continue() end, desc = "Continue", mode = "n" },
+    { "<leader>db", function() dap.toggle_breakpoint() end, desc = "Toggle Breakpoint", mode = "n" },
+    { "<leader>dB", function() dap.clear_breakpoints() end, desc = "Clear Breakpoints", mode = "n" },
+    { "<leader>dc", function() dap.continue() end, desc = "Continue", mode = "n" },
     { "<leader>dC",
       function()
         vim.ui.input({ prompt = "Condition: " }, function(condition)
           if condition then
-            require("dap").set_breakpoint(condition)
+            dap.set_breakpoint(condition)
           end
         end)
       end,
       desc = "Conditional Breakpoint",
       mode = "n",
     },
-    { "<leader>di", function() require("dap").step_into() end, desc = "Step Into", mode = "n" },
-    { "<leader>do", function() require("dap").step_over() end, desc = "Step Over", mode = "n" },
-    { "<leader>dO", function() require("dap").step_out() end, desc = "Step Out", mode = "n" },
-    { "<leader>dq", function() require("dap").close() end, desc = "Close", mode = "n" },
-    { "<leader>dQ", function() require("dap").terminate() end, desc = "Terminate", mode = "n" },
-    { "<leader>dp", function() require("dap").pause() end, desc = "Pause", mode = "n" },
-    { "<leader>dr", function() require("dap").repl.open() end, desc = "Open REPL", mode = "n" },
-    { "<leader>dR", function() require("dap").restart_frame() end, desc = "Toggle REPL", mode = "n" },
-    { "<leader>ds", function() require("dap").run_to_cursor() end, desc = "Run to cursor", mode = "n" },
+    { "<leader>di", function() dap.step_into() end, desc = "Step Into", mode = "n" },
+    { "<leader>do", function() dap.step_over() end, desc = "Step Over", mode = "n" },
+    { "<leader>dO", function() dap.step_out() end, desc = "Step Out", mode = "n" },
+    { "<leader>dq", function()
+        dap.close()
+        dap.terminate()
+    end, desc = "Exit current Dap", mode = "n" },
+    { "<leader>dp", function() dap.pause() end, desc = "Pause", mode = "n" },
+    { "<leader>dr", function() dap.repl.open() end, desc = "Open REPL", mode = "n" },
+    { "<leader>dR", function() dap.restart_frame() end, desc = "Restart Frame", mode = "n" },
+    { "<leader>ds", function() dap.run_to_cursor() end, desc = "Run to cursor", mode = "n" },
   })
 
   if is_available("nvim-dap-ui") then
@@ -506,6 +508,8 @@ wk.add({
   { "<leader>bd", "<cmd>BufferOrderByDirectory<cr>", desc = "Sort by directory", mode = "n" },
   { "<leader>bL", "<cmd>BufferOrderByLanguage<cr>", desc = "Sort by language", mode = "n" },
   { "<leader>bw", "<cmd>BufferOrderByWindowNumber<cr>", desc = "Sort by window number", mode = "n" },
+  { "<leader>bc", "<cmd>BufferCloseAllButCurrentOrPinned<cr>", desc = "Close all but current", mode = "n" },
+  { "<C-p>", "<cmd>BufferPick<cr>", desc = "Pick buffer", mode = "n" },
 })
 
 -- Vim Mappings
