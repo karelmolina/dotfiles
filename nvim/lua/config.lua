@@ -206,6 +206,7 @@ local plugins = {
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   { "norcalli/nvim-colorizer.lua" },
+  { "folke/twilight.nvim" },
   {
 }
 
