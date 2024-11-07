@@ -492,6 +492,12 @@ end
 wk.add({
   { "<leader>oo", "<cmd>Oil<cr>", desc = "Open Directory", mode = "n" },
 })
+
+-- twilight nvim
+wk.add({
+  { "<leader>tw", "<cmd>Twilight<cr>", desc = "Toggle Twilight", mode = "n" },
+})
+
 -- Vim Mappings
 vim.keymap.set("n", "<C-l>", 'false')
 -- wk.add({
