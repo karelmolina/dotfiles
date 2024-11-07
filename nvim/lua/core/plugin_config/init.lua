@@ -11,7 +11,7 @@ require("core.plugin_config.treesitter")
 require("core.plugin_config.spectre")
 require("core.plugin_config.colorizer")
 require("core.plugin_config.oil")
-require("core.plugin_config.dashboard")
+require("core.plugin_config.alpha")
 
 require("core.plugin_config.lsp.mason")
 require("core.plugin_config.lsp.lspconfig")
