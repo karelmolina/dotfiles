@@ -488,6 +488,10 @@ if is_available("nvim-ufo") then
   })
 end
 
+-- oil nvim
+wk.add({
+  { "<leader>oo", "<cmd>Oil<cr>", desc = "Open Directory", mode = "n" },
+})
 -- Vim Mappings
 vim.keymap.set("n", "<C-l>", 'false')
 -- wk.add({
