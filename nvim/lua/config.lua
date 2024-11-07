@@ -217,6 +217,14 @@ local plugins = {
     lazy = true,
     event = "VimEnter",
   },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+  },
 }
 
 local opts = {}
