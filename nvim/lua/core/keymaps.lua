@@ -21,6 +21,8 @@ wk.add({
   { "<leader>j", ":m .+1<cr>==", desc = "Move line down", mode = "n" },
   { "<leader>k", ":m <-2<cr>==gv", desc = "Move line up", mode = "v" },
   { "<leader>j", ":m '>+1<cr>==gv", desc = "Move line down", mode = "v" },
+  { "<C-u>", "<C-u>zz", desc = "Scroll up", mode = "n" },
+  { "<C-d>", "<C-d>zz", desc = "Scroll down", mode = "n" },
 })
 
 -- Plugin Manager
