@@ -205,6 +205,7 @@ local plugins = {
     "stevearc/oil.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
+  { "norcalli/nvim-colorizer.lua" },
   {
 }
 
