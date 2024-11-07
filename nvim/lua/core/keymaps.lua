@@ -25,6 +25,7 @@ wk.add({
   { "<C-d>", "<C-d>zz", desc = "Scroll down", mode = "n" },
   { "C-c", "<esc>", desc = "Escape", mode = "i" },
   { "C-c", "<esc>", desc = "Escape", mode = "v" },
+  { "<leader>bc", ":silent! %bdelete|edit#|bdelete#<CR>", desc = "Delete other buffers but the current one", mode = "n" },
 })
 
 -- Plugin Manager
