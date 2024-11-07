@@ -19,4 +19,8 @@ indent.setup {
         highlight = highlight,
         remove_blankline_trail = false,
     },
+    exclude = {
+        filetypes = { "dashboard" },
+        buftypes = { "nofile" },
+    }
 }
