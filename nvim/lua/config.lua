@@ -208,6 +208,10 @@ local plugins = {
   { "norcalli/nvim-colorizer.lua" },
   { "folke/twilight.nvim" },
   {
+    "nvimdev/dashboard-nvim",
+    event = "VimEnter",
+    dependencies = { {'nvim-tree/nvim-web-devicons'}}
+  },
 }
 
 local opts = {}
