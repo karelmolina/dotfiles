@@ -22,8 +22,14 @@ local plugins = {
     dependencies = { "kevinhwang91/promise-async" },
     run = "yarn install --frozen-lockfile",
   },
-  { "rcarriga/nvim-notify" },
-
+  {
+    "rcarriga/nvim-notify",
+    opts = {
+      render = "compact", -- Use compact rendering for notifications
+      background_colour = "#1a1b26", -- Set the background color for notifications
+      timeout = 3000, -- Set the timeout for notifications (in milliseconds)
+    },
+  },
   --colorscheme
   {
     "folke/tokyonight.nvim",
