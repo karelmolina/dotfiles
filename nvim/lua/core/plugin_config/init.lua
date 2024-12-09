@@ -13,6 +13,7 @@ require("core.plugin_config.colorizer")
 require("core.plugin_config.oil")
 require("core.plugin_config.alpha")
 require("core.plugin_config.noice")
+require("core.plugin_config.nvim-ufo")
 
 require("core.plugin_config.lsp.mason")
 require("core.plugin_config.lsp.lspconfig")
