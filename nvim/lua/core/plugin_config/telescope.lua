@@ -12,6 +12,14 @@ end
 
 -- configure telescope
 telescope.setup {
+  pickers = {
+    find_files = {
+      theme = "dropdown",
+    },
+    live_grep = {
+      theme = "dropdown",
+    },
+  },
   extensions = {
     fzf = {
       fuzzy = true,                     -- false will only do exact matching
