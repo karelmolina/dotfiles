@@ -18,15 +18,14 @@ local plugins = {
   { "max397574/better-escape.nvim", event = "InsertCharPre", opts = { timeout = 300 } },
   {
     "kevinhwang91/nvim-ufo",
-    event = { "InsertEnter" },
     dependencies = { "kevinhwang91/promise-async" },
     run = "yarn install --frozen-lockfile",
   },
   {
     "rcarriga/nvim-notify",
     opts = {
-      render = "compact", -- Use compact rendering for notifications
-      background_colour = "#1a1b26", -- Set the background color for notifications
+      render = "default", -- Use compact rendering for notifications
+      -- background_colour = "#1a1b26", -- Set the background color for notifications
       timeout = 3000, -- Set the timeout for notifications (in milliseconds)
     },
   },
