@@ -62,8 +62,8 @@ dashboard.section.terminal.width = width
 dashboard.section.terminal.height = height
 dashboard.section.terminal.opts.redraw = true
 dashboard.section.buttons.val = {
-  dashboard.button("s", " " .. " Restore Session", [[:lua require("persistence").load() <cr>]]),
-  dashboard.button("f", " " .. " Recent files", ":lua require('telescope').extensions.recent_files.pick()<CR>"),
+  dashboard.button("p", " " .. "Find Projects", [[:Telescope neovim-project discover<CR>]]),
+  dashboard.button("f", " " .. " Recent files", [[:lua  require("telescope.builtin").oldfiles()<CR>]]),
   dashboard.button("l", " " .. " Update plugins", ":Lazy<CR>"),
   dashboard.button("q", " " .. " Quit", ":qa<CR>"),
 }
