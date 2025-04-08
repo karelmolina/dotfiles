@@ -8,26 +8,18 @@ if not uistatus then
   return
 end
 
-local vscodeStatus, dap_vscode = pcall(require, "dap-vscode-js")
-if not vscodeStatus then
-  return
-end
-
 local pythondapstatus, dap_python = pcall(require, "dap-python")
+
 if not pythondapstatus then
   return
 end
 
--- git clone https://github.com/microsoft/vscode-js-debug
--- cd vscode-js-debug
--- npm install --legacy-peer-deps
--- npx gulp vsDebugServerBundle
--- mv dist out
-dap_vscode.setup({
-  node_path = "node",
-  debugger_path = os.getenv("HOME") .. "/.DAP/vscode-js-debug",
-  adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
-})
+local utilsStatus, utils = pcall(require, "core.utils")
+
+if not utilsStatus then
+  return
+end
+
 
 -- mkdir .virtualenvs
 -- cd .virtualenvs
@@ -55,6 +47,22 @@ vim.fn.sign_define("DapStopped", { text = "▶️", texthl = "", linehl = "", nu
 vim.fn.sign_define("DapBreakpointRejected", { text = "🚫", texthl = "", linehl = "", numhl = "" })
 vim.fn.sign_define("DapBreakpointCondition", { text = "❓", texthl = "", linehl = "", numhl = "" })
 vim.fn.sign_define("DapLogPoint", { text = "💬", texthl = "", linehl = "", numhl = "" })
+
+-- fix related to https://github.com/mxsdev/nvim-dap-vscode-js/issues/58
+-- error when using nvim-dap-vscode-js ** its not needed anymore **
+-- workaround is configure manually
+dap.adapters['pwa-node'] = {
+  type = 'server',
+  host = 'localhost',
+  port = '${port}',
+  executable = {
+    command = 'node',
+    args = {
+      utils.get_pkg_path('js-debug-adapter', '/js-debug/src/dapDebugServer.js'),
+      '${port}',
+    },
+  },
+}
 
 dapui.setup({
   floating = { border = "rounded" },
