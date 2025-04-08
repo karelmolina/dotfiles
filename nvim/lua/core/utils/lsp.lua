@@ -59,11 +59,12 @@ local function add_buffer_autocmd(augroup, bufnr, autocmds)
 end
 
 function M.on_attach(client, bufnr)
+  -- Add keybindings with `which-key` (wk)
   wk.add({
     {
       "<leader>ld",
       function()
-       vim.diagnostic.open_float()
+        vim.diagnostic.open_float()
       end,
       desc = "Hover diagnostics",
       mode = "n",
@@ -95,7 +96,7 @@ function M.on_attach(client, bufnr)
     {
       "<leader>la",
       function()
-       vim.lsp.buf.code_action()
+        vim.lsp.buf.code_action()
       end,
       desc = "LSP code action",
       mode = { "n", "v" },
@@ -103,7 +104,7 @@ function M.on_attach(client, bufnr)
     {
       "gD",
       function()
-       vim.lsp.buf.declaration()
+        vim.lsp.buf.declaration()
       end,
       desc = "Declaration of current symbol",
       mode = "n",
@@ -111,7 +112,7 @@ function M.on_attach(client, bufnr)
     {
       "gd",
       function()
-       vim.lsp.buf.definition()
+        vim.lsp.buf.definition()
       end,
       desc = "Show the definition of current symbol",
       mode = "n",
@@ -119,7 +120,7 @@ function M.on_attach(client, bufnr)
     {
       "<leader>lr",
       function()
-       vim.lsp.buf.rename()
+        vim.lsp.buf.rename()
       end,
       desc = "Rename current symbol",
       mode = "n",
@@ -131,18 +132,20 @@ function M.on_attach(client, bufnr)
       {
         "<leader>lD",
         function()
-         require("telescope.builtin").diagnostics()
+          require("telescope.builtin").diagnostics()
         end,
-        desc = "Search diagnostics",}
+        desc = "Search diagnostics",
+      },
     })
   end
 
+  -- Add formatting keybind only if the LSP supports it
   if client.supports_method("textDocument/formatting") then
     wk.add({
       {
         "<leader>lf",
         function()
-         vim.lsp.buf.format(format_opts)
+          vim.lsp.buf.format(M.format_opts)
         end,
         desc = "Format buffer",
         mode = { "n", "v" },
@@ -152,44 +155,38 @@ function M.on_attach(client, bufnr)
     vim.api.nvim_buf_create_user_command(bufnr, "Format", function()
       vim.lsp.buf.format(M.format_opts)
     end, { desc = "Format file with LSP" })
+
+    -- Autoformat on save (if enabled)
     local autoformat = { enabled = false }
     local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-    if
-      autoformat.enabled
-        and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
-        and (
-          tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(
-            autoformat.ignore_filetypes,
-            filetype
-          )
-        )
+    if autoformat.enabled
+      and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
+      and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
     then
-       add_buffer_autocmd("lsp_auto_format", bufnr, {
+      add_buffer_autocmd("lsp_auto_format", bufnr, {
         events = "BufWritePre",
         desc = "autoformat on save",
         callback = function()
-         if not M.has_capability("textDocument/codeLens", { bufnr = bufnr }) then
-          del_buffer_autocmd("lsp_auto_format", bufnr)
-          return
-         end
-         local autoformat_enabled = vim.b.autoformat_enabled
-         if autoformat_enabled == nil then
-          autoformat_enabled = vim.g.autoformat_enabled
-         end
-         if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
-          vim.lsp.buf.format(extend_tbl(format_opts, { bufnr = bufnr }))
-         end
+          if not M.has_capability("textDocument/codeLens", { bufnr = bufnr }) then
+            del_buffer_autocmd("lsp_auto_format", bufnr)
+            return
+          end
+          local autoformat_enabled = vim.b.autoformat_enabled or vim.g.autoformat_enabled
+          if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
+            vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
+          end
         end,
-       })
+      })
     end
   end
 
+  -- Add references keybind only if the LSP supports it
   if client.supports_method("textDocument/references") then
     wk.add({
       {
         "gr",
         function()
-         vim.lsp.buf.references()
+          vim.lsp.buf.references()
         end,
         desc = "Search references",
         mode = "n",
@@ -197,7 +194,7 @@ function M.on_attach(client, bufnr)
       {
         "<leader>lR",
         function()
-         vim.lsp.buf.references()
+          vim.lsp.buf.references()
         end,
         desc = "Search references",
         mode = "n",
@@ -206,90 +203,90 @@ function M.on_attach(client, bufnr)
   end
 
   if is_available("telescope.nvim") then
+    -- Add mappings for Telescope if already registered
     if is_mapping_registered("n", "gd") then
-        wk.add({
-          {
-            "gd",
-            function()
-             require("telescope.builtin").lsp_definitions()
-            end,
-            desc = "Show the definition of current symbol",
-            mode = "n",
-          },
-        })
+      wk.add({
+        {
+          "gd",
+          function()
+            require("telescope.builtin").lsp_definitions()
+          end,
+          desc = "Show the definition of current symbol",
+          mode = "n",
+        },
+      })
     end
     if is_mapping_registered("n", "gI") then
-        wk.add({
-          {
-            "gI",
-            function()
-             require("telescope.builtin").lsp_implementations()
-            end,
-            desc = "Show the implementation of current symbol",
-            mode = "n",
-          },
-        })
+      wk.add({
+        {
+          "gI",
+          function()
+            require("telescope.builtin").lsp_implementations()
+          end,
+          desc = "Show the implementation of current symbol",
+          mode = "n",
+        },
+      })
     end
     if is_mapping_registered("n", "gr") then
-        wk.add({
-          {
-            "gr",
-            function()
-             require("telescope.builtin").lsp_references()
-            end,
-            desc = "Search references",
-            mode = "n",
-          },
-        })
+      wk.add({
+        {
+          "gr",
+          function()
+            require("telescope.builtin").lsp_references()
+          end,
+          desc = "Search references",
+          mode = "n",
+        },
+      })
     end
     if is_mapping_registered("n", "<leader>lR") then
-        wk.add({
-          {
-            "<leader>lR",
-            function()
-             require("telescope.builtin").lsp_references()
-            end,
-            desc = "Search references",
-            mode = "n",
-          },
-        })
+      wk.add({
+        {
+          "<leader>lR",
+          function()
+            require("telescope.builtin").lsp_references()
+          end,
+          desc = "Search references",
+          mode = "n",
+        },
+      })
     end
     if is_mapping_registered("n", "gy") then
-        wk.add({
-          {
-            "gy",
-            function()
-             require("telescope.builtin").lsp_type_definitions()
-            end,
-            desc = "Show the type definition of current symbol",
-            mode = "n",
-          },
-        })
+      wk.add({
+        {
+          "gy",
+          function()
+            require("telescope.builtin").lsp_type_definitions()
+          end,
+          desc = "Show the type definition of current symbol",
+          mode = "n",
+        },
+      })
     end
     if is_mapping_registered("n", "<leader>lG") then
-        wk.add({
-          {
-            "<leader>lG",
-            function()
-              vim.ui.input({ prompt = "Symbol Query: (leave empty for word under cursor)" }, function(query)
-               if query then
-                -- word under cursor if given query is empty
+      wk.add({
+        {
+          "<leader>lG",
+          function()
+            vim.ui.input({ prompt = "Symbol Query: (leave empty for word under cursor)" }, function(query)
+              if query then
                 if query == "" then
-                 query = vim.fn.expand("<cword>")
+                  query = vim.fn.expand("<cword>")
                 end
                 require("telescope.builtin").lsp_workspace_symbols({
-                 query = query,
-                 prompt_title = ("Find word (%s)"):format(query),
+                  query = query,
+                  prompt_title = ("Find word (%s)"):format(query),
                 })
-               end
-              end)
-            end,
-            desc = "Search workspace symbols",
-            mode = "n",
-          },
-        })
+              end
+            end)
+          end,
+          desc = "Search workspace symbols",
+          mode = "n",
+        },
+      })
     end
-   end
+  end
 end
 
 return M
