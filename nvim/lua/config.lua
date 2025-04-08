@@ -141,7 +141,13 @@ local plugins = {
   }, -- enhanced lsp uis
 
   -- formatting & linting
-  "jose-elias-alvarez/null-ls.nvim", -- configure formatters & linters
+  {
+    "nvimtools/none-ls.nvim", -- configure formatters & linters
+     dependencies = {
+      "nvimtools/none-ls-extras.nvim",
+      "gbprod/none-ls-shellcheck.nvim",
+    }
+  },
   "jayp0521/mason-null-ls.nvim", -- bridges gap b/w mason & null-ls
 
   -- nvim-dap,
@@ -149,7 +155,6 @@ local plugins = {
     "mfussenegger/nvim-dap",
     enabled = vim.fn.has("win32") == 0,
     dependencies = {
-      "mxsdev/nvim-dap-vscode-js",
       {
         "jay-babu/mason-nvim-dap.nvim",
         dependencies = { "nvim-dap" },
@@ -192,6 +197,7 @@ local plugins = {
     "Exafunction/codeium.vim",
     event = "BufEnter",
   },
+  -- { "github/copilot.vim" },
   { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
   {
     "coffebar/neovim-project",
@@ -230,6 +236,8 @@ local plugins = {
       "rcarriga/nvim-notify",
     },
   },
+  -- diffnvim
+  "sindrets/diffview.nvim",
 }
 
 local opts = {}
