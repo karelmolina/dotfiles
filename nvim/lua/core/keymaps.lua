@@ -453,7 +453,6 @@ if is_available("nvim-dap") then
     end, desc = "Exit current Dap", mode = "n" },
     { "<leader>dp", function() dap.pause() end, desc = "Pause", mode = "n" },
     { "<leader>dr", function() dap.repl.open() end, desc = "Open REPL", mode = "n" },
-    { "<leader>dR", function() dap.restart_frame() end, desc = "Restart Frame", mode = "n" },
     { "<leader>ds", function() dap.run_to_cursor() end, desc = "Run to cursor", mode = "n" },
   })
 
@@ -472,6 +471,11 @@ if is_available("nvim-dap") then
         mode = { "n", "v" },
       },
       { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle UI", mode = "n" },
+      { "<leader>dR", function()
+        local dapui = require("dapui")
+        dapui.close()
+        dapui.open()
+      end, desc = "Restart UI", mode = "n" },
       { "<leader>dh", function() require("dap.ui.widgets").hover() end, desc = "Debugger Hover", mode = "n" },
     })
   end
