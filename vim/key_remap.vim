@@ -1,5 +1,5 @@
 " leader key to space
-let mapleader="\\"
+let mapleader=" "
 
 nnoremap<C-s> <ESC>:w<CR>
 inoremap<C-s> <ESC>:w<CR>
