@@ -14,11 +14,12 @@ require("core.plugin_config.oil")
 require("core.plugin_config.alpha")
 require("core.plugin_config.noice")
 require("core.plugin_config.nvim-ufo")
+require("core.plugin_config.diffview")
 
 require("core.plugin_config.lsp.mason")
+require("core.plugin_config.lsp.null-ls")
 require("core.plugin_config.lsp.lspconfig")
 require("core.plugin_config.lsp.lspsaga")
-require("core.plugin_config.lsp.null-ls")
 require("core.plugin_config.lsp.dap")
 require("core.plugin_config.lsp.aerial")
 
