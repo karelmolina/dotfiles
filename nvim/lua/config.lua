@@ -194,7 +194,8 @@ local plugins = {
     end,
   },
   {
-    "Exafunction/codeium.vim",
+    -- renamed from codeium ==> https://windsurf.com/
+    "Exafunction/windsurf.vim",
     event = "BufEnter",
   },
   -- { "github/copilot.vim" },
