@@ -1,11 +1,15 @@
 " SCHEME
-let g:hybrid_custom_term_colors = 1
-let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-colorscheme hybrid
+let g:tokyonight_style = 'night' " options: 'storm', 'night', 'day'
+let g:tokyonight_enable_italic = 1
+let g:tokyonight_transparent_background = 0
+colorscheme tokyonight
 
 "  Vim commentary
-noremap \c :Commentary<CR
+noremap \c :Commentary<CR>
 autocmd FileType ruby setlocal commentstring=#\ %s
+autocmd FileType javascript setlocal commentstring=//\ %s
+autocmd FileType typescript setlocal commentstring=//\ %s
+autocmd FileType html setlocal commentstring=<!--\ %s\ -->
 
 " Fzf
 command! -bang -nargs=? -complete=dir Files
@@ -26,8 +30,6 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 " You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
-let g:fzf_layout = { 'window': 'enew' }
-let g:fzf_layout = { 'window': '-tabnew' }
 let g:fzf_layout = { 'window': '10new' }
 
 " Enable per-command history
