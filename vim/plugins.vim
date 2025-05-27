@@ -64,5 +64,25 @@ Plugin 'valloric/matchtagalways'
 
 " themes
 Plugin 'w0ng/vim-hybrid'
+Plugin 'ghifarit53/tokyonight-vim'
+Plugin 'catppuccin/vim'
+
+" Which-key alternative
+Plugin 'liuchengxu/vim-which-key'
+
+" Floating terminal
+Plugin 'voldikss/vim-floaterm'
+
+" Colorizer for hex colors
+Plugin 'chrisbra/Colorizer'
+
+" Markdown previewer for Vim
+Plugin 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
+" Optional for autocompletion (alternative to nvim-cmp)
+Plugin 'Shougo/neocomplete.vim'
+
+" Optional: Linting support
+Plugin 'dense-analysis/ale'
 
 call vundle#end()            " required
