@@ -26,7 +26,7 @@ local plugins = {
     opts = {
       render = "default", -- Use compact rendering for notifications
       -- background_colour = "#1a1b26", -- Set the background color for notifications
-      timeout = 3000, -- Set the timeout for notifications (in milliseconds)
+      timeout = 3000,     -- Set the timeout for notifications (in milliseconds)
     },
   },
   --colorscheme
@@ -37,7 +37,21 @@ local plugins = {
     opts = {},
   },
   { "rebelot/kanagawa.nvim" },
-  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000
+  },
+  {
+    "rose-pine/neovim",
+    name = "rose-pine"
+  },
+  {
+    "bluz71/vim-moonfly-colors",
+    name = "moonfly",
+    lazy = false,
+    priority = 1000
+  },
 
   -- git
   "lewis6991/gitsigns.nvim",
@@ -87,7 +101,7 @@ local plugins = {
     end,
   },
   -- "gc" to comment visual regions/lines
-  { "numToStr/Comment.nvim", opts = {} },
+  { "numToStr/Comment.nvim",               opts = {} },
 
   -- autopairs
   "windwp/nvim-autopairs",
@@ -129,7 +143,7 @@ local plugins = {
   },
 
   -- managing & installing lsp servers, linters & formatters
-  "williamboman/mason.nvim", -- in charge of managing lsp servers, linters & formatters
+  "williamboman/mason.nvim",           -- in charge of managing lsp servers, linters & formatters
   "williamboman/mason-lspconfig.nvim", -- bridges gap b/w mason & lspconfig
 
   -- configuring lsp servers
@@ -143,7 +157,7 @@ local plugins = {
   -- formatting & linting
   {
     "nvimtools/none-ls.nvim", -- configure formatters & linters
-     dependencies = {
+    dependencies = {
       "nvimtools/none-ls-extras.nvim",
       "gbprod/none-ls-shellcheck.nvim",
     }
@@ -199,7 +213,7 @@ local plugins = {
     event = "BufEnter",
   },
   -- { "github/copilot.vim" },
-  { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
+  { "ellisonleao/glow.nvim",      config = true, cmd = "Glow" },
   {
     "coffebar/neovim-project",
     opts = {
@@ -239,6 +253,14 @@ local plugins = {
   },
   -- diffnvim
   "sindrets/diffview.nvim",
+  {
+    "m4xshen/hardtime.nvim",
+    lazy = false,
+    dependencies = { "MunifTanjim/nui.nvim" },
+    opts = {
+      disable_mouse = false,
+    },
+  },
 }
 
 local opts = {}
