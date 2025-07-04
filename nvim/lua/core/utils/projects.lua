@@ -1,5 +1,7 @@
 local M = {}
-local project_path_json = vim.fn.stdpath("config") .. "/project_path.json"
+local project_name = vim.env.project or ""
+local project_path_name = "/" .. project_name .. "project_path.json"
+local project_path_json = vim.fn.stdpath("config") .. project_path_name
 
 function M.get_project_path()
   local paths = {}
