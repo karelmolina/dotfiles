@@ -1,3 +1,7 @@
-require("core.colorschemes.kanagawa")
+require("core.colorschemes")
 
-vim.cmd[[colorscheme kanagawa-dragon]]
+-- colorscheme
+local default = "cyberdream"
+local theme = vim.env.theme or default
+
+pcall(vim.cmd.colorscheme, theme)
