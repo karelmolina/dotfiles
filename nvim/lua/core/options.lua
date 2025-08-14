@@ -51,6 +51,7 @@ local options = {
     virtualedit = "block", -- allow going past end of line in visual block mode
     wrap = false, -- disable wrapping of lines longer than the width of window
     writebackup = false, -- disable making a backup before overwriting a file
+    conceallevel = 1, -- so that `` is visible in markdown
   },
   g = {
     max_file = { size = 1024 * 100, lines = 10000 }, -- set global limits for large files

@@ -38,6 +38,11 @@ local plugins = {
   },
   { "rebelot/kanagawa.nvim" },
   {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+  {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000
@@ -212,7 +217,6 @@ local plugins = {
     "Exafunction/windsurf.vim",
     event = "BufEnter",
   },
-  -- { "github/copilot.vim" },
   { "ellisonleao/glow.nvim",      config = true, cmd = "Glow" },
   {
     "coffebar/neovim-project",
@@ -261,6 +265,10 @@ local plugins = {
       disable_mouse = false,
     },
   },
+  {
+    "epwalsh/obsidian.nvim",
+    version = "*",
+  }
 }
 
 local opts = {}
