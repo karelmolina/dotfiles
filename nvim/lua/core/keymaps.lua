@@ -95,8 +95,8 @@ if is_available("gitsigns.nvim") then
 
   wk.add({
     { "<leader>g", group = "Git" },
-    { "]g", function() gitsigns.next_hunk() end, desc = "Next Git hunk", mode = "n" },
-    { "[g", function() gitsigns.prev_hunk() end, desc = "Previous Git hunk", mode = "n" },
+    { "]g", function() gitsigns.nav_hunk('next') end, desc = "Next Git hunk", mode = "n" },
+    { "[g", function() gitsigns.nav_hunk('prev') end, desc = "Previous Git hunk", mode = "n" },
     {
       "<leader>gl",
       function()
@@ -156,7 +156,7 @@ if is_available("gitsigns.nvim") then
     {
       "<leader>gu",
       function()
-        gitsigns.undo_stage_hunk()
+        gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
       end,
       desc = "Undo stage Git hunk",
       mode = "n",
