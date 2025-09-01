@@ -7,6 +7,13 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 	command = [[%s/\s\+$//e]],
 })
 
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+  pattern = "*.md",
+  callback = function()
+    vim.opt_local.conceallevel = 1
+  end,
+})
+
 vim.opt.backspace:append { "nostop" } -- don't stop backspace at insert
 
 local options = {
@@ -51,7 +58,6 @@ local options = {
     virtualedit = "block", -- allow going past end of line in visual block mode
     wrap = false, -- disable wrapping of lines longer than the width of window
     writebackup = false, -- disable making a backup before overwriting a file
-    conceallevel = 1, -- so that `` is visible in markdown
   },
   g = {
     max_file = { size = 1024 * 100, lines = 10000 }, -- set global limits for large files
@@ -81,5 +87,5 @@ end
 -- Enable logging
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
 -- local logFilePath = vim.fn.expand(vim.g.nvim_logfile)
---vim.api.nvim_command('redir! >> ' .. logFilePath .. ' | silent! set verbosefile=' .. logFilePath .. ' | set verbose=15 | redir END')
+-- vim.api.nvim_command('redir! >> ' .. logFilePath .. ' | silent! set verbosefile=' .. logFilePath .. ' | set verbose=15 | redir END')
 

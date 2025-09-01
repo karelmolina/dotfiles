@@ -171,6 +171,9 @@ function M.on_attach(client, bufnr)
             del_buffer_autocmd("lsp_auto_format", bufnr)
             return
           end
+
+          if vim.bo.filetype == "dap-repl" or vim.bo.filetype == "markdown" then return end
+
           local autoformat_enabled = vim.b.autoformat_enabled or vim.g.autoformat_enabled
           if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then
             vim.lsp.buf.format(extend_tbl(M.format_opts, { bufnr = bufnr }))
