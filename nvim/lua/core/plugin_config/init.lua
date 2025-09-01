@@ -15,6 +15,7 @@ require("core.plugin_config.alpha")
 require("core.plugin_config.noice")
 require("core.plugin_config.nvim-ufo")
 require("core.plugin_config.diffview")
+require("core.plugin_config.render-markdown")
 require("core.plugin_config.obsidian")
 
 require("core.plugin_config.lsp.mason")
