@@ -17,6 +17,7 @@ require("core.plugin_config.nvim-ufo")
 require("core.plugin_config.diffview")
 require("core.plugin_config.render-markdown")
 require("core.plugin_config.obsidian")
+require("core.plugin_config.rustaceanvim")
 
 require("core.plugin_config.lsp.mason")
 require("core.plugin_config.lsp.null-ls")

@@ -17,3 +17,13 @@ function y() {
   [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
   rm -f -- "$tmp"
 }
+
+function power() {
+  export GIT_SSH_COMMAND='ssh -i ~/.ssh/tvup  -o IdentitiesOnly=yes'
+  echo "Using SSH key ~/.ssh/tvup"
+}
+
+function tvup() {
+  export GIT_SSH_COMMAND='ssh -T -i ~/.ssh/kareltvup -F ~/.ssh/tvup-config/config -o IdentitiesOnly=yes'
+  echo "Using SSH key ~/.ssh/kareltvup"
+}
