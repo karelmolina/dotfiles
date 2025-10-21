@@ -32,7 +32,8 @@ treesitter.setup({
     "dockerfile",
     "gitignore",
     "gomod",
-    "go"
+    "go",
+    "rust",
   },
   modules = {},
   ignore_install = {},
