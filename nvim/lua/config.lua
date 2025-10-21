@@ -26,7 +26,7 @@ local plugins = {
     opts = {
       render = "default", -- Use compact rendering for notifications
       -- background_colour = "#1a1b26", -- Set the background color for notifications
-      timeout = 3000,     -- Set the timeout for notifications (in milliseconds)
+      timeout = 3000, -- Set the timeout for notifications (in milliseconds)
     },
   },
   --colorscheme
@@ -45,17 +45,17 @@ local plugins = {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    priority = 1000
+    priority = 1000,
   },
   {
     "rose-pine/neovim",
-    name = "rose-pine"
+    name = "rose-pine",
   },
   {
     "bluz71/vim-moonfly-colors",
     name = "moonfly",
     lazy = false,
-    priority = 1000
+    priority = 1000,
   },
 
   -- git
@@ -106,7 +106,7 @@ local plugins = {
     end,
   },
   -- "gc" to comment visual regions/lines
-  { "numToStr/Comment.nvim",               opts = {} },
+  { "numToStr/Comment.nvim", opts = {} },
 
   -- autopairs
   "windwp/nvim-autopairs",
@@ -148,7 +148,7 @@ local plugins = {
   },
 
   -- managing & installing lsp servers, linters & formatters
-  "williamboman/mason.nvim",           -- in charge of managing lsp servers, linters & formatters
+  "williamboman/mason.nvim", -- in charge of managing lsp servers, linters & formatters
   "williamboman/mason-lspconfig.nvim", -- bridges gap b/w mason & lspconfig
 
   -- configuring lsp servers
@@ -165,7 +165,7 @@ local plugins = {
     dependencies = {
       "nvimtools/none-ls-extras.nvim",
       "gbprod/none-ls-shellcheck.nvim",
-    }
+    },
   },
   "jayp0521/mason-null-ls.nvim", -- bridges gap b/w mason & null-ls
 
@@ -217,7 +217,7 @@ local plugins = {
     "Exafunction/windsurf.vim",
     event = "BufEnter",
   },
-  { "ellisonleao/glow.nvim",      config = true, cmd = "Glow" },
+  { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
   {
     "coffebar/neovim-project",
     opts = {
@@ -266,8 +266,8 @@ local plugins = {
     },
   },
   {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
   },
@@ -279,7 +279,12 @@ local plugins = {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-  }
+  },
+  {
+    "mrcjkb/rustaceanvim",
+    version = "^6", -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
 }
 
 local opts = {}

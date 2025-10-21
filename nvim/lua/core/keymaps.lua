@@ -184,7 +184,7 @@ end
 if is_available("neo-tree.nvim") then
   wk.add({
     { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer", mode = "n" },
-    { "<leader>o", function()
+    { "<leader>r", function()
         if vim.bo.filetype == "neo-tree" then
           vim.cmd.wincmd("p")
         else
@@ -492,9 +492,33 @@ if is_available("nvim-ufo") then
   })
 end
 
+-- obsidian
+wk.add({
+  { "<leader>o",  group = "Obsidian" },
+  { "<leader>ob", ":ObsidianQuickSwitch<cr>", desc = "Open Obsidian",   mode = "n" },
+  { "<leader>od", ":ObsidianDailies<cr>",       desc = "Open daily note", mode = "n" },
+  { "<leader>ot", ":ObsidianTemplate note<cr>",       desc = "Open daily note", mode = "n" },
+  {
+    "<leader>ch",
+    function()
+      return require("obsidian").util.toggle_checkbox()
+    end,
+    desc = "Toggle checkbox",
+    mode = { "n", "v" },
+  },
+  {
+    "<leader>cr",
+    function()
+      return require("obsidian").util.smart_action()
+    end,
+    desc = "Toggle checkbox",
+    mode = { "n", "v" },
+  }
+})
+
 -- oil nvim
 wk.add({
-  { "<leader>oo", "<cmd>Oil<cr>", desc = "Open Directory", mode = "n" },
+  { "<leader>ol", "<cmd>Oil<cr>", desc = "Open Directory", mode = "n" },
 })
 
 -- twilight nvim
