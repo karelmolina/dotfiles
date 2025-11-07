@@ -531,6 +531,18 @@ vim.keymap.set("n", "<C-l>", 'false')
 -- wk.add({
 --   { "<C-l>", false, mode = "n" }, -- Disable this keymap
 -- })
+
+-- Spectre
+if is_available("nvim-spectre") then
+  local spectre = require("spectre")
+  wk.add({
+    { "<leader>S", function() spectre.toggle() end, desc = "Toggle Spectre", mode = "n" },
+    { "<leader>sw", function() spectre.open_visual({ select_word = true }) end, desc = "Search current word", mode = "n" },
+    { "<leader>sw", function() spectre.open_visual() end, desc = "Search current word", mode = "v" },
+    { "<leader>sf", function() spectre.open_file_search({ select_word = true }) end, desc = "Search current file", mode = "n" },
+  })
+end
+
 -- Kulala
 if is_available("kulala.nvim") then
   local kulala = require("kulala")

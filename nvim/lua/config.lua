@@ -286,6 +286,12 @@ local plugins = {
     lazy = false, -- This plugin is already lazy
   },
   {
+    "nvim-pack/nvim-spectre",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+  },
+  {
     "mistweaverco/kulala.nvim",
     ft = { "http", "rest" }, -- load only for these filetypes
   },
