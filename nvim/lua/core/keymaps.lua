@@ -184,7 +184,7 @@ end
 if is_available("neo-tree.nvim") then
   wk.add({
     { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer", mode = "n" },
-    { "<leader>r", function()
+    { "<leader>E", function()
         if vim.bo.filetype == "neo-tree" then
           vim.cmd.wincmd("p")
         else
@@ -531,3 +531,19 @@ vim.keymap.set("n", "<C-l>", 'false')
 -- wk.add({
 --   { "<C-l>", false, mode = "n" }, -- Disable this keymap
 -- })
+-- Kulala
+if is_available("kulala.nvim") then
+  local kulala = require("kulala")
+  wk.add({
+    { "<leader>r", group = "REST", mode = { "n", "v" } },
+    { "<leader>rs", function() kulala.run() end, desc = "Run Request", mode = { "n", "v" } },
+    { "<leader>r<CR>" , function() kulala.replay() end, desc = "Run last Request", mode = { "n", "v" } },
+    { "<leader>re", function() kulala.set_selected_env() end, desc = "Select Environment", mode = { "n", "v" } },
+    { "<leader>rx", function() kulala.scripts_clear_global() end, desc = "Clear Globals", mode = { "n", "v" } },
+    { "<leader>rf", function() kulala.search() end, desc = "Search Request", mode = { "n", "v" } },
+    { "<leader>ri", function() vim.schedule(function()
+end)
+      kulala.from_curl() end, desc = "Import cURL from clipboard", mode = { "n", "v" } },
+    { "<leader>rc", "<cmd>KulalaScratchToCurl<CR>", desc = "Copy current request as cURL", mode = { "n", "v" } },
+  })
+end

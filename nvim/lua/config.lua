@@ -285,6 +285,10 @@ local plugins = {
     version = "^6", -- Recommended
     lazy = false, -- This plugin is already lazy
   },
+  {
+    "mistweaverco/kulala.nvim",
+    ft = { "http", "rest" }, -- load only for these filetypes
+  },
 }
 
 local opts = {}
