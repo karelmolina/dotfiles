@@ -295,6 +295,11 @@ local plugins = {
     "mistweaverco/kulala.nvim",
     ft = { "http", "rest" }, -- load only for these filetypes
   },
+  -- cursor animation
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {},
+  },
 }
 
 local opts = {}
