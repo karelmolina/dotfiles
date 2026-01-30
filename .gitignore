@@ -2,3 +2,5 @@
 .vscode
 lazy-lock.json
 .luarc.json
+zsh/*
+nvim/*_path.json
