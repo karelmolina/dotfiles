@@ -27,7 +27,37 @@ end
 -- debugpy/bin/python -m pip install debugpy
 dap_python.setup("~/.virtualenvs/debugpy/bin/python")
 
-vim.g.dap_nodejs_path = vim.fn.system("volta which node"):gsub("\n", "")
+-- Detect node path from various version managers
+local function get_node_path()
+  -- Check for fnm (Fast Node Manager)
+  local fnm_check = vim.fn.system("which fnm 2>/dev/null")
+  if fnm_check ~= "" then
+    local fnm_node = vim.fn.system("fnm which node 2>/dev/null")
+    if fnm_node ~= "" then
+      return fnm_node:gsub("\n", "")
+    end
+  end
+
+  -- Check for volta
+  local volta_check = vim.fn.system("which volta 2>/dev/null")
+  if volta_check ~= "" then
+    local volta_node = vim.fn.system("volta which node 2>/dev/null")
+    if volta_node ~= "" then
+      return volta_node:gsub("\n", "")
+    end
+  end
+
+  -- Check for nvm
+  local nvm_check = vim.fn.system("which nvm 2>/dev/null")
+  if nvm_check ~= "" and vim.env.NVM_BIN then
+    return vim.env.NVM_BIN .. "/node"
+  end
+
+  -- Fallback to system node
+  return vim.fn.system("which node 2>/dev/null"):gsub("\n", "")
+end
+
+vim.g.dap_nodejs_path = get_node_path()
 
 local dap_config_json = vim.fn.stdpath("config") .. "/dap-config.json"
 if vim.fn.filereadable(dap_config_json) == 1 then
@@ -38,7 +68,7 @@ if vim.fn.filereadable(dap_config_json) == 1 then
     dap.configurations[lang] = configs
   end
 else
-  print("DAP configuration file not found: " .. dap_config_json)
+  -- DAP configuration file not found (silently ignore)
 end
 
 -- Signs
