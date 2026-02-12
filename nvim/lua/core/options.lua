@@ -1,5 +1,10 @@
 -- general
 vim.cmd([[ set noswapfile ]])
+vim.opt.shortmess:append("I") -- disable startup message
+vim.opt.shortmess:append("c") -- disable completion menu messages
+vim.opt.shortmess:append("C") -- disable "Scanning..." messages
+vim.opt.shortmess:append("s") -- disable search hit BOTTOM/TOP messages
+vim.opt.shortmess:append("W") -- disable file written messages
 
 -- trim whitespaces
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -21,7 +26,7 @@ local options = {
     backspace = "indent,eol,start", -- allow backspace on indent, end of line or insert mode start position
     breakindent = true, -- wrap indent to match  line start
     clipboard = "unnamedplus", -- connection to the system clipboard
-    cmdheight = 0, -- hide command line unless needed
+    cmdheight = 1, -- set to 1 to avoid "Press any key" prompts
     completeopt = { "menu", "menuone", "noselect" }, -- Options for insert mode completion
     copyindent = true, -- copy the previous indentation on autoindenting
     cursorline = true, -- highlight the text line of the cursor
