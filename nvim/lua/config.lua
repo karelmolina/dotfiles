@@ -223,7 +223,7 @@ local plugins = {
     opts = {
       projects = projects.get_project_path(),
       datapath = vim.fn.stdpath("data"),
-      last_session_on_startup = true,
+      last_session_on_startup = false,
     },
     init = function()
       vim.opt.sessionoptions:append("globals")
