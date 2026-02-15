@@ -1,212 +1,72 @@
 #!/bin/bash
+# OS Detection and dispatch script
 
-dependencies_install() {
-    echo "Installing dependencies"
-    if [ "$SYSTEM" == "Linux" ]; then
-        sudo apt -y install diodon curl git xclip vim-gtk ripgrep gawk autoconf \
-        automake bison libffi-dev gnupg2 libgdbm-dev libncurses5-dev libsqlite3-dev libtool \
-        libyaml-dev sqlite3 zlib1g-dev libgmp-dev libreadline-dev libssl-dev g++ \
-        mono-complete golang default-jdk \
-        build-essential cmake vim-nox python3-dev \
-        libpng-dev tmux git-cola >$LOG_SCRIPT 2>$LOG_SCRIPT
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo "$ID"
+    elif [ "$(uname -s)" = "Darwin" ]; then
+        echo "macos"
     else
-        echo "no dependencies_install configure for system: $SYSTEM"
+        echo "unknown"
     fi
 }
 
-snapinstall() {
-    echo installing $1
-    shift
-    sudo snap install "$@" >$LOG_SCRIPT 2>$LOG_SCRIPT
-}
-
-update_install() {
-    echo "*** UPDATING ***"
-    if [ "$SYSTEM" == "Linux" ]; then
-        sudo apt update
-    elif [ "$SYSTEM" == "Darwin" ]; then
-        brew update
-    else
-        echo "Unsupported operating system: $SYSTEM"
-        exit 1
+detect_version() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo "$VERSION_ID"
     fi
 }
 
-upgrade_install()
-{
-    echo "*** UPGRADING ***"
-        if [ "$SYSTEM" == "Linux" ]; then
-        sudo apt upgrade -y
-    elif [ "$SYSTEM" == "Darwin" ]; then
-        brew upgrade
-    else
-        echo "Unsupported operating system: $SYSTEM"
-        exit 1
-    fi
-
+main() {
+    local os=$(detect_os)
+    local version=$(detect_version)
+    
+    echo "=============================================="
+    echo "Dotfiles Installer"
+    echo "=============================================="
+    echo "Detected OS: $os"
+    echo "Version: $version"
+    echo ""
+    
+    case "$os" in
+        fedora)
+            echo "Running Fedora installer..."
+            bash "$SCRIPT_DIR/scripts/fedora.sh" "$@"
+            ;;
+        ubuntu)
+            echo "Ubuntu support coming soon!"
+            exit 1
+            ;;
+        debian)
+            echo "Debian support coming soon!"
+            exit 1
+            ;;
+        arch)
+            echo "Arch support coming soon!"
+            exit 1
+            ;;
+        macos)
+            echo "macOS support coming soon!"
+            exit 1
+            ;;
+        *)
+            echo "ERROR: Unsupported operating system: $os"
+            echo ""
+            echo "Supported systems:"
+            echo "  - Fedora (43+)"
+            echo "  - Ubuntu (coming soon)"
+            echo "  - Debian (coming soon)"
+            echo "  - Arch (coming soon)"
+            echo "  - macOS (coming soon)"
+            exit 1
+            ;;
+    esac
 }
 
-nvm_install() {
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
-    source $BASEDIR/.bashrc
-    nvm install 14
-    source $BASEDIR/.bashrc
-    npm -g install yarn
-}
-
-fzf_install() {
-    echo "installing fzf"
-    git clone --depth 1 https://github.com/junegunn/fzf.git $BASEDIR/.fzf
-    cd $BASEDIR/.fzf
-    echo "N N Y" | ./install
-    cd
-}
-
-font_install() {
-    cd $DOWNLOADS
-    wget https://download.jetbrains.com/fonts/JetBrainsMono-2.242.zip
-    unzip JetBrainsMono-2.242.zip -d $BASEDIR/.local/share/fonts
-    fc-cache -f -v
-    cd
-}
-
-bash_install() {
-    git clone git://github.com/ohmybash/oh-my-bash.git ~/.oh-my-bash
-    cp ~/.bashrc ~/.bashrc.orig
-    cp ~/.oh-my-bash/templates/bashrc.osh-template ~/.bashrc
-    source ~/.bashrc
-}
-
-mongo_install()
-{
-    curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-    sudo apt update -y
-    sudo apt install -y mongodb-org
-}
-
-redis_install()
-{
-    sudo apt install redis-server -y
-    sudo echo "supervised systemd" >> /etc/redis/redis.conf
-    sudo systemctl restart redis.service
-}
-
-
-tmux_install()
-{
-    cd
-    git clone https://github.com/gpakosz/.tmux.git
-    ln -s -f .tmux/.tmux.conf
-    mkdir $BASEDIR/tmux-plugins
-    git clone https://github.com/tmux-plugins/tmux-resurrect.git $BASEDIR/tmux-plugins/tmux-resurrect/
-}
-
-vim_install()
-{
-    cd
-    echo -n "Installing  Pathogen and vundle"
-    mkdir -p $BASEDIR/.vim/autoload $BASEDIR/.vim/bundle && \
-    curl -LSso $BASEDIR/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
-    git clone https://github.com/VundleVim/Vundle.vim.git $BASEDIR/.vim/bundle/Vundle.vim
-    ln -s $BASEDIR/dotfiles/vim/vimrc $BASEDIR/.vimrc
-    ln -s $BASEDIR/dotfiles/tmux/tmux.conf $BASEDIR/.tmux.conf.local
-    INSTALL=true vim +PluginInstall +qa
-
-}
-
-slack_install()
-{
-    snapinstall "Slack" slack --classic
-}
-
-spotify_install()
-{
-    snapinstall "Spotify" spotify
-}
-
-barrier_install()
-{
-    snapinstall "Barrier" barrier
-    sed -i 's/^serverHostname=/serverHostname=192.168.10.109/' $BASEDIR/snap/barrier/current/.config/Debauchee/Barrier.conf
-}
-
-postman_install()
-{
-    snapinstall "Postman" postman
-}
-
-postgres_install()
-{
-    echo "Installing Postgresql latest"
-    sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-    sudo apt update -y
-    sudo apt -y install postgresql libpq-dev
-}
-
-pgadmin_install()
-{
-    # Install the public key for the repository (if not done previously):
-    sudo curl https://www.pgadmin.org/static/packages_pgadmin_org.pub | sudo apt-key add
-
-    # Create the repository configuration file:
-    sudo sh -c 'echo "deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/$(lsb_release -cs) pgadmin4 main" > /etc/apt/sources.list.d/pgadmin4.list && apt update'
-    # Install for both desktop and web modes:
-    sudo apt install pgadmin4 -y
-}
-
-rvm_install()
-{
-    gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-    \curl -sSL https://get.rvm.io | bash -s stable
-    source $BASEDIR/.bashrc
-    rvm install 2.7.2
-}
-
-declare -A package_functions=(
-    [REQUIRED]=true
-    [UPDATE]=false
-    [UPGRADE]=false
-    [NVM]=false
-    [FZF]=false
-    [FONT]=false
-    [BASH]=false
-    [MONGO]=false
-    [REDIS]=false
-    [TMUX]=false
-    [VIM]=false
-    [SLACK]=true
-    [SPOTIFY]=true
-    [BARRIER]=false
-    [POSTGRES]=false
-    [POSTMAN]=true
-    [RVM]=false
-    [PGADMIN]=false
-)
-# paths
-BASEDIR="$("$HOME" || echo ~)"
-echo "Home Base Dir: $BASEDIR"
-SSH_FOLDER="$BASEDIR/.ssh"
-SHHCONFIG="$SSH_FOLDER/config"
-if [ -e "$BASEDIR/.zshrc"] then
-    SHRC="$BASEDIR/.zshrc"
-else
-    SHRC="$BASEDIR/.bashrc"
-fi
-LOG_SCRIPT=./log_script.txt
-DOWNLOADS="$BASEDIR/Downloads/"
-SYSTEM="$(uname -s)"
-
-for package in "${!package_functions[@]}"; do
-    if [ "${!package}" = true ]; then
-        echo "found!! $package"
-        # Get the function name associated with the variable
-        function_name="${package_functions[$package]}"
-        if [ -n "$function_name" ]; then
-            echo "$package."
-        else
-            echo "No function associated with $package."
-        fi
-    fi
-done
+main "$@"
