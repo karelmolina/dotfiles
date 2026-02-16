@@ -4,6 +4,7 @@ alias v="nvim"
 alias pv="theme=rose-pine project=power nvim"
 alias fz="project=fz nvim"
 alias nv="nvim -u ~/dotfiles-mini/nvim/init.lua"
+alias cd="z"
 
 # fill with ssh keys names
 export SSH_POWER=""

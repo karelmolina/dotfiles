@@ -35,5 +35,7 @@ focus-follows-mouse = false
 background-image = ~/dotfiles/wallpapers/od_torvalds.png
 background-image-fit = cover
 background-image-position = center
+# Dim the background image (0.0 = invisible, 1.0 = fully visible)
+background-image-opacity = 0.2
 # Optional: adjust opacity to see the background better
 # background-opacity = 0.9
