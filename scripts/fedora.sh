@@ -168,6 +168,7 @@ step8_apps() {
         "com.mongodb.Compass"
         "io.dbeaver.DBeaverCommunity"
         "com.github.marhkb.Pods"
+        "com.bitwarden.desktop"
     )
 
     for app in "${flatpak_apps[@]}"; do
@@ -178,6 +179,16 @@ step8_apps() {
     done
 
     sudo dnf install -y git-cola meld vim-enhanced neofetch bat eza zoxide atuin
+
+    # Install lazydocker
+    if ! has_command lazydocker; then
+        echo_info "Installing lazydocker..."
+        curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+    fi
+
+    # Enable podman socket for lazydocker (user-level)
+    echo_info "Setting up podman socket for lazydocker..."
+    systemctl --user enable --now podman.socket || echo_warn "Failed to enable podman socket, you may need to run: systemctl --user enable --now podman.socket"
 
     echo_success "Applications installed"
 }
@@ -191,11 +202,13 @@ step9_stow() {
     stow_config "wezterm"
     stow_config "kitty"
     stow_config "ghostty"
+    stow_config "mise"
     stow_config "zsh"
 
     dotlink "zsh/zshrc" ".zshrc"
     dotlink "zsh/zshenv" ".zshenv"
     dotlink "zsh/starship.toml" ".config/starship.toml"
+    dotlink "mise/config.toml" ".config/mise/config.toml"
 
     echo_success "Dotfiles stowed"
 }
