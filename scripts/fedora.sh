@@ -178,7 +178,7 @@ step8_apps() {
         fi
     done
 
-    sudo dnf install -y git-cola meld vim-enhanced neofetch bat eza zoxide atuin
+    sudo dnf install -y git-cola meld vim-enhanced neofetch bat eza zoxide atuin btop
 
     # Install OpenVPN3 client
     echo_info "Installing OpenVPN3 client..."
@@ -208,6 +208,7 @@ step9_stow() {
     stow_config "kitty"
     stow_config "ghostty"
     stow_config "mise"
+    stow_config "btop"
     stow_config "zsh" "$HOME/.oh-my-zsh/custom"
 
     dotlink "zsh/zshrc" ".zshrc"

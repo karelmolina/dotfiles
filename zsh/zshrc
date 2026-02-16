@@ -145,8 +145,16 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # mise tools that don't use standard bin/ structure
-export PATH="$HOME/.local/share/mise/installs/lazydocker/latest:$PATH"
+# Add all mise Go version bin directories (for go install binaries like gotop)
+for go_bin in $HOME/.local/share/mise/installs/go/*/bin; do
+    if [[ -d "$go_bin" ]]; then
+        export PATH="$go_bin:$PATH"
+    fi
+done
 export PATH="/usr/local/go/bin:$PATH"
+
+# Standard Go binaries location (fallback)
+export PATH="$HOME/go/bin:$PATH"
 
 # Default editor
 export EDITOR='nvim'
