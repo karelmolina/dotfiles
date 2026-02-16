@@ -40,21 +40,28 @@ function vpnup() {
 }
 
 function vpndown() {
-  local sessions_json
-  sessions_json=$(openvpn3 sessions-list --json 2>/dev/null)
+  local sessions_output
+  sessions_output=$(openvpn3 sessions-list 2>/dev/null)
 
-  if [[ -z "$sessions_json" ]] || [[ "$sessions_json" == "[]" ]]; then
+  if [[ -z "$sessions_output" ]] || [[ "$sessions_output" == *"No sessions"* ]]; then
     echo "No active VPN sessions"
     return 1
   fi
 
-  local session_paths=($(echo "$sessions_json" | jq -r '.[].path'))
-  local session_configs=($(echo "$sessions_json" | jq -r '.[].config_name'))
+  # Parse session paths and config names from text output
+  local session_paths=($(echo "$sessions_output" | grep "^\s*Path:" | awk '{print $2}'))
+  local session_configs=($(echo "$sessions_output" | grep "Config name:" | awk '{print $3}'))
+
+  if [[ ${#session_paths[@]} -eq 0 ]]; then
+    echo "No active VPN sessions found"
+    return 1
+  fi
 
   echo "Select session to disconnect:"
   local options=()
   for i in {1..${#session_paths[@]}}; do
-    options+=("${session_configs[$i]} (${session_paths[$i]})")
+    local idx=$((i))
+    options+=("${session_configs[$idx]:-unknown} (${session_paths[$idx]})")
   done
 
   local selected
@@ -67,21 +74,28 @@ function vpndown() {
 }
 
 function vpnlogs() {
-  local sessions_json
-  sessions_json=$(openvpn3 sessions-list --json 2>/dev/null)
+  local sessions_output
+  sessions_output=$(openvpn3 sessions-list 2>/dev/null)
 
-  if [[ -z "$sessions_json" ]] || [[ "$sessions_json" == "[]" ]]; then
+  if [[ -z "$sessions_output" ]] || [[ "$sessions_output" == *"No sessions"* ]]; then
     echo "No active VPN sessions"
     return 1
   fi
 
-  local session_paths=($(echo "$sessions_json" | jq -r '.[].path'))
-  local session_configs=($(echo "$sessions_json" | jq -r '.[].config_name'))
+  # Parse session paths and config names from text output
+  local session_paths=($(echo "$sessions_output" | grep "^\s*Path:" | awk '{print $2}'))
+  local session_configs=($(echo "$sessions_output" | grep "Config name:" | awk '{print $3}'))
+
+  if [[ ${#session_paths[@]} -eq 0 ]]; then
+    echo "No active VPN sessions found"
+    return 1
+  fi
 
   echo "Select session to view logs:"
   local options=()
   for i in {1..${#session_paths[@]}}; do
-    options+=("${session_configs[$i]}")
+    local idx=$((i))
+    options+=("${session_configs[$idx]:-unknown}")
   done
 
   local selected

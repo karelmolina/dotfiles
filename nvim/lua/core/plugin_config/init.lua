@@ -27,5 +27,4 @@ require("core.plugin_config.lsp.lspsaga")
 require("core.plugin_config.lsp.dap")
 require("core.plugin_config.lsp.aerial")
 
-
 require("core.plugin_config.which-key")

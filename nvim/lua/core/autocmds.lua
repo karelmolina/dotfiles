@@ -2,19 +2,23 @@ local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 local cmd = vim.api.nvim_create_user_command
 
-local utils = require("core.utils");
+local utils = require("core.utils")
 
 autocmd({ "VimEnter", "FileType", "BufEnter", "WinEnter" }, {
   desc = "URL Highlighting",
   group = augroup("highlighturl", { clear = true }),
-  callback = function() utils.set_url_match() end,
+  callback = function()
+    utils.set_url_match()
+  end,
 })
 
 autocmd("TextYankPost", {
   desc = "Highlight yanked text",
   group = augroup("highlightyank", { clear = true }),
   pattern = "*",
-  callback = function() vim.highlight.on_yank() end,
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
 
 autocmd("BufWinEnter", {
@@ -33,21 +37,17 @@ autocmd("BufWinEnter", {
   end,
 })
 
-cmd(
-  "UpdateAllPackages",
-  function()
-    require("lazy").sync { wait = true }
-    require("astronvim.utils.mason").update_all()
-  end,
-  { desc = "Update Plugins and Mason" }
-)
+cmd("UpdateAllPackages", function()
+  require("lazy").sync({ wait = true })
+  require("astronvim.utils.mason").update_all()
+end, { desc = "Update Plugins and Mason" })
 
-autocmd('FileType', {
-  pattern = 'sh',
+autocmd("FileType", {
+  pattern = "sh",
   callback = function()
     vim.lsp.start({
-      name = 'bash-language-server',
-      cmd = { 'bash-language-server', 'start' },
+      name = "bash-language-server",
+      cmd = { "bash-language-server", "start" },
     })
   end,
 })

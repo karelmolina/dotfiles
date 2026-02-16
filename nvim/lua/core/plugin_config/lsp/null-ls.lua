@@ -15,7 +15,7 @@ if not setupShellCheck then
 end
 
 -- for conciseness
-local formatting = null_ls.builtins.formatting   -- to setup formatters
+local formatting = null_ls.builtins.formatting -- to setup formatters
 local diagnostics = null_ls.builtins.diagnostics -- to setup linters
 local diagnostics_extra = none_ls.diagnostics
 local formatting_extra = none_ls.formatters

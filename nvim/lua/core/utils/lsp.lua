@@ -9,7 +9,7 @@ local format_opts = {
   end,
 }
 local function is_mapping_registered(mode, lhs)
-local mappings = vim.api.nvim_get_keymap(mode)
+  local mappings = vim.api.nvim_get_keymap(mode)
   for _, mapping in ipairs(mappings) do
     if mapping.lhs == lhs then
       return true
@@ -19,43 +19,43 @@ local mappings = vim.api.nvim_get_keymap(mode)
 end
 
 local function extend_tbl(default, opts)
- opts = opts or {}
- return default and vim.tbl_deep_extend("force", default, opts) or opts
+  opts = opts or {}
+  return default and vim.tbl_deep_extend("force", default, opts) or opts
 end
 
 local function del_buffer_autocmd(augroup, bufnr)
- local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
- if cmds_found then
-  vim.tbl_map(function(cmd)
-   vim.api.nvim_del_autocmd(cmd.id)
-  end, cmds)
- end
+  local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
+  if cmds_found then
+    vim.tbl_map(function(cmd)
+      vim.api.nvim_del_autocmd(cmd.id)
+    end, cmds)
+  end
 end
 
 function M.has_capability(capability, filter)
- for _, client in ipairs(vim.lsp.get_clients(filter)) do
-  if client.supports_method(capability) then
-   return true
+  for _, client in ipairs(vim.lsp.get_clients(filter)) do
+    if client.supports_method(capability) then
+      return true
+    end
   end
- end
- return false
+  return false
 end
 
 local function add_buffer_autocmd(augroup, bufnr, autocmds)
- if not vim.islist(autocmds) then
-  autocmds = { autocmds }
- end
- local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
- if not cmds_found or vim.tbl_isempty(cmds) then
-  vim.api.nvim_create_augroup(augroup, { clear = false })
-  for _, autocmd in ipairs(autocmds) do
-   local events = autocmd.events
-   autocmd.events = nil
-   autocmd.group = augroup
-   autocmd.buffer = bufnr
-   vim.api.nvim_create_autocmd(events, autocmd)
+  if not vim.islist(autocmds) then
+    autocmds = { autocmds }
   end
- end
+  local cmds_found, cmds = pcall(vim.api.nvim_get_autocmds, { group = augroup, buffer = bufnr })
+  if not cmds_found or vim.tbl_isempty(cmds) then
+    vim.api.nvim_create_augroup(augroup, { clear = false })
+    for _, autocmd in ipairs(autocmds) do
+      local events = autocmd.events
+      autocmd.events = nil
+      autocmd.group = augroup
+      autocmd.buffer = bufnr
+      vim.api.nvim_create_autocmd(events, autocmd)
+    end
+  end
 end
 
 function M.on_attach(client, bufnr)
@@ -124,7 +124,7 @@ function M.on_attach(client, bufnr)
       end,
       desc = "Rename current symbol",
       mode = "n",
-    }
+    },
   })
 
   if is_available("telescope.nvim") then
@@ -159,7 +159,8 @@ function M.on_attach(client, bufnr)
     -- Autoformat on save (if enabled)
     local autoformat = { enabled = false }
     local filetype = vim.api.nvim_get_option_value("filetype", { buf = bufnr })
-    if autoformat.enabled
+    if
+      autoformat.enabled
       and (tbl_isempty(autoformat.allow_filetypes or {}) or tbl_contains(autoformat.allow_filetypes, filetype))
       and (tbl_isempty(autoformat.ignore_filetypes or {}) or not tbl_contains(autoformat.ignore_filetypes, filetype))
     then
@@ -172,7 +173,9 @@ function M.on_attach(client, bufnr)
             return
           end
 
-          if vim.bo.filetype == "dap-repl" or vim.bo.filetype == "markdown" then return end
+          if vim.bo.filetype == "dap-repl" or vim.bo.filetype == "markdown" then
+            return
+          end
 
           local autoformat_enabled = vim.b.autoformat_enabled or vim.g.autoformat_enabled
           if autoformat_enabled and ((not autoformat.filter) or autoformat.filter(bufnr)) then

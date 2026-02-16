@@ -20,7 +20,6 @@ if not utilsStatus then
   return
 end
 
-
 -- mkdir .virtualenvs
 -- cd .virtualenvs
 -- python -m venv debugpy
@@ -81,15 +80,15 @@ vim.fn.sign_define("DapLogPoint", { text = "💬", texthl = "", linehl = "", num
 -- fix related to https://github.com/mxsdev/nvim-dap-vscode-js/issues/58
 -- error when using nvim-dap-vscode-js ** its not needed anymore **
 -- workaround is configure manually
-dap.adapters['pwa-node'] = {
-  type = 'server',
-  host = 'localhost',
-  port = '${port}',
+dap.adapters["pwa-node"] = {
+  type = "server",
+  host = "localhost",
+  port = "${port}",
   executable = {
-    command = 'node',
+    command = "node",
     args = {
-      utils.get_pkg_path('js-debug-adapter', '/js-debug/src/dapDebugServer.js'),
-      '${port}',
+      utils.get_pkg_path("js-debug-adapter", "/js-debug/src/dapDebugServer.js"),
+      "${port}",
     },
   },
 }

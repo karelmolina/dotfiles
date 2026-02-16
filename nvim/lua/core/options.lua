@@ -8,8 +8,8 @@ vim.opt.shortmess:append("W") -- disable file written messages
 
 -- trim whitespaces
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-	pattern = { "*" },
-	command = [[%s/\s\+$//e]],
+  pattern = { "*" },
+  command = [[%s/\s\+$//e]],
 })
 
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   end,
 })
 
-vim.opt.backspace:append { "nostop" } -- don't stop backspace at insert
+vim.opt.backspace:append({ "nostop" }) -- don't stop backspace at insert
 
 local options = {
   opt = {
@@ -36,7 +36,7 @@ local options = {
     foldlevel = 99, -- set high foldlevel for nvim-ufo
     foldlevelstart = 99, -- start with all code unfolded
     foldmethod = "manual",
-    foldcolumn = vim.fn.has "nvim-0.9" == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
+    foldcolumn = vim.fn.has("nvim-0.9") == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
     hlsearch = true, -- Make line numbers default
     history = 100, -- number of commands to remember in a history table
     ignorecase = true, -- case insensitive searching
@@ -80,7 +80,7 @@ local options = {
     lsp_handlers_enabled = true, -- enable or disable default vim.lsp.handlers (hover and signature help)
     semantic_tokens_enabled = true, -- enable or disable LSP semantic tokens on startup
     git_worktrees = nil, -- enable git integration for detached worktrees (specify a table where each entry is of the form { toplevel = vim.env.HOME, gitdir=vim.env.HOME .. "/.dotfiles" })
-  }
+  },
 }
 
 for key, table in pairs(options) do
@@ -93,4 +93,3 @@ end
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
 -- local logFilePath = vim.fn.expand(vim.g.nvim_logfile)
 -- vim.api.nvim_command('redir! >> ' .. logFilePath .. ' | silent! set verbosefile=' .. logFilePath .. ' | set verbose=15 | redir END')
-

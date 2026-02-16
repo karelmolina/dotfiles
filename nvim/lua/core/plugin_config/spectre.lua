@@ -1,6 +1,6 @@
 local status, spectre = pcall(require, "spectre")
 if not status then
-	return
+  return
 end
 
-spectre.setup {}
+spectre.setup({})

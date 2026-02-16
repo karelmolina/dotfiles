@@ -5,6 +5,6 @@ if not setup then
 end
 
 dressing.setup({
-    input = { default_prompt = "➤ " },
-    select = { backend = { "telescope", "builtin" } },
+  input = { default_prompt = "➤ " },
+  select = { backend = { "telescope", "builtin" } },
 })

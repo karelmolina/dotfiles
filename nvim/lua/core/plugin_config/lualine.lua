@@ -25,9 +25,13 @@ lualine.setup({
   },
   sections = {
     lualine_a = { "mode" },
-    lualine_b = { "branch", "diff", "diagnostics",  function()
+    lualine_b = {
+      "branch",
+      "diff",
+      "diagnostics",
+      function()
         return vim.fn["codeium#GetStatusString"]()
-      end
+      end,
     },
     lualine_c = { "filename" },
     lualine_x = { "encoding", "fileformat", "filetype" },

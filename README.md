@@ -1,81 +1,163 @@
 # Dotfiles Repository
 
-This repository contains my personal configuration files for Vim, Neovim, Tmux, and a collection of shell scripts to simplify the installation of dependencies and setup process for a productive development environment.
+Personal dotfiles for a modern, productive Linux development environment. Optimized for Fedora with automated installation and comprehensive tool configuration.
 
-## Table of Contents
+## Overview
 
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Configuration](#configuration)
-- [Customization](#customization)
-- [Contributing](#contributing)
-- [License](#license)
+This repository contains configuration files and installation scripts for:
+- **Terminal Emulators**: Kitty, Ghostty, WezTerm
+- **Editors**: Neovim (Lua-based), Vim
+- **Shell**: Zsh with Oh-My-Zsh, Starship prompt
+- **Tools**: Tmux, btop, yazi, lazygit, lazydocker
+- **Version Management**: mise (formerly rtx) for Go, Node.js
 
-## Introduction
+## Quick Start
 
-Maintaining a consistent and efficient development environment across multiple machines can be a challenge. This repository is designed to streamline the setup process by providing a collection of configuration files and scripts to help you get up and running quickly with Vim, Neovim, and Tmux.
+```bash
+# Clone and install
+git clone https://github.com/karelmolina/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+./install
+```
 
-### Included Configurations and Tools
+## What's Included
 
-- **Vim and Neovim Configuration**: Customized settings, keybindings, and plugins to enhance your text editing experience.
-- **Tmux Configuration**: A productive terminal multiplexer configuration with useful shortcuts.
-- **Shell Scripts**: Handy scripts to automate the installation of essential dependencies and the setup of your development environment.
+### Core Applications
 
-## Getting Started
+| Tool | Purpose | Config Location |
+|------|---------|-----------------|
+| **Neovim** | Modern Vim editor | `nvim/` |
+| **Vim** | Legacy Vim config | `vim/` |
+| **Tmux** | Terminal multiplexer | `tmux/` |
+| **Zsh** | Shell with aliases & functions | `zsh/` |
+| **Kitty** | GPU-accelerated terminal | `kitty/` |
+| **Ghostty** | Fast native terminal | `ghostty/` |
+| **WezTerm** | Cross-platform terminal | `wezterm/` |
+| **btop** | Resource monitor (RAM-focused) | `btop/` |
+| **yazi** | Terminal file manager | `yazi/` |
+| **mise** | Version manager (Go, Node) | `mise/` |
 
-Follow these steps to set up your development environment using the configuration files and scripts provided in this repository.
+### Key Features
+
+#### btop - RAM-Focused System Monitor
+- Optimized layout showing Memory and Processes only
+- Processes sorted by memory usage
+- No GPU or network graphs for clean interface
+- Braille graphs for high-resolution memory visualization
+
+#### mise - Universal Version Manager
+- Go (latest) with `go install` binary support
+- Node.js 20 for JavaScript development
+- Automatic PATH configuration for installed tools
+
+#### Neovim
+- Lazy.nvim plugin manager
+- LSP support with mason.nvim
+- Telescope for fuzzy finding
+- Treesitter for syntax highlighting
+- Catppuccin theme
+
+## Installation
 
 ### Prerequisites
 
-Before you begin, ensure you have the following prerequisites installed on your system:
+- Fedora 43+ (primary target)
+- Git, curl
+- Internet connection for package downloads
 
-- [Vim](https://www.vim.org/) or [Neovim](https://neovim.io/)
-- [Tmux](https://github.com/tmux/tmux)
-- [Git](https://git-scm.com/)
-- [curl](https://curl.se/)
-
-### Installation
-
-1. Clone this repository to your home directory:
+### Automated Install
 
 ```bash
-    git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
+./install
 ```
 
-2. change to the repository directory:
-```bash
-    cd ~/.dotfiles
-```
+This will:
+1. Detect your OS (currently Fedora supported)
+2. Install all packages via dnf/flatpak
+3. Stow configuration files to `~/.config/`
+4. Set up shell configuration
 
-3. Run the setup script to install the configuration files and dependencies:
-
-```bash
-    ./install.sh
-```
-4. Follow the prompts and instructions provided by the installation script.
-
-5. Restart your terminal or run tmux to start using your newly configured environment.
-
-### Configuration
-- Vim/Neovim Configuration: The Vim and Neovim configuration files (vimrc and nvimrc) are extensively commented to help you understand and modify the settings according to your preferences.
-to start using it just run any of this commands:
-```bash
-    ln -s ~/dotfiles/vim/vimrc ~/.vimrc
-```
+### Manual Component Setup
 
 ```bash
-    ln -s ~/dotfiles/nvim/ ~/.config/
+# Neovim
+ln -s ~/dotfiles/nvim ~/.config/nvim
+
+# Vim
+ln -s ~/dotfiles/vim/vimrc ~/.vimrc
+
+# Zsh
+ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
+
+# Individual tools
+stow -d ~/dotfiles -t ~/.config btop
 ```
 
-Tmux Configuration: The Tmux configuration (tmux.conf) is similarly commented to make customization straightforward.
+## Configuration Details
 
-### Customization
-- Feel free to customize the configuration files to suit your needs. You can add or remove plugins, change keybindings, or tweak settings according to your preferences.
+### Shell (Zsh)
 
-### Contributing
-- Contributions are welcome! If you have any improvements, bug fixes, or new features to propose, please open an issue or submit a pull request.
+- **Framework**: Oh-My-Zsh
+- **Prompt**: Starship
+- **Key Features**:
+  - mise integration for version management
+  - Go binaries in PATH (mise Go installations)
+  - Cargo (Rust) binaries
+  - Local bin directories
+  - Useful aliases (eza, bat, zoxide)
 
-### License
-- This repository is licensed under the MIT License. See the LICENSE file for details.
+### btop Layout
+
+The btop configuration focuses on **memory monitoring**:
+- Shows: Memory box + Process list
+- Hides: Network, GPU, detailed CPU graphs
+- Sorts processes by memory usage
+- High-resolution braille graphs
+
+### mise Tools
+
+Located in `mise/config.toml`:
+```toml
+[tools]
+go = "latest"
+node = "20"
+```
+
+Go binaries installed via `go install` (e.g., `gotop`) are automatically available in PATH.
+
+## Customization
+
+All configurations are extensively commented. Key files:
+- `nvim/lua/core/` - Neovim core settings
+- `zsh/zshrc` - Shell configuration
+- `btop/btop.conf` - System monitor layout
+- `mise/config.toml` - Version management
+
+## Supported Platforms
+
+| OS | Status |
+|----|--------|
+| Fedora 43+ | Fully supported |
+| Ubuntu | Planned |
+| Debian | Planned |
+| Arch | Planned |
+| macOS | Planned |
+
+## Contributing
+
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details.
+
+## Credits
+
+- [Neovim](https://neovim.io/) - Hyperextensible Vim-based text editor
+- [mise](https://mise.jdx.dev/) - Polyglot version manager
+- [btop](https://github.com/aristocratos/btop) - Resource monitor
+- [Catppuccin](https://github.com/catppuccin) - Theme ecosystem

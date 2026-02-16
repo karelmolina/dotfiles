@@ -1,7 +1,7 @@
 local status, indent = pcall(require, "ibl")
 
 if not status then
-    return
+  return
 end
 
 vim.opt.list = true
@@ -9,18 +9,18 @@ vim.opt.list = true
 vim.opt.listchars:append("eol:↴")
 
 local highlight = {
-    "CursorColumn",
-    "Whitespace",
+  "CursorColumn",
+  "Whitespace",
 }
 
-indent.setup {
-    indent = { highlight = highlight, char = "┊" },
-    whitespace = {
-        highlight = highlight,
-        remove_blankline_trail = false,
-    },
-    exclude = {
-        filetypes = { "dashboard" },
-        buftypes = { "nofile" },
-    }
-}
+indent.setup({
+  indent = { highlight = highlight, char = "┊" },
+  whitespace = {
+    highlight = highlight,
+    remove_blankline_trail = false,
+  },
+  exclude = {
+    filetypes = { "dashboard" },
+    buftypes = { "nofile" },
+  },
+})

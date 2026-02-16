@@ -11,7 +11,7 @@ function M.get_project_path()
   else
     paths = {
       "~/workspace/*",
-      "~/.config/*"
+      "~/.config/*",
     }
   end
 

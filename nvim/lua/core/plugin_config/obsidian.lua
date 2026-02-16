@@ -3,7 +3,7 @@ if not status_ok then
   return
 end
 
-obsidian.setup {
+obsidian.setup({
   workspaces = {
     {
       name = "daily",
@@ -26,7 +26,7 @@ obsidian.setup {
     folder = "daily",
     date_format = "%Y/%m/%A-%d",
     default_tags = { "daily" },
-    template = "Template, daily.md"
+    template = "Template, daily.md",
   },
   -- templates
   templates = {
@@ -34,7 +34,9 @@ obsidian.setup {
     date_format = "%Y-%m-%d",
     time_format = "%H:%M",
     substitutions = {
-      today = function() return os.date("%A, %B %d, %Y") end,
+      today = function()
+        return os.date("%A, %B %d, %Y")
+      end,
       yesterdayLink = function()
         local parts = {
           "[[daily/",
@@ -51,7 +53,7 @@ obsidian.setup {
         }
         return table.concat(parts)
       end,
-    }
+    },
   },
   wiki_link_func = "use_alias_only", -- [[Note]] -> pretty alias
-}
+})

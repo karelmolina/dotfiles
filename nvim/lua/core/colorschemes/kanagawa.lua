@@ -8,7 +8,7 @@ local palette = colors.palette
 
 kanagawa.setup({
   colors = {
-    theme ={
+    theme = {
       dragon = {
         ui = {
           bg = palette.dragonBlack0,
@@ -20,12 +20,12 @@ kanagawa.setup({
           string = palette.dragonGreen,
         },
         diff = {
-            add    = palette.autumnGreen,
-            delete = palette.winterRed,
-            change = palette.waverBlue1,
-            text   = palette.autumnYellow,
+          add = palette.autumnGreen,
+          delete = palette.winterRed,
+          change = palette.waverBlue1,
+          text = palette.autumnYellow,
         },
-      }
-    }
-  }
+      },
+    },
+  },
 })

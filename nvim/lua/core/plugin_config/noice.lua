@@ -13,7 +13,7 @@ noice.setup({
   opts = {
     highlight = {
       background = "#1a1b45",
-    }
+    },
   },
   -- stylua: ignore
   max_height = function() return math.floor(vim.o.lines * 0.75) end,

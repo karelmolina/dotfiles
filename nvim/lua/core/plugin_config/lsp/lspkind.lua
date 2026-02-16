@@ -1,7 +1,7 @@
 -- import plugin safely
 local setup, lspkind = pcall(require, "lspkind")
 if not setup then
-	return
+  return
 end
 
 lspkind.init({
