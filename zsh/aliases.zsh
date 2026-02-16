@@ -1,8 +1,8 @@
 alias rzsh="source ~/.zshrc"
-alias ls="eza -l --icons -a --no-user"
 alias v="nvim"
 alias pv="theme=rose-pine project=power nvim"
 alias fz="project=fz nvim"
+alias onion="project=onion nvim"
 alias nv="nvim -u ~/dotfiles-mini/nvim/init.lua"
 alias cd="z"
 
