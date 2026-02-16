@@ -78,8 +78,6 @@ ZSH_THEME=""
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    zsh-autosuggestions
-    zsh-syntax-highlighting
     history-substring-search
 )
 
@@ -110,9 +108,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Load custom aliases
-source $HOME/.dotfiles/zsh/aliases.zsh
 
 # ============================================
 # Starship Prompt

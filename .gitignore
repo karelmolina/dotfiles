@@ -4,4 +4,5 @@ lazy-lock.json
 .luarc.json
 zsh/*
 !zsh/zshrc
+!zsh/functions.zsh
 nvim/*_path.json

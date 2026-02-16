@@ -180,6 +180,11 @@ step8_apps() {
 
     sudo dnf install -y git-cola meld vim-enhanced neofetch bat eza zoxide atuin
 
+    # Install OpenVPN3 client
+    echo_info "Installing OpenVPN3 client..."
+    sudo dnf copr enable -y dsommers/openvpn3 || echo_warn "COPR repo already enabled or failed"
+    sudo dnf install -y openvpn3-client || echo_warn "OpenVPN3 client install failed, may need manual install"
+
     # Install lazydocker
     if ! has_command lazydocker; then
         echo_info "Installing lazydocker..."
@@ -203,7 +208,7 @@ step9_stow() {
     stow_config "kitty"
     stow_config "ghostty"
     stow_config "mise"
-    stow_config "zsh"
+    stow_config "zsh" "$HOME/.oh-my-zsh/custom"
 
     dotlink "zsh/zshrc" ".zshrc"
     dotlink "zsh/zshenv" ".zshenv"
