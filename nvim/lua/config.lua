@@ -302,6 +302,10 @@ local plugins = {
   },
 }
 
-local opts = {}
+local opts = {
+  rocks = {
+    enabled = false, -- disable luarocks support since no plugins require it
+  },
+}
 
 require("lazy").setup(plugins, opts)

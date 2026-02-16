@@ -47,7 +47,8 @@ step2_core_deps() {
         tree htop unzip zip p7zip jq yq httpie \
         xclip wl-clipboard gnome-tweaks gnome-extensions-app \
         fontconfig freetype g++ gcc cmake ninja-build \
-        python3-devel python3-pip nodejs npm
+        python3-devel python3-pip nodejs npm clang-libs \
+        clang
 
     echo_success "Core dependencies installed"
 }
@@ -150,6 +151,10 @@ step7_dev_tools() {
         curl https://mise.run | sh
         echo 'eval "$(mise activate zsh)"' >> "$HOME/.zshrc"
     fi
+
+    # tree-sitter-cli (required by nvim-treesitter)
+    echo_info "Installing tree-sitter-cli..."
+    cargo install tree-sitter-cli
 
     echo_success "Development tools installed"
 }

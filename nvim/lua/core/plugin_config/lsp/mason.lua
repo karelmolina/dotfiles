@@ -41,6 +41,7 @@ mason_null_ls.setup({
     "stylua", -- lua formatter
     "eslint", -- ts/js linter
     "djlint",
+    "graphql-language-service-cli", -- graphql formatter
     -- "rubocop",
     -- "hadolint",
   },

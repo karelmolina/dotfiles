@@ -34,6 +34,7 @@ treesitter.setup({
     "gomod",
     "go",
     "rust",
+    "http",
   },
   modules = {},
   ignore_install = {},

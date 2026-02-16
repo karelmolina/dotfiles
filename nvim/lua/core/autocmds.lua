@@ -51,3 +51,10 @@ autocmd("FileType", {
     })
   end,
 })
+
+autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.http",
+  callback = function()
+    vim.bo.filetype = "http"
+  end,
+})
