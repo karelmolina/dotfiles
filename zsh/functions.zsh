@@ -18,6 +18,31 @@ function tvup() {
 }
 
 # OpenVPN3
+VPN_PASS_DIR="${HOME}/.config/openvpn3/passphrases"
+
+function _vpn_get_passphrase() {
+  local config="$1"
+  local pass_file="${VPN_PASS_DIR}/$(basename "$config" .ovpn).pass"
+  
+  if [[ -f "$pass_file" ]]; then
+    cat "$pass_file"
+    return 0
+  fi
+  return 1
+}
+
+function _vpn_save_passphrase() {
+  local config="$1"
+  local passphrase="$2"
+  local pass_file="${VPN_PASS_DIR}/$(basename "$config" .ovpn).pass"
+  
+  mkdir -p "$VPN_PASS_DIR"
+  chmod 700 "$VPN_PASS_DIR"
+  echo "$passphrase" > "$pass_file"
+  chmod 600 "$pass_file"
+  echo "Passphrase saved to $pass_file"
+}
+
 function vpnup() {
   local config="$1"
   local vpn_dir="$HOME/workspace"
@@ -36,7 +61,22 @@ function vpnup() {
     done
   fi
 
-  openvpn3 session-start --config "$config"
+  local passphrase
+  if ! passphrase=$(_vpn_get_passphrase "$config"); then
+    echo "No saved passphrase found for $(basename "$config")"
+    echo -n "Private key passphrase: "
+    read -rs passphrase
+    echo ""
+    
+    echo -n "Save passphrase for future use? [y/N]: "
+    read -r save_choice
+    if [[ "$save_choice" =~ ^[Yy]$ ]]; then
+      _vpn_save_passphrase "$config" "$passphrase"
+    fi
+  fi
+
+  # Start VPN with passphrase via stdin (for private key decryption)
+  echo "$passphrase" | openvpn3 session-start --config "$config"
 }
 
 function vpndown() {
