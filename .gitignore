@@ -6,3 +6,6 @@ zsh/*
 !zsh/zshrc
 !zsh/functions.zsh
 nvim/*_path.json
+
+# Git-cliff project-specific configs
+*.cliff.toml

@@ -1,4 +1,5 @@
 alias rzsh="source ~/.zshrc"
+alias lg="lazygit"
 alias v="nvim"
 alias pv="theme=rose-pine project=power nvim"
 alias fz="project=fz nvim"

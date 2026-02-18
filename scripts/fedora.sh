@@ -155,6 +155,8 @@ step7_dev_tools() {
     # tree-sitter-cli (required by nvim-treesitter)
     echo_info "Installing tree-sitter-cli..."
     cargo install tree-sitter-cli
+    echo_info "Installing git-cliff..."
+    cargo install git-cliff
 
     echo_success "Development tools installed"
 }
@@ -183,7 +185,7 @@ step8_apps() {
         fi
     done
 
-    sudo dnf install -y git-cola meld vim-enhanced neofetch bat eza zoxide atuin btop
+    sudo dnf install -y git-cola git-delta meld vim-enhanced neofetch bat eza zoxide atuin btop lazygit
 
     # Install OpenVPN3 client
     echo_info "Installing OpenVPN3 client..."
@@ -214,6 +216,7 @@ step9_stow() {
     stow_config "ghostty"
     stow_config "mise"
     stow_config "btop"
+    stow_config "lazygit"
     stow_config "zsh" "$HOME/.oh-my-zsh/custom"
 
     dotlink "zsh/zshrc" ".zshrc"
