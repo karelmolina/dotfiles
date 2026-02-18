@@ -36,3 +36,16 @@ function _lazygit_toggle()
   local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
   lazygit:toggle()
 end
+
+-- function for opencode
+function _opencode_toggle()
+  local Terminal = terminal.Terminal
+  local opencode = Terminal:new({
+    cmd = "opencode .",
+    hidden = true,
+    on_open = function(term)
+      vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<Esc>", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+  })
+  opencode:toggle()
+end

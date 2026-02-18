@@ -478,6 +478,12 @@ if is_available("toggleterm.nvim") then
       { "<leader>gg", "<cmd>lua _lazygit_toggle() <CR>", desc = "ToggleTerm lazygit", mode = "n" },
     })
   end
+
+  if vim.fn.executable("opencode") == 1 then
+    wk.add({
+      { "<leader>to", "<cmd>lua _opencode_toggle() <CR>", desc = "ToggleTerm opencode", mode = "n" },
+    })
+  end
 end
 
 -- DAP Mappings
