@@ -10,6 +10,12 @@ alias vpnls="openvpn3 sessions-list"
 alias vpnstatus="openvpn3 session-manage --status"
 alias vpnstop="openvpn3 session-manage --disconnect"
 
+# if on fedora alias for podman
+if [ -f /etc/fedora-release ]; then
+  alias docker="podman"
+  alias docker-compose="podman-compose"
+fi
+
 
 # fill with ssh keys names
 export SSH_POWER=""
