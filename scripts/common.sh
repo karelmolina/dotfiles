@@ -28,12 +28,12 @@ echo_warn() {
 dotlink() {
     local src="$DOTFILES_DIR/$1"
     local dest="$BASEDIR/$2"
-    
+
     if [ -e "$dest" ] && [ ! -L "$dest" ]; then
         echo_warn "Backing up existing $dest"
         mv "$dest" "$dest.backup.$(date +%Y%m%d%H%M%S)"
     fi
-    
+
     ln -sf "$src" "$dest"
     echo_success "Linked: $src -> $dest"
 }
@@ -60,26 +60,26 @@ stow_config() {
     local pkg="$1"
     local target_dir="${2:-$HOME/.config}"
     local src="$DOTFILES_DIR/$pkg"
-    
+
     if [ ! -d "$src" ]; then
         echo_error "Package $pkg not found in dotfiles"
         return 1
     fi
-    
+
     mkdir -p "$target_dir"
-    
+
     for item in "$src"/*; do
         local basename=$(basename "$item")
         local dest="$target_dir/$basename"
-        
+
         if [ -e "$dest" ] && [ ! -L "$dest" ]; then
             echo_warn "Backing up existing $dest"
             mv "$dest" "$dest.backup.$(date +%Y%m%d%H%M%S)"
         fi
-        
+
         ln -sf "$item" "$dest"
     done
-    
+
     echo_success "Stowed: $pkg"
 }
 
@@ -89,16 +89,16 @@ install_fonts() {
     local font_name="$2"
     local temp_dir=$(mktemp -d)
     local fonts_dir="$HOME/.local/share/fonts"
-    
+
     echo_info "Installing font: $font_name"
     mkdir -p "$fonts_dir"
-    
+
     cd "$temp_dir"
     curl -L -o font.zip "$font_url"
     unzip -o font.zip -d "$fonts_dir/"
     fc-cache -f -v
     cd -
     rm -rf "$temp_dir"
-    
+
     echo_success "Font $font_name installed"
 }
