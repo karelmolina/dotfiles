@@ -7,7 +7,7 @@ obsidian.setup({
   workspaces = {
     {
       name = "daily",
-      path = "~/Projects/daily-tasks",
+      path = "~/Projects/daily-notes",
     },
   },
   ui = {
