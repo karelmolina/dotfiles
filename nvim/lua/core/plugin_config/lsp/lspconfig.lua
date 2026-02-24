@@ -51,17 +51,39 @@ local lsp_servers = {
       },
     },
   },
-  ts_ls = {
+  vtsls = {
     settings = {
       typescript = {
         tsserver = {
-          maxTsServerMemory = 2048, -- Limit tsserver to 2GB max
+          maxTsServerMemory = 3072, -- 3GB for larger projects
+        },
+        preferences = {
+          -- Disable auto-import suggestions (saves RAM)
+          includePackageJsonAutoImports = "off",
         },
       },
       javascript = {
         tsserver = {
-          maxTsServerMemory = 2048,
+          maxTsServerMemory = 3072,
         },
+        preferences = {
+          includePackageJsonAutoImports = "off",
+        },
+      },
+      vtsls = {
+        experimental = {
+          -- Disable completion for node_modules (huge RAM saver)
+          completion = {
+            enableServerSideFuzzyMatch = true,
+          },
+        },
+      },
+    },
+    -- Don't watch node_modules (major RAM saver)
+    init_options = {
+      hostInfo = "neovim",
+      preferences = {
+        includePackageJsonAutoImports = "off",
       },
     },
   },

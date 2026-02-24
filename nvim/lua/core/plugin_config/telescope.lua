@@ -59,6 +59,11 @@ telescope.setup({
       },
       n = { ["q"] = actions.close },
     },
+    preview = {
+      -- Disable treesitter highlighting in preview if it causes issues
+      -- This prevents the ft_to_lang nil error
+      treesitter = false,
+    },
   },
 })
 
