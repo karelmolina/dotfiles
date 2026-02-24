@@ -12,6 +12,26 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   command = [[%s/\s\+$//e]],
 })
 
+-- RAM Optimization: Handle large files
+vim.api.nvim_create_autocmd({ "BufReadPre" }, {
+  pattern = "*",
+  callback = function()
+    local max_filesize = 1024 * 1024 -- 1 MB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(0))
+    if ok and stats and stats.size > max_filesize then
+      -- Disable features for large files
+      vim.opt_local.swapfile = false
+      vim.opt_local.undofile = false
+      vim.opt_local.foldmethod = "manual"
+      vim.opt_local.foldenable = false
+      vim.opt_local.list = false
+      -- Disable LSP for very large files
+      vim.b.large_file = true
+      vim.notify("Large file detected (>1MB): Disabled swap, undo, folding, and LSP", vim.log.levels.WARN)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   pattern = "*.md",
   callback = function()
@@ -38,7 +58,7 @@ local options = {
     foldmethod = "manual",
     foldcolumn = vim.fn.has("nvim-0.9") == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
     hlsearch = true, -- Make line numbers default
-    history = 100, -- number of commands to remember in a history table
+    history = 50, -- reduced from 100 to save memory
     ignorecase = true, -- case insensitive searching
     infercase = true, -- infer cases in keyword completion
     laststatus = 3, -- global statusline
@@ -78,7 +98,7 @@ local options = {
     icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available)
     inlay_hints_enabled = false, -- enable or disable LSP inlay hints on startup (Neovim v0.10 only)
     lsp_handlers_enabled = true, -- enable or disable default vim.lsp.handlers (hover and signature help)
-    semantic_tokens_enabled = true, -- enable or disable LSP semantic tokens on startup
+    semantic_tokens_enabled = false, -- disabled to save RAM (treesitter handles highlighting)
     git_worktrees = nil, -- enable git integration for detached worktrees (specify a table where each entry is of the form { toplevel = vim.env.HOME, gitdir=vim.env.HOME .. "/.dotfiles" })
   },
 }

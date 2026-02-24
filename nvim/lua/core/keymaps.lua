@@ -827,3 +827,15 @@ if is_available("kulala.nvim") then
     { "<leader>rc", "<cmd>KulalaScratchToCurl<CR>", desc = "Copy current request as cURL", mode = { "n", "v" } },
   })
 end
+
+-- Opencode (AI Assistant)
+if is_available("opencode.nvim") then
+  wk.add({
+    { "<leader>o", group = "Opencode" },
+    { "<leader>oa", function() require("opencode").ask("@this: ", { submit = true }) end, desc = "Ask opencode…", mode = { "n", "x" } },
+    { "<leader>ox", function() require("opencode").select() end, desc = "Execute opencode action…", mode = { "n", "x" } },
+    { "<leader>ot", function() require("opencode").toggle() end, desc = "Toggle opencode", mode = { "n", "t" } },
+    { "go", function() return require("opencode").operator("@this ") end, desc = "Add range to opencode", mode = { "n", "x" }, expr = true },
+    { "goo", function() return require("opencode").operator("@this ") .. "_" end, desc = "Add line to opencode", mode = "n", expr = true },
+  })
+end

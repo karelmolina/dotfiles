@@ -58,3 +58,60 @@ autocmd({ "BufRead", "BufNewFile" }, {
     vim.bo.filetype = "http"
   end,
 })
+
+-- RAM Optimization: Auto-delete hidden buffers after 30 minutes
+local buffer_cleanup_group = augroup("buffer_cleanup", { clear = true })
+
+-- Track buffer access times
+local buffer_access_times = {}
+
+autocmd({ "BufEnter", "BufRead" }, {
+  desc = "Track buffer access time",
+  group = buffer_cleanup_group,
+  pattern = "*",
+  callback = function(args)
+    buffer_access_times[args.buf] = vim.loop.now()
+  end,
+})
+
+autocmd("BufDelete", {
+  desc = "Remove buffer from tracking",
+  group = buffer_cleanup_group,
+  pattern = "*",
+  callback = function(args)
+    buffer_access_times[args.buf] = nil
+  end,
+})
+
+-- Clean up hidden buffers every 10 minutes
+autocmd("CursorHold", {
+  desc = "Clean up old hidden buffers",
+  group = buffer_cleanup_group,
+  pattern = "*",
+  callback = function()
+    local now = vim.loop.now()
+    local max_age = 30 * 60 * 1000 -- 30 minutes in milliseconds
+    local buffers_deleted = 0
+    
+    for bufnr, last_access in pairs(buffer_access_times) do
+      -- Check if buffer is valid, hidden, not modified, and old
+      if vim.api.nvim_buf_is_valid(bufnr) then
+        local is_hidden = vim.fn.bufwinnr(bufnr) == -1
+        local is_modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
+        local is_listed = vim.api.nvim_get_option_value("buflisted", { buf = bufnr })
+        
+        if is_hidden and not is_modified and is_listed and (now - last_access) > max_age then
+          vim.api.nvim_buf_delete(bufnr, { force = false })
+          buffer_access_times[bufnr] = nil
+          buffers_deleted = buffers_deleted + 1
+        end
+      else
+        buffer_access_times[bufnr] = nil
+      end
+    end
+    
+    if buffers_deleted > 0 then
+      vim.notify("Cleaned up " .. buffers_deleted .. " old buffers", vim.log.levels.INFO)
+    end
+  end,
+})

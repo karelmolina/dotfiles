@@ -59,19 +59,19 @@ local plugins = {
   },
 
   -- git
-  "lewis6991/gitsigns.nvim",
+  { "lewis6991/gitsigns.nvim", event = "BufReadPost" },
 
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
 
   -- which key
-  "folke/which-key.nvim",
+  { "folke/which-key.nvim", event = "VeryLazy" },
 
   -- bottom line
-  "nvim-lualine/lualine.nvim",
+  { "nvim-lualine/lualine.nvim", event = "VeryLazy" },
 
   -- Add indentation guides even on blank lines
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, event = "BufReadPost" },
 
   { -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
@@ -220,13 +220,36 @@ local plugins = {
   { "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
   {
     "coffebar/neovim-project",
-    opts = {
-      projects = projects.get_project_path(),
-      datapath = vim.fn.stdpath("data"),
-      last_session_on_startup = false,
-    },
+    opts = function()
+      -- Defer require until plugin is being configured
+      local session_config = require("session_manager.config")
+      return {
+        projects = projects.get_project_path(),
+        datapath = vim.fn.stdpath("data"),
+        last_session_on_startup = false,
+        -- RAM optimizations
+        session_manager_opts = {
+          autosave_ignore_dirs = {
+            vim.fn.expand("~"),
+            "/tmp",
+          },
+          autosave_ignore_filetypes = {
+            "gitcommit",
+            "gitrebase",
+          },
+          -- Only save 1 session per project
+          autoload_mode = session_config.AutoloadMode.Disabled,
+        },
+      }
+    end,
     init = function()
-      vim.opt.sessionoptions:append("globals")
+      -- Minimize session data to save RAM
+      vim.opt.sessionoptions = {
+        "buffers",
+        "curdir",
+        "tabpages",
+        "winsize",
+      }
     end,
     dependencies = {
       { "nvim-lua/plenary.nvim" },
@@ -299,6 +322,20 @@ local plugins = {
   {
     "sphamba/smear-cursor.nvim",
     opts = {},
+  },
+  {
+    "nickjvandyke/opencode.nvim",
+    config = function()
+      vim.g.opencode_opts = {
+        autoread = true,
+        provider = {
+          terminal = {
+            split = "right",
+            width = math.floor(vim.o.columns * 0.5), -- 50% width (default is 35%)
+          },
+        },
+      }
+    end,
   },
 }
 

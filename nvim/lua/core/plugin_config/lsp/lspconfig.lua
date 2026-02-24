@@ -51,8 +51,38 @@ local lsp_servers = {
       },
     },
   },
-  ts_ls = {},
-  yamlls = {},
+  ts_ls = {
+    settings = {
+      typescript = {
+        tsserver = {
+          maxTsServerMemory = 2048, -- Limit tsserver to 2GB max
+        },
+      },
+      javascript = {
+        tsserver = {
+          maxTsServerMemory = 2048,
+        },
+      },
+    },
+  },
+  yamlls = {
+    settings = {
+      yaml = {
+        schemas = {
+          -- Disable all broken schemas from lalcebo/json-schema repository
+          -- These schemas are no longer available and cause errors
+          ["https://raw.githubusercontent.com/lalcebo/json-schema/master/serverless/resources/cloudformation-modified/*.json"] = "!serverless.yml",
+        },
+        schemaStore = {
+          enable = true,
+          url = "https://www.schemastore.org/api/json/catalog.json",
+        },
+        validate = true,
+        completion = true,
+        hover = true,
+      },
+    },
+  },
   pyright = {},
   jsonls = {},
   bashls = {
@@ -80,13 +110,74 @@ local lsp_servers = {
   },
 }
 
+-- Track LSP clients per buffer for cleanup
+local lsp_clients_by_buffer = {}
+
+-- Enhanced on_attach with buffer tracking
+local function enhanced_on_attach(client, bufnr)
+  on_attach(client, bufnr)
+  
+  -- Track this client for this buffer
+  if not lsp_clients_by_buffer[bufnr] then
+    lsp_clients_by_buffer[bufnr] = {}
+  end
+  lsp_clients_by_buffer[bufnr][client.id] = client
+  
+  -- Set up autocmd to detach LSP when buffer is hidden for too long
+  vim.api.nvim_create_autocmd("BufHidden", {
+    buffer = bufnr,
+    callback = function()
+      -- Schedule LSP detach after 5 minutes of being hidden
+      vim.defer_fn(function()
+        if vim.api.nvim_buf_is_valid(bufnr) then
+          local is_visible = vim.fn.bufwinnr(bufnr) ~= -1
+          if not is_visible then
+            -- Stop LSP clients for this buffer
+            for client_id, _ in pairs(lsp_clients_by_buffer[bufnr] or {}) do
+              local client = vim.lsp.get_client_by_id(client_id)
+              if client then
+                -- Check if client is used by other buffers
+                local other_buffers = false
+                for other_bufnr, clients in pairs(lsp_clients_by_buffer) do
+                  if other_bufnr ~= bufnr and clients[client_id] then
+                    other_buffers = true
+                    break
+                  end
+                end
+                -- Only stop if not used by other buffers
+                if not other_buffers then
+                  vim.lsp.stop_client(client_id, true)
+                end
+              end
+            end
+            lsp_clients_by_buffer[bufnr] = nil
+          end
+        end
+      end, 5 * 60 * 1000) -- 5 minutes
+    end,
+  })
+end
+
 -- Loop through all servers and configure them
 for server, config in pairs(lsp_servers) do
   lspconfig(server, {
     capabilities = capabilities,
-    on_attach = on_attach,
+    on_attach = enhanced_on_attach,
     settings = config.settings,
     filetypes = config.filetypes,
     default_config = config.default_config,
+    -- Reduce LSP overhead
+    flags = {
+      debounce_text_changes = 300, -- Increase debounce to reduce updates
+      allow_incremental_sync = true,
+    },
   })
 end
+
+-- Clean up LSP tracking on buffer delete
+vim.api.nvim_create_autocmd("BufDelete", {
+  pattern = "*",
+  callback = function(args)
+    lsp_clients_by_buffer[args.buf] = nil
+  end,
+})

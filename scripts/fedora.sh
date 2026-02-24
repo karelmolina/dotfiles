@@ -42,13 +42,14 @@ step2_core_deps() {
 
     sudo dnf groupinstall -y "Development Tools"
 
+    sudo dnf copr enable dejan/lazygit -y
     sudo dnf install -y \
         git curl wget neovim ripgrep fd-find fzf zsh stow \
         tree htop unzip zip p7zip jq yq httpie \
-        xclip wl-clipboard gnome-tweaks gnome-extensions-app \
+        xclip wl-clipboard \
         fontconfig freetype g++ gcc cmake ninja-build \
         python3-devel python3-pip nodejs npm clang-libs \
-        clang
+        clang zoxide lazygit
 
     echo_success "Core dependencies installed"
 }
@@ -157,6 +158,8 @@ step7_dev_tools() {
     cargo install tree-sitter-cli
     echo_info "Installing git-cliff..."
     cargo install git-cliff
+    echo_info "Installing eza..."
+    cargo install eza
 
     echo_success "Development tools installed"
 }
@@ -171,7 +174,6 @@ step8_apps() {
         "com.spotify.Client"
         "com.google.Chrome"
         "com.getpostman.Postman"
-        "org.ferdium.Ferdium"
         "com.mongodb.Compass"
         "io.dbeaver.DBeaverCommunity"
         "com.github.marhkb.Pods"
@@ -185,7 +187,7 @@ step8_apps() {
         fi
     done
 
-    sudo dnf install -y git-cola git-delta meld vim-enhanced neofetch bat eza zoxide atuin btop lazygit
+    sudo dnf install -y git-cola git-delta meld vim-enhanced bat zoxide atuin btop
 
     # Install OpenVPN3 client
     echo_info "Installing OpenVPN3 client..."
@@ -220,7 +222,6 @@ step9_stow() {
     stow_config "zsh" "$HOME/.oh-my-zsh/custom"
 
     dotlink "zsh/zshrc" ".zshrc"
-    dotlink "zsh/zshenv" ".zshenv"
     dotlink "zsh/starship.toml" ".config/starship.toml"
     dotlink "mise/config.toml" ".config/mise/config.toml"
 
