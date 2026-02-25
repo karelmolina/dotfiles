@@ -18,7 +18,7 @@ Personal dotfiles for:
 
 ### Installation
 ```bash
-./install                    # Run main installation script
+./install                    # Run main installation script (Fedora only)
 ln -s ~/dotfiles/nvim ~/.config/nvim
 ln -s ~/dotfiles/vim/vimrc ~/.vimrc
 ```
@@ -44,6 +44,7 @@ nvim --headless "+Lazy update" +qa
 # Syntax checks
 bash -n install
 zsh -n zsh/aliases.zsh
+zsh -n zsh/functions.zsh
 
 # Lint (if shellcheck available)
 shellcheck install zsh/aliases.zsh 2>/dev/null || true
@@ -74,12 +75,14 @@ vim +PluginInstall +qa
   ```
 - **Comments**: Use `--`, keep concise
 - **Globals**: Use `vim.opt.*` for options, `vim.g.*` for globals
+- **Module pattern**: Return table at end of file
 
 ### Shell Scripts
 - **Indentation**: 2 spaces
 - **Naming**: `snake_case` functions, `UPPER_SNAKE_CASE` exports, `lowercase` aliases
 - **Quotes**: Double quotes for variables, single for literals
 - **Error handling**: Use `&&`/`||` or `set -e` where appropriate
+- **Shebang**: Use `#!/bin/bash` for bash scripts
 
 ### Vimscript (vim/)
 - **Indentation**: 2 spaces
@@ -111,7 +114,7 @@ vim +PluginInstall +qa
 ### LSP Setup
 - **mason.nvim**: Manage LSP servers
 - **nvim-lspconfig**: Configure servers
-- **none-ls.nvim**: Formatters/linters
+- **null-ls.nvim**: Formatters/linters
 - **Diagnostics**: Mode 3 (all visible)
 - Location: `core/plugin_config/lsp/`
 

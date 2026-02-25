@@ -23,7 +23,7 @@ VPN_PASS_DIR="${HOME}/.config/openvpn3/passphrases"
 function _vpn_get_passphrase() {
   local config="$1"
   local pass_file="${VPN_PASS_DIR}/$(basename "$config" .ovpn).pass"
-  
+
   if [[ -f "$pass_file" ]]; then
     cat "$pass_file"
     return 0
@@ -35,7 +35,7 @@ function _vpn_save_passphrase() {
   local config="$1"
   local passphrase="$2"
   local pass_file="${VPN_PASS_DIR}/$(basename "$config" .ovpn).pass"
-  
+
   mkdir -p "$VPN_PASS_DIR"
   chmod 700 "$VPN_PASS_DIR"
   echo "$passphrase" > "$pass_file"
@@ -67,7 +67,7 @@ function vpnup() {
     echo -n "Private key passphrase: "
     read -rs passphrase
     echo ""
-    
+
     echo -n "Save passphrase for future use? [y/N]: "
     read -r save_choice
     if [[ "$save_choice" =~ ^[Yy]$ ]]; then

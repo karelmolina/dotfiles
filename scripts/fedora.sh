@@ -48,7 +48,7 @@ step2_core_deps() {
         tree htop unzip zip p7zip jq yq httpie \
         xclip wl-clipboard \
         fontconfig freetype g++ gcc cmake ninja-build \
-        python3-devel python3-pip nodejs npm clang-libs \
+        python3-devel python3-pip clang-libs \
         clang zoxide lazygit
 
     echo_success "Core dependencies installed"
@@ -151,6 +151,31 @@ step7_dev_tools() {
     if ! has_command mise; then
         curl https://mise.run | sh
         echo 'eval "$(mise activate zsh)"' >> "$HOME/.zshrc"
+        # Trust the mise config file to prevent LSP issues
+        "$HOME/.local/bin/mise" trust ~/dotfiles/mise/config.toml 2>/dev/null || true
+    fi
+
+    #node
+    if ! has_command node; then
+        # ask for node version
+        read -p "Enter node version: " NODE_VERSION
+        echo_info "Installing node..."
+        mise install node@"$NODE_VERSION:20"
+
+        npm install -g @fission-ai/openspec@latest
+    fi
+
+    # opencode
+    if ! has_command opencode; then
+        echo_info "Installing opencode..."
+        curl -fsSL https://opencode.ai/install | bash
+    fi
+
+    # vicinae
+    if ! has_command vicinae; then
+        echo_info "Installing vicinae..."
+        sudo curl -fsSL https://vicinae.com/install.sh | bash
+        systemctl --user enable vicinae --now
     fi
 
     # tree-sitter-cli (required by nvim-treesitter)
@@ -187,7 +212,7 @@ step8_apps() {
         fi
     done
 
-    sudo dnf install -y git-cola git-delta meld vim-enhanced bat zoxide atuin btop
+    sudo dnf install -y git-cola git-delta meld vim-enhanced bat zoxide atuin btop podman-docker
 
     # Install OpenVPN3 client
     echo_info "Installing OpenVPN3 client..."
