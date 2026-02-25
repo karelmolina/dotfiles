@@ -43,6 +43,7 @@ vim.opt.backspace:append({ "nostop" }) -- don't stop backspace at insert
 
 local options = {
   opt = {
+    spell = false, -- disable spell checking
     backspace = "indent,eol,start", -- allow backspace on indent, end of line or insert mode start position
     breakindent = true, -- wrap indent to match  line start
     clipboard = "unnamedplus", -- connection to the system clipboard

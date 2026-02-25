@@ -129,6 +129,13 @@ local lsp_servers = {
   },
   harper_ls = {
     filetypes = { "markdown", "html", "javascript", "json", "http" },
+    settings = {
+      ["harper-ls"] = {
+        linters = {
+          LongSentences = false,  -- Disable long sentence warnings
+        },
+      },
+    },
   },
 }
 

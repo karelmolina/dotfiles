@@ -42,6 +42,62 @@ cmd("UpdateAllPackages", function()
   require("astronvim.utils.mason").update_all()
 end, { desc = "Update Plugins and Mason" })
 
+-- ============================================================================
+-- Opencode Project Directory Tracking
+-- ============================================================================
+-- Purpose: Track the current project directory for Opencode AI assistant
+-- integration. This allows Opencode to always open in the correct project
+-- context, even when switching between projects using neovim-project.
+--
+-- How it works:
+--   1. On VimEnter, we capture the initial working directory
+--   2. When DirChanged fires (e.g., from neovim-project switching),
+--      we update the tracked directory after a short debounce period
+--   3. Both toggleterm.lua and opencode.nvim config use vim.g.opencode_project_dir
+--      to determine the correct working directory for Opencode sessions
+--
+-- vim.g.opencode_project_dir stores the currently tracked project directory
+-- vim.g._opencode_dir_debounce stores the timer ID for debounce management
+
+local opencode_sync_group = augroup("OpencodeProjectSync", { clear = true })
+
+-- Initialize project directory on startup
+-- This captures the initial working directory so Opencode knows the project
+-- context even before any directory changes occur
+autocmd("VimEnter", {
+  desc = "Initialize Opencode project directory on startup",
+  group = opencode_sync_group,
+  once = true,
+  callback = function()
+    vim.g.opencode_project_dir = vim.fn.getcwd()
+  end,
+})
+
+-- Track directory changes with debounce to handle rapid project switches
+-- Debounce prevents race conditions when neovim-project switches directories quickly
+autocmd("DirChanged", {
+  desc = "Update Opencode project directory on directory change (with debounce)",
+  group = opencode_sync_group,
+  pattern = "*",
+  callback = function(args)
+    -- Clear existing debounce timer if present (prevents overlapping updates)
+    if vim.g._opencode_dir_debounce then
+      vim.fn.timer_stop(vim.g._opencode_dir_debounce)
+    end
+
+    -- Set new debounce timer (100ms delay)
+    -- The timer ensures we only update after directory changes settle
+    vim.g._opencode_dir_debounce = vim.fn.timer_start(100, function()
+      vim.schedule(function()
+        -- args.file contains the new directory path from DirChanged event
+        -- Fallback to vim.fn.getcwd() if args.file is not available
+        vim.g.opencode_project_dir = args.file or vim.fn.getcwd()
+      end)
+      vim.g._opencode_dir_debounce = nil
+    end)
+  end,
+})
+
 autocmd("FileType", {
   pattern = "sh",
   callback = function()
@@ -92,14 +148,14 @@ autocmd("CursorHold", {
     local now = vim.loop.now()
     local max_age = 30 * 60 * 1000 -- 30 minutes in milliseconds
     local buffers_deleted = 0
-    
+
     for bufnr, last_access in pairs(buffer_access_times) do
       -- Check if buffer is valid, hidden, not modified, and old
       if vim.api.nvim_buf_is_valid(bufnr) then
         local is_hidden = vim.fn.bufwinnr(bufnr) == -1
         local is_modified = vim.api.nvim_get_option_value("modified", { buf = bufnr })
         local is_listed = vim.api.nvim_get_option_value("buflisted", { buf = bufnr })
-        
+
         if is_hidden and not is_modified and is_listed and (now - last_access) > max_age then
           vim.api.nvim_buf_delete(bufnr, { force = false })
           buffer_access_times[bufnr] = nil
@@ -109,9 +165,19 @@ autocmd("CursorHold", {
         buffer_access_times[bufnr] = nil
       end
     end
-    
+
     if buffers_deleted > 0 then
       vim.notify("Cleaned up " .. buffers_deleted .. " old buffers", vim.log.levels.INFO)
     end
+  end,
+})
+
+-- Disable spell checking for all buffers
+autocmd({ "BufEnter", "FileType" }, {
+  desc = "Disable spell checking",
+  group = augroup("disable_spell", { clear = true }),
+  pattern = "*",
+  callback = function()
+    vim.opt_local.spell = false
   end,
 })

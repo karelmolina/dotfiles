@@ -37,11 +37,16 @@ function _lazygit_toggle()
   lazygit:toggle()
 end
 
--- function for opencode
+-- Opencode toggle function with project directory support
+-- Uses vim.g.opencode_project_dir to open Opencode in the correct project context
+-- Falls back to current working directory if project dir is not set
 function _opencode_toggle()
   local Terminal = terminal.Terminal
+  -- Get tracked project directory or fall back to current working directory
+  -- This ensures Opencode always opens in the right context even if tracking failed
+  local project_dir = vim.g.opencode_project_dir or vim.fn.getcwd()
   local opencode = Terminal:new({
-    cmd = "opencode .",
+    cmd = "opencode " .. vim.fn.shellescape(project_dir),
     hidden = true,
     on_open = function(term)
       vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<Esc>", "<cmd>close<CR>", { noremap = true, silent = true })
