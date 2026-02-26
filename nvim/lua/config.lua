@@ -325,27 +325,19 @@ local plugins = {
     opts = {},
   },
   {
-    "nickjvandyke/opencode.nvim",
-    config = function()
-      vim.g.opencode_opts = {
-        autoread = true,
-        provider = {
-          terminal = {
-            split = "right",
-            width = math.floor(vim.o.columns * 0.5), -- 50% width (default is 35%)
-            -- Dynamic working directory using function instead of static value
-            -- This allows opencode.nvim to query the current project directory
-            -- each time it opens, rather than using a fixed path from startup.
-            -- Integrates with directory tracking in core/autocmds.lua which updates
-            -- vim.g.opencode_project_dir when switching projects via neovim-project.
-            -- Falls back to vim.fn.getcwd() if tracking variable is not set.
-            cwd = function()
-              return vim.g.opencode_project_dir or vim.fn.getcwd()
-            end,
-          },
+    "sudo-tee/opencode.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {
+          anti_conceal = { enabled = false },
+          file_types = { "markdown", "opencode_output" },
         },
-      }
-    end,
+        ft = { "markdown", "Avante", "copilot-chat", "opencode_output" },
+      },
+      "folke/snacks.nvim",
+    },
   },
 }
 

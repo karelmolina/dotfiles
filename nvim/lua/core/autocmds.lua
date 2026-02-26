@@ -92,6 +92,13 @@ autocmd("DirChanged", {
         -- args.file contains the new directory path from DirChanged event
         -- Fallback to vim.fn.getcwd() if args.file is not available
         vim.g.opencode_project_dir = args.file or vim.fn.getcwd()
+        
+        -- Notify sudo-tee's opencode.nvim about directory change
+        -- This triggers session reset and context unloading for new project
+        local ok, opencode = pcall(require, "opencode.core")
+        if ok and opencode.handle_directory_change then
+          opencode.handle_directory_change()
+        end
       end)
       vim.g._opencode_dir_debounce = nil
     end)
