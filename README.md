@@ -10,6 +10,7 @@ This repository contains configuration files and installation scripts for:
 - **Shell**: Zsh with Oh-My-Zsh, Starship prompt
 - **Tools**: Tmux, btop, yazi, lazygit, lazydocker
 - **Version Management**: mise (formerly rtx) for Go, Node.js
+- **AI Assistant**: Opencode with SDD skills (sdd-commit, sdd-init, sdd-spec, etc.)
 
 ## Quick Start
 
@@ -124,6 +125,25 @@ node = "20"
 ```
 
 Go binaries installed via `go install` (e.g., `gotop`) are automatically available in PATH.
+
+### Opencode SDD Skills
+
+The repository includes SDD (Spec-Driven Development) skills for the Opencode AI assistant:
+
+| Skill | Purpose | Location |
+|-------|---------|----------|
+| **sdd-commit** | Conventional commit creation with automatic message generation | `opencode/skills/sdd-commit/` |
+| **sdd-init** | Bootstrap SDD directory structure in projects | `opencode/skills/sdd-init/` |
+| **sdd-spec** | Write specifications with requirements and scenarios | `opencode/skills/sdd-spec/` |
+| **sdd-propose** | Create change proposals with intent and scope | `opencode/skills/sdd-propose/` |
+| **sdd-design** | Create technical design documents | `opencode/skills/sdd-design/` |
+| **sdd-tasks** | Break down changes into implementation tasks | `opencode/skills/sdd-tasks/` |
+| **sdd-apply** | Implement tasks from changes | `opencode/skills/sdd-apply/` |
+| **sdd-verify** | Validate implementation against specs | `opencode/skills/sdd-verify/` |
+| **sdd-archive** | Archive completed changes | `opencode/skills/sdd-archive/` |
+| **sdd-explore** | Explore and investigate ideas | `opencode/skills/sdd-explore/` |
+
+These skills follow the SDD pattern for structured, verifiable AI-assisted development.
 
 ## Customization
 

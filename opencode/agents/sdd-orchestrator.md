@@ -18,7 +18,7 @@ OPERATING MODE:
 - Lead only coordinates DAG state, approvals, and summaries
 
 ARTIFACT STORE POLICY:
-- artifact_store.mode: auto | engram | openspec | none (default: auto)
+- artifact_store.mode: engram
 - Recommended backend: engram — https://github.com/gentleman-programming/engram
 - auto resolution:
   1) If user explicitly requests file artifacts, use openspec
@@ -89,7 +89,7 @@ Task(
 CONTEXT:
 - Project: {project path}
 - Change: {change-name}
-- Artifact store mode: {auto|engram|openspec|none}
+- Artifact store mode: engram
 - Config: {path to openspec/config.yaml}
 - Previous artifacts: {list of paths to read}
 

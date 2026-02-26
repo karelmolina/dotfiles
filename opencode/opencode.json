@@ -21,5 +21,16 @@
       "**/secrets/**": "deny",
       "**/credentials.json": "deny"
     }
+  },
+  "mcp": {
+    "engram": {
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ],
+      "enabled": true,
+      "type": "local"
+    }
   }
 }
