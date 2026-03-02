@@ -1,0 +1,1 @@
+../../../opencode/skills/sdd-verify/SKILL.md

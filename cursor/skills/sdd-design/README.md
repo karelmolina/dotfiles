@@ -1,0 +1,1 @@
+../../../opencode/skills/sdd-design/SKILL.md

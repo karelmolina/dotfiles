@@ -19,6 +19,7 @@ declare -A STEPS=(
     [7]="Development Tools (Rust, Go, mise)"
     [8]="Applications (Flatpak + DNF)"
     [9]="Dotfiles Stow"
+    [10]="Cursor IDE Config"
     [all]="Run All Steps"
 )
 
@@ -253,6 +254,37 @@ step9_stow() {
     echo_success "Dotfiles stowed"
 }
 
+step10_cursor() {
+    echo_info "Setting up Cursor IDE configuration..."
+
+    # Check if cursor is installed
+    if ! has_command cursor; then
+        echo_warn "Cursor not found in PATH. You can install it from https://cursor.sh/"
+        echo_info "The configuration will be ready when you install Cursor."
+    fi
+
+    # Symlink cursor config directory
+    if [ -d "$HOME/.cursor" ] && [ ! -L "$HOME/.cursor" ]; then
+        echo_warn "Backing up existing ~/.cursor directory"
+        mv "$HOME/.cursor" "$HOME/.cursor.backup.$(date +%Y%m%d%H%M%S)"
+    fi
+
+    ln -sf "$DOTFILES_DIR/cursor" "$HOME/.cursor"
+    echo_success "Linked cursor config directory"
+
+    # Copy cursorrules template to dotfiles root if not exists
+    if [ ! -f "$DOTFILES_DIR/.cursorrules" ]; then
+        cp "$DOTFILES_DIR/cursor/cursorrules.template" "$DOTFILES_DIR/.cursorrules"
+        echo_info "Created .cursorrules template in dotfiles root"
+        echo_info "Edit .cursorrules to customize project context"
+    fi
+
+    echo_info "To use in any project:"
+    echo_info "  ln -s ~/dotfiles/cursor ~/.cursor"
+    echo_info "  cp ~/dotfiles/cursor/cursorrules.template .cursorrules"
+    echo_success "Cursor configuration ready"
+}
+
 # ============================================
 # Interactive Menu
 # ============================================
@@ -300,7 +332,7 @@ parse_selection() {
         done
     else
         for item in $input; do
-            if [[ "$item" =~ ^[0-9]+$ ]] && [ "$item" -ge 1 ] && [ "$item" -le 9 ]; then
+            if [[ "$item" =~ ^[0-9]+$ ]] && [ "$item" -ge 1 ] && [ "$item" -le 10 ]; then
                 selected+=($item)
             fi
         done
@@ -327,6 +359,7 @@ run_step() {
         7) step7_dev_tools ;;
         8) step8_apps ;;
         9) step9_stow ;;
+        10) step10_cursor ;;
     esac
 }
 
@@ -396,7 +429,7 @@ run_all() {
     echo "=============================================="
     echo ""
 
-    for i in {1..9}; do
+    for i in {1..10}; do
         run_step $i || echo_warn "Step $i had issues but continuing..."
     done
 

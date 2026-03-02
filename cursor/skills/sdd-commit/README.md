@@ -1,0 +1,1 @@
+../../../opencode/skills/sdd-commit/SKILL.md

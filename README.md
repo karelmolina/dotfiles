@@ -11,6 +11,7 @@ This repository contains configuration files and installation scripts for:
 - **Tools**: Tmux, btop, yazi, lazygit, lazydocker
 - **Version Management**: mise (formerly rtx) for Go, Node.js
 - **AI Assistant**: Opencode with SDD skills (sdd-commit, sdd-init, sdd-spec, etc.)
+- **IDE**: Cursor with portable SDD configuration
 
 ## Quick Start
 
@@ -144,6 +145,35 @@ The repository includes SDD (Spec-Driven Development) skills for the Opencode AI
 | **sdd-explore** | Explore and investigate ideas | `opencode/skills/sdd-explore/` |
 
 These skills follow the SDD pattern for structured, verifiable AI-assisted development.
+
+### Cursor IDE Configuration
+
+Portable Cursor IDE configuration with SDD workflow support:
+
+| Component | Purpose | Location |
+|-----------|---------|----------|
+| **cursor.json** | Main config (MCP, permissions) | `cursor/cursor.json` |
+| **cursorrules** | Agent personality & rules | `cursor/cursorrules.template` |
+| **agents/** | SDD orchestrator agent | `cursor/agents/` |
+| **commands/** | 8 SDD commands | `cursor/commands/` |
+| **skills/** | 10 SDD skills documentation | `cursor/skills/` |
+
+**Setup in any project:**
+```bash
+# Quick setup with auto-detection
+~/dotfiles/scripts/cursor-setup.sh
+
+# Or manual setup
+ln -s ~/dotfiles/cursor ~/.cursor
+cp ~/dotfiles/cursor/cursorrules.template .cursorrules
+# Edit .cursorrules with project-specific context
+```
+
+**Features:**
+- Same mentoring personality as Opencode (Senior Architect, Rioplatense Spanish)
+- Full SDD workflow: `sdd new`, `sdd ff`, `sdd apply`, etc.
+- Engram MCP integration for persistent memory
+- Security-focused permissions (denies access to secrets/env files)
 
 ## Customization
 
