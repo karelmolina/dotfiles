@@ -8,6 +8,10 @@ LOG_FILE="${LOG_FILE:-$HOME/.dotfiles-install.log}"
 BASEDIR="$HOME"
 DOTFILES_DIR="$HOME/dotfiles"
 
+# Omarchy-specific constants
+OMARCHY_CONFIG_DIR="${HOME}/.omarchy"
+OMARCHY_VERSION_FILE="/etc/omarchy/version"
+
 echo_info() {
     echo "[INFO] $1"
 }
@@ -101,4 +105,54 @@ install_fonts() {
     rm -rf "$temp_dir"
 
     echo_success "Font $font_name installed"
+}
+
+# ============================================
+# OS Detection Functions
+# ============================================
+
+# Check if running on Omarchy Linux
+# Returns 0 if Omarchy detected, 1 otherwise
+is_omarchy() {
+  # Method 1: Check /etc/os-release for ID=omarchy
+  if [ -f /etc/os-release ]; then
+    if grep -q "^ID=omarchy" /etc/os-release 2>/dev/null || \
+       grep -q "^ID_LIKE=.*omarchy" /etc/os-release 2>/dev/null; then
+      return 0
+    fi
+  fi
+
+  # Method 2: Check for Omarchy-specific directories
+  if [ -d "$HOME/.omarchy" ] || [ -d "/opt/omarchy" ] || [ -d "/etc/omarchy" ]; then
+    return 0
+  fi
+
+  # Method 3: Check for Omarchy environment variables
+  if [ -n "$OMARCHY_VERSION" ] || [ -n "$OMARCHY_HOME" ]; then
+    return 0
+  fi
+
+  return 1
+}
+
+# Check if running on Fedora
+# Returns 0 if Fedora detected, 1 otherwise
+is_fedora() {
+  if [ -f /etc/os-release ]; then
+    if grep -q "^ID=fedora" /etc/os-release 2>/dev/null; then
+      return 0
+    fi
+  fi
+  return 1
+}
+
+# Check if running on Pop!_OS
+# Returns 0 if Pop!_OS detected, 1 otherwise
+is_popos() {
+  if [ -f /etc/os-release ]; then
+    if grep -q "^ID=pop" /etc/os-release 2>/dev/null; then
+      return 0
+    fi
+  fi
+  return 1
 }

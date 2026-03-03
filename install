@@ -39,6 +39,14 @@ main() {
             echo "Running Fedora installer..."
             bash "$SCRIPT_DIR/scripts/fedora.sh" "$@"
             ;;
+        omarchy)
+            echo "Running Omarchy installer..."
+            bash "$SCRIPT_DIR/scripts/omarchy.sh" "$@"
+            ;;
+        pop)
+            echo "Running Pop!_OS installer..."
+            bash "$SCRIPT_DIR/scripts/popos.sh" "$@"
+            ;;
         ubuntu)
             echo "Ubuntu support coming soon!"
             exit 1
@@ -60,6 +68,8 @@ main() {
             echo ""
             echo "Supported systems:"
             echo "  - Fedora (43+)"
+            echo "  - Pop!_OS"
+            echo "  - Omarchy Linux"
             echo "  - Ubuntu (coming soon)"
             echo "  - Debian (coming soon)"
             echo "  - Arch (coming soon)"

@@ -15,11 +15,27 @@ This repository contains configuration files and installation scripts for:
 
 ## Quick Start
 
+### Fedora (Primary)
+
 ```bash
 # Clone and install
 git clone https://github.com/karelmolina/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ./install
+```
+
+### Omarchy Linux
+
+```bash
+# Clone the repository
+git clone https://github.com/karelmolina/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# Run the Omarchy installer
+./scripts/omarchy.sh --all
+
+# Or run interactively to select specific steps
+./scripts/omarchy.sh
 ```
 
 ## What's Included
@@ -63,11 +79,12 @@ cd ~/dotfiles
 
 ### Prerequisites
 
-- Fedora 43+ (primary target)
+- **Fedora**: Version 43+ (primary target)
+- **Omarchy Linux**: Any version (complementary tools)
 - Git, curl
 - Internet connection for package downloads
 
-### Automated Install
+### Fedora Automated Install
 
 ```bash
 ./install
@@ -78,6 +95,40 @@ This will:
 2. Install all packages via dnf/flatpak
 3. Stow configuration files to `~/.config/`
 4. Set up shell configuration
+
+### Omarchy Linux Installation
+
+For Omarchy Linux, use the dedicated installer script that provides complementary
+tools without modifying Omarchy's opinionated defaults:
+
+```bash
+# Run all steps
+./scripts/omarchy.sh --all
+
+# Or run specific steps
+./scripts/omarchy.sh 2 3 4
+
+# Dry run to see what would be installed
+./scripts/omarchy.sh --dry-run --all
+
+# Run the test suite
+./scripts/omarchy.sh --test
+```
+
+**What gets installed on Omarchy:**
+- mise (version manager for Go, Node.js)
+- Rust toolchain (if not present)
+- Go compiler (if not present)
+- Neovim configuration (dotfiles nvim)
+- Zsh enhancements (oh-my-zsh, starship, atuin)
+- Kitty terminal configuration
+- Development tools (opencode, vicinae installers)
+
+**What Omarchy already provides (skipped):**
+- Terminal emulator (Omarchy uses specific terminal)
+- Window manager configuration
+- System utilities
+- Base fonts
 
 ### Manual Component Setup
 
@@ -185,13 +236,14 @@ All configurations are extensively commented. Key files:
 
 ## Supported Platforms
 
-| OS | Status |
-|----|--------|
-| Fedora 43+ | Fully supported |
-| Ubuntu | Planned |
-| Debian | Planned |
-| Arch | Planned |
-| macOS | Planned |
+| OS | Status | Installer |
+|----|--------|-----------|
+| **Fedora 43+** | Fully supported | `./install` |
+| **Omarchy Linux** | Fully supported | `./scripts/omarchy.sh` |
+| Ubuntu | Planned | - |
+| Debian | Planned | - |
+| Arch | Planned | - |
+| macOS | Planned | - |
 
 ## Contributing
 
