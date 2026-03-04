@@ -1,55 +1,102 @@
-" SCHEME
-let g:tokyonight_style = 'night' " options: 'storm', 'night', 'day'
-let g:tokyonight_enable_italic = 1
-let g:tokyonight_transparent_background = 0
-colorscheme tokyonight
+" ============================================================================
+" 1. HABAMAX (Colorscheme - native to Vim 8.2+)
+" ============================================================================
+" Habamax is a modern high-contrast colorscheme built into Vim 8.2+
+" No plugin needed - comes with Vim itself
+set background=dark
+try
+  colorscheme habamax
+catch
+  " Fallback for older Vim versions
+  colorscheme default
+endtry
 
-"  Vim commentary
-noremap \c :Commentary<CR>
+" ============================================================================
+" 2. VIM-POLYGLOT (Syntax highlighting - zero config needed)
+" ============================================================================
+" Polyglot works out of the box, but we can tweak some settings:
+let g:polyglot_disabled = ['autoindent']  " Use Vim's native autoindent
+
+" ============================================================================
+" 3. VIM-COMMENTARY (Comment toggling)
+" ============================================================================
+" gcc - comment line
+" gc{motion} - comment motion (e.g. gcip for paragraph)
+" gc in visual mode
+" Additional filetype comment strings:
 autocmd FileType ruby setlocal commentstring=#\ %s
 autocmd FileType javascript setlocal commentstring=//\ %s
 autocmd FileType typescript setlocal commentstring=//\ %s
 autocmd FileType html setlocal commentstring=<!--\ %s\ -->
+autocmd FileType css setlocal commentstring=/*\ %s\ */
+autocmd FileType scss setlocal commentstring=//\ %s
+autocmd FileType yaml setlocal commentstring=#\ %s
+autocmd FileType dockerfile setlocal commentstring=#\ %s
+autocmd FileType bash setlocal commentstring=#\ %s
+autocmd FileType zsh setlocal commentstring=#\ %s
+autocmd FileType vim setlocal commentstring=\"\ %s
+autocmd FileType lua setlocal commentstring=--\ %s
 
-" Fzf
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
-command! -bang -nargs=? -complete=dir GFiles
-  \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview(), <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>, fzf#vim#with_preview(), <bang>0)
+" ============================================================================
+" 4. VIM-SURROUND (Bracket manipulation)
+" ============================================================================
+" cs - change surrounding (cs"' changes " to ')
+" ds - delete surrounding (ds" removes surrounding ")
+" ys - add surrounding (ysiw" adds " around word)
+" yS - add surrounding + indent (ySiw{)
+" S - surround in visual mode
+" Example: "Hello world" -> cs"' -> 'Hello world'
+" Example: 'Hello' -> ds' -> Hello
+" Example: Hello -> ysiw" -> "Hello"
 
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
+" ============================================================================
+" 5. VIM-FUGITIVE (Git integration)
+" ============================================================================
+" Keybindings are in key_remap.vim
+" Commands:
+" :Gstatus - git status (use - to add, p to patch, cc to commit)
+" :Gdiff - git diff current file
+" :Gblame - blame annotation
+" :Glog - git log (open commits)
+" :Gcommit - git commit
+" :Gpush - git push
+" :Gpull - git pull
+" :Gwrite - git add current file
+" :Gread - checkout file (revert changes)
+" :Gremove - git rm
+" :Gmove - git mv
+set diffopt+=vertical  " Always vertical diff
 
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+" ============================================================================
+" 6. VIM-UNIMPAIRED (Quick navigation)
+" ============================================================================
+" [q / ]q - previous/next quickfix
+" [l / ]l - previous/next location list
+" [b / ]b - previous/next buffer
+" [t / ]t - previous/next tag
+" [f / ]f - previous/next file in directory
+" [<Space> / ]<Space> - add blank line above/below
+" [e / ]e - exchange line with above/below
+" [x / ]x - encode/decode XML
+" [u / ]u - encode/decode URL
+" yo - toggle options (yoh for hlsearch, yow for wrap, etc.)
 
-" You can set up fzf window using a Vim command (Neovim or latest Vim 8 required)
-let g:fzf_layout = { 'window': '10new' }
+" ============================================================================
+" 7. VIM-REPEAT (Dot command support)
+" ============================================================================
+" Makes . (dot) repeat work with surround, commentary, etc.
+" No configuration needed - just works!
 
-" Enable per-command history
-" - History files will be stored in the specified directory
-" - When set, CTRL-N and CTRL-P will be bound to 'next-history' and
-"   'previous-history' instead of 'down' and 'up'.
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-
-" RainbowParentheses
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-let g:rbpt_max = 16
-
-" HTML, JSX
-let g:closetag_filenames = '*.html,*.js,*.jsx,*.ts,*.tsx'
-
-" fugitive always vertical diffing
-set diffopt+=vertical
-
-" auto pairs
-let g:AutoPairsShortcutFastWrap = '<C-e>'
+" ============================================================================
+" 8. VIM-SNEAK (Fast motion)
+" ============================================================================
+" Default: s{char}{char} to sneak forward
+" S{char}{char} to sneak backward
+" ; to repeat forward
+" , to repeat backward
+" After s/S, use s again to go to next match
+let g:sneak#label = 1           " Enable "EasyMotion" style labels
+let g:sneak#use_ic_scs = 1      " Use ignorecase + smartcase
+let g:sneak#s_next = 1          " Press s again to go to next match
+let g:sneak#f_reset = 1         " f/F/t/T are enhanced by sneak
+let g:sneak#t_reset = 1

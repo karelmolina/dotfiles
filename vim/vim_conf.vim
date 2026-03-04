@@ -69,3 +69,36 @@ if !empty($TMUX)
     let &t_SR .= "\e[5 q"
     let &t_EI .= "\e[4 q"
 endif
+
+" ============================================================================
+" NATIVE STATUSLINE (minimalist, no airline)
+" ============================================================================
+set laststatus=2
+set statusline=
+set statusline+=%#StatusLine#
+set statusline+=\ %n\                              " buffer number
+set statusline+=%{&modified?'[+]':'\ '}             " modified flag
+set statusline+=%{&readonly?'[RO]':'\ '}            " readonly flag
+set statusline+=%<%F\                               " full path
+set statusline+=%=                                  " right align
+set statusline+=%{&filetype!=''?&filetype:'none'}\  " filetype
+set statusline+=%{&fileencoding!=''?&fileencoding:&encoding}\  " encoding
+set statusline+=%l/%L:%c\                           " line/total:column
+set statusline+=%3p%%\                              " percentage
+
+" ============================================================================
+" NETRW (built-in file explorer)
+" ============================================================================
+let g:netrw_banner=0              " disable banner
+let g:netrw_liststyle=3           " tree view
+let g:netrw_browse_split=4        " open in previous window
+let g:netrw_altv=1                " open splits to the right
+let g:netrw_winsize=25            " width of netrw window
+let g:netrw_keepdir=0             " keep current directory sync'd
+let g:netrw_localcopydircmd='cp -r'
+let g:netrw_fastbrowse=0          " close netrw after opening file
+
+" ============================================================================
+" COLORS
+" ============================================================================
+" Habamax colorscheme is loaded via plugin_options.vim (native to Vim 8.2+)

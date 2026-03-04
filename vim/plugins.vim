@@ -1,88 +1,33 @@
-" Pathogen
-set nocp
-call pathogen#infect()
+" Minimalist Vim Configuration - 8 Essential Plugins
+" Using Vundle for plugin management
 
-" set the runtime path to include Vundle and initialize
-
+set nocompatible
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
+" Vundle manages itself
 Plugin 'VundleVim/Vundle.vim'
 
-" Files stucture tree
-Plugin 'preservim/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-
-" Git
-Plugin 'tpope/vim-fugitive'
-Plugin 'mhinz/vim-signify'
-
-"" Quick comment toggling
-Plugin 'tpope/vim-commentary'
-
-" Multicursor
-Plugin 'terryma/vim-multiple-cursors'
-
-" Ident Line
-Plugin 'Yggdroot/indentLine'
-
-" Additional syntaxes and markup/programming languages
+" 1. Syntax highlighting for all languages
 Plugin 'sheerun/vim-polyglot'
 
-" Insert or delete brackets, parens, quotes in pair.
-Plugin 'jiangmiao/auto-pairs'
+" 2. Comment toggling (gc)
+Plugin 'tpope/vim-commentary'
 
-" highlight trailing whitespace
-Plugin 'bronson/vim-trailing-whitespace'
-
-" Configure tab labels within Terminal Vim with a very succinct output.
-Plugin 'mkitt/tabline.vim'
-
-" status/tabline for vim
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-
-" Fzf
-Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plugin 'junegunn/fzf.vim'
-
-" surround
+" 3. Bracket/parentheses manipulation (cs, ds, ys)
 Plugin 'tpope/vim-surround'
 
-" colorize surroundings
-Plugin 'kien/rainbow_parentheses.vim'
+" 4. Git integration (:Gstatus, :Gdiff, etc.)
+Plugin 'tpope/vim-fugitive'
 
-" underline word matches
-Plugin 'itchyny/vim-cursorword'
+" 5. Quick navigation ([q, ]q, [b, ]b, etc.)
+Plugin 'tpope/vim-unimpaired'
 
-" highlight tag
-Plugin 'valloric/matchtagalways'
+" 6. Dot command support for plugins
+Plugin 'tpope/vim-repeat'
 
-" themes
-Plugin 'w0ng/vim-hybrid'
-Plugin 'ghifarit53/tokyonight-vim'
-Plugin 'catppuccin/vim'
+" 7. Fast motion (s{char}{char})
+Plugin 'justinmk/vim-sneak'
 
-" Which-key alternative
-Plugin 'liuchengxu/vim-which-key'
-
-" Floating terminal
-Plugin 'voldikss/vim-floaterm'
-
-" Colorizer for hex colors
-Plugin 'chrisbra/Colorizer'
-
-" Markdown previewer for Vim
-Plugin 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-
-" Optional for autocompletion (alternative to nvim-cmp)
-Plugin 'Shougo/neocomplete.vim'
-
-" Optional: Linting support
-Plugin 'dense-analysis/ale'
-
-call vundle#end()            " required
+call vundle#end()

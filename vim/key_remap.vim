@@ -1,31 +1,46 @@
 " leader key to space
 let mapleader=" "
 
+" Save
 nnoremap<C-s> <ESC>:w<CR>
 inoremap<C-s> <ESC>:w<CR>
 vnoremap<C-s> <ESC>:w!<CR>
 
-" remap splitting windows
+" Window navigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" NERDTree
-map <leader>e :NERDTreeToggle %<CR>
+" ============================================================================
+" NETRW (file explorer - replaces NERDTree)
+" ============================================================================
+nmap <leader>e :Lexplore<CR>
+nmap <leader>E :Lexplore %:p:h<CR>
+
+" In netrw: press 't' to open in new tab, 'v' for vertical split, 'o' for horizontal
+" Use '-' to go up a directory, <CR> to enter directory or open file
+
+" ============================================================================
+" VIM-SNEAK (fast motion with s{char}{char})
+" ============================================================================
+" Default: s{char}{char} to sneak forward, S{char}{char} to sneak backward
+" ; to repeat forward, , to repeat backward
+" f/F/t/T extended to work across lines (1 character sneak)
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
 
 " Move lines
-" Normal Mode
 nnoremap <leader>k :m .-2<CR>==
 nnoremap <leader>j :m .+1<CR>==
-" Insert Mode
 inoremap <leader>k <Esc>:m .-2<CR>==gi
 inoremap <leader>j <Esc>:m .+1<CR>==gi
-" Visual Mode
 vnoremap <leader>k :m '<-2<CR>gv=gv
 vnoremap <leader>j :m '>+1<CR>gv=gv
 
-" turn off search highlights
+" Clear search highlights
 nnoremap <leader>h :nohlsearch<CR>
 
 " Reload Vim config
@@ -34,28 +49,27 @@ nnoremap <Leader>r :so ~/.vimrc<CR>
 " Tabs
 nnoremap <leader>tt :tabprevious<CR>
 nnoremap <leader>t :tabnext<CR>
-inoremap <leader>t <Esc>:tabprevious<CR>
+inoremap <leader>tt <Esc>:tabprevious<CR>
 inoremap <leader>t <Esc>:tabnext<CR>
 nnoremap <C-t> :tabnew<CR>
 inoremap <C-t> :tabnew<CR>
 
-" resize pane
+" Resize panes
 nnoremap <silent> <Leader>+ :exe "vertical resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader>- :exe "vertical resize " . (winheight(0) * 2/3)<CR>
 
-" copy
+" Copy/paste
 inoremap <C-v> <ESC>"+pa
 vnoremap y "+y
 vnoremap <C-x> "+d
 
-" copy filename and filepath
+" Copy filename and filepath
 nmap <leader>cn :let @*=expand("%")<CR>
 nmap <leader>cp :let @*=expand("%:p")<CR>
 
-" close
+" Close/quit
 nnoremap<leader>w <ESC>:w<CR>
 vnoremap<leader>w <ESC>:w<CR>
-
 nnoremap<leader>q <ESC>:q<CR>
 inoremap<leader>q <ESC>:q<CR>
 vnoremap<leader>q <ESC>:q<CR>
@@ -63,19 +77,12 @@ nnoremap<C-q> <ESC>:qa!<CR>
 inoremap<C-q> <ESC>:qa!<CR>
 vnoremap<C-q> <ESC>:qa!<CR>
 
-" fzf
-nnoremap <leader>ff :GFiles <CR>
-nnoremap <leader>fF :Files<CR>
-nnoremap <leader>fr :RG<CR>
-map <Leader>ag :Ag<CR>
-
-" buffers
-map <Leader>ob :Buffers<cr>
-
-" Signify
-nnoremap ghu :SignifyHunkUndo<CR>
-nnoremap ghd :SignifyHunkDiff<CR>
-nmap <leader>n <plug>(signify-next-hunk)
-nmap <leader>p <plug>(signify-prev-hunk)
-omap ghv <plug>(signify-motion-inner-pending)
-xmap ghv <plug>(signify-motion-inner-visual)
+" ============================================================================
+" VIM-FUGITIVE (Git)
+" ============================================================================
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gd :Gdiff<CR>
+nnoremap <leader>gb :Gblame<CR>
+nnoremap <leader>gl :Glog<CR>
+nnoremap <leader>gc :Gcommit<CR>
+nnoremap <leader>gp :Gpush<CR>
