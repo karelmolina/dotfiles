@@ -54,6 +54,7 @@ cd ~/dotfiles
 | **btop** | Resource monitor (RAM-focused) | `btop/` |
 | **yazi** | Terminal file manager | `yazi/` |
 | **mise** | Version manager (Go, Node) | `mise/` |
+| **Atuin** | Shell history sync & search | `atuin/` |
 
 ### Key Features
 
@@ -177,6 +178,34 @@ node = "20"
 ```
 
 Go binaries installed via `go install` (e.g., `gotop`) are automatically available in PATH.
+
+### Atuin - Shell History Sync
+
+Magical shell history with sync, search, and smart filtering:
+
+**Configuration** (`atuin/config.toml`):
+- **Search Mode**: `skim` - Prioritizes frequently used commands (smart frequency scoring)
+- **Filter Mode**: `session` - Isolates history per terminal session
+- **Style**: Compact with inverted layout (prompt at top)
+- **Inline Height**: 10 lines for quick browsing without taking over the screen
+- **Preview**: Enabled with 5-line preview pane to see full command before selecting
+- **Sync v2**: Enabled for efficient background synchronization
+- **Secrets Filter**: Automatically excludes AWS keys, GitHub tokens, etc.
+
+**Key Bindings** (configured in zsh):
+- `Ctrl+R` - Open Atuin search
+- `Up Arrow` - Filter history by current directory
+- `Enter` - Execute selected command immediately
+- `Tab` - Edit selected command before executing
+
+**Installation**:
+```bash
+# Via stow
+stow -d ~/dotfiles -t ~/.config atuin
+
+# Or symlink
+ln -s ~/dotfiles/atuin ~/.config/atuin
+```
 
 ### Opencode SDD Skills
 
