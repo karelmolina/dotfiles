@@ -207,24 +207,101 @@ stow -d ~/dotfiles -t ~/.config atuin
 ln -s ~/dotfiles/atuin ~/.config/atuin
 ```
 
-### Opencode SDD Skills
+### Opencode AI Assistant with SDD
 
-The repository includes SDD (Spec-Driven Development) skills for the Opencode AI assistant:
+Configuration for [Opencode](https://opencode.ai) AI assistant with **Spec-Driven Development (SDD)** workflow. Based on the [Agent Teams Lite](https://github.com/Gentleman-Programming/agent-teams-lite) pattern by Gentleman Programming.
+
+**What is SDD?** Instead of "vibe coding" and hoping for the best, you plan first: proposal → specs → design → tasks → implementation → verification. Structured, verifiable, repeatable.
+
+#### Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ORCHESTRATOR (Opencode main agent)                         │
+│  • Detects when SDD is needed                               │
+│  • Launches sub-agents via Task tool                        │
+│  • Tracks state between phases                              │
+└──────────────┬──────────────────────────────────────────────┘
+               │
+    ┌──────────┴──────────────────────────────────────────┐
+    │                                                      │
+    ▼          ▼          ▼         ▼         ▼           ▼
+┌────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌────────┐
+│EXPLORE ││PROPOSE ││  SPEC  ││ DESIGN ││ TASKS  ││ APPLY  │
+└────────┘└────────┘└────────┘└────────┘└────────┘└────────┘
+```
+
+#### Available Commands
+
+| Command | What It Does |
+|---------|--------------|
+| `/sdd-init` | Initialize SDD context in current project |
+| `/sdd-explore <topic>` | Investigate an idea, compare approaches |
+| `/sdd-new <name>` | Start a new change (explore + proposal) |
+| `/sdd-continue` | Run next dependency-ready phase |
+| `/sdd-ff <name>` | Fast-forward: proposal → specs → design → tasks |
+| `/sdd-apply` | Implement tasks in batches |
+| `/sdd-verify` | Validate implementation against specs |
+| `/sdd-archive` | Close change and persist final state |
+
+#### Skills (Sub-Agents)
 
 | Skill | Purpose | Location |
 |-------|---------|----------|
-| **sdd-commit** | Conventional commit creation with automatic message generation | `opencode/skills/sdd-commit/` |
-| **sdd-init** | Bootstrap SDD directory structure in projects | `opencode/skills/sdd-init/` |
-| **sdd-spec** | Write specifications with requirements and scenarios | `opencode/skills/sdd-spec/` |
-| **sdd-propose** | Create change proposals with intent and scope | `opencode/skills/sdd-propose/` |
+| **sdd-init** | Bootstrap SDD directory structure | `opencode/skills/sdd-init/` |
+| **sdd-explore** | Read codebase, identify risks | `opencode/skills/sdd-explore/` |
+| **sdd-propose** | Create proposal with intent/scope | `opencode/skills/sdd-propose/` |
+| **sdd-spec** | Write delta specs (ADDED/MODIFIED/REMOVED) | `opencode/skills/sdd-spec/` |
 | **sdd-design** | Create technical design documents | `opencode/skills/sdd-design/` |
-| **sdd-tasks** | Break down changes into implementation tasks | `opencode/skills/sdd-tasks/` |
-| **sdd-apply** | Implement tasks from changes | `opencode/skills/sdd-apply/` |
-| **sdd-verify** | Validate implementation against specs | `opencode/skills/sdd-verify/` |
-| **sdd-archive** | Archive completed changes | `opencode/skills/sdd-archive/` |
-| **sdd-explore** | Explore and investigate ideas | `opencode/skills/sdd-explore/` |
+| **sdd-tasks** | Break down into phased task checklist | `opencode/skills/sdd-tasks/` |
+| **sdd-apply** | Write code following specs (v2.0 with TDD) | `opencode/skills/sdd-apply/` |
+| **sdd-verify** | Validate with real test execution (v2.0) | `opencode/skills/sdd-verify/` |
+| **sdd-archive** | Merge deltas into main specs | `opencode/skills/sdd-archive/` |
+| **sdd-commit** | Conventional commits with auto-generation | `opencode/skills/sdd-commit/` |
 
-These skills follow the SDD pattern for structured, verifiable AI-assisted development.
+#### Setup
+
+```bash
+# Symlink opencode config
+ln -s ~/dotfiles/opencode ~/.config/opencode
+
+# Or use the install script
+./install  # Includes opencode setup on Fedora
+```
+
+#### Example Workflow
+
+```
+You: /sdd-new add-dark-mode
+
+AI:  Analyzing codebase... React + Tailwind detected.
+     ✓ proposal.md created
+       Intent: Add dark mode toggle
+       Scope: Theme context, toggle component, CSS variables
+
+You: /sdd-continue
+
+AI:  ✓ specs/ui/spec.md — 3 requirements, 7 scenarios
+     ✓ design.md — CSS variables approach
+     ✓ tasks.md — 3 phases, 8 tasks
+
+You: /sdd-apply
+
+AI:  Phase 1 complete (3/8 tasks)
+     Continue with Phase 2?
+```
+
+#### Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `opencode/opencode.json` | Main config (MCP, agents) |
+| `opencode/AGENTS.md` | Agent personality & rules (Senior Architect, Rioplatense) |
+| `opencode/agents/sdd-orchestrator.md` | SDD orchestrator agent definition |
+| `opencode/commands/*.md` | Slash command definitions |
+| `opencode/skills/*/SKILL.md` | Sub-agent skill instructions |
+
+**Credits:** SDD workflow inspired by [Agent Teams Lite](https://github.com/Gentleman-Programming/agent-teams-lite) — zero dependencies, pure Markdown, works everywhere.
 
 ### Cursor IDE Configuration
 
