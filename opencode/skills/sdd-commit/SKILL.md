@@ -5,7 +5,7 @@ description: >
   Trigger: When the user wants to commit staged changes, says "commit", or uses the commit command.
 license: MIT
 metadata:
-  author: gentleman-programming
+  author: karel Molina
   version: "1.0"
 ---
 
@@ -30,12 +30,13 @@ From git state:
 ## Execution and Persistence Contract
 
 From the orchestrator:
-- `artifact_store.mode`: `auto | engram | openspec | none`
+- Artifact store mode (`engram | openspec | none`)
 
-Resolution:
-- If mode resolves to `none`, do not execute commits; return the analysis and proposed message only.
-- If mode resolves to `engram`, persist commit context to Engram and execute the commit.
-- If mode resolves to `openspec`, update any relevant change tracking and execute the commit.
+Read and follow `skills/_shared/persistence-contract.md` for mode resolution rules.
+
+- If mode is `engram`: Read and follow `skills/_shared/engram-convention.md`. Artifact type: `archive-report`. Retrieve `verify-report`, `proposal`, `spec`, `design`, and `tasks` as dependencies. Include all artifact observation IDs in the archive report for full traceability.
+- If mode is `openspec`: Read and follow `skills/_shared/openspec-convention.md`. Perform merge and archive folder moves.
+- If mode is `none`: Return closure summary only. Do not perform archive file operations.
 
 ## What to Do
 
