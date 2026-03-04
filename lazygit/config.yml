@@ -95,3 +95,13 @@ customCommands:
     context: "global"
     description: "Show latest changelog"
     output: popup
+  # Create a new release with specified version tag
+  - key: "#"
+    command: "$HOME/dotfiles/bin/gc-smart -u --tag {{.Form.Tag}} --prepend CHANGELOG.md"
+    context: "global"
+    description: "Create release with tag"
+    output: none
+    prompts:
+      - type: "input"
+        title: "Version Tag"
+        key: "Tag"
