@@ -1,0 +1,26 @@
+#!/bin/zsh
+# Smart git-cliff - auto-detects project-specific cliff.toml
+# Usage: gc-smart [git-cliff-args...]
+
+set -e
+
+local config_file
+local default_config="$HOME/dotfiles/git-cliff/cliff.toml"
+
+# Check for project-specific configs in order of priority
+if [[ -f "./cliff.toml" ]]; then
+  config_file="./cliff.toml"
+elif [[ -f "./.cliff.toml" ]]; then
+  config_file="./.cliff.toml"
+elif [[ -n "$GIT_CLIFF_CONFIG" ]]; then
+  config_file="$GIT_CLIFF_CONFIG"
+else
+  config_file="$default_config"
+fi
+
+# Verbose output if not in a pipe (lazygit shows popup anyway)
+if [[ -t 1 ]]; then
+  echo "Using config: $config_file"
+fi
+
+git-cliff --config "$config_file" "$@"

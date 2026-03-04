@@ -78,20 +78,20 @@ disableStartupPopups: false
 notARepository: prompt
 promptToReturnFromSubprocess: true
 customCommands:
-  # Generate full changelog (overwrites CHANGELOG.md)
+  # Generate full changelog (auto-detects project config)
   - key: "<c-g>"
-    command: "git-cliff --config ~/dotfiles/git-cliff/cliff.toml -o CHANGELOG.md"
+    command: "$HOME/dotfiles/bin/gc-smart -o CHANGELOG.md"
     context: "global"
     description: "Generate full changelog"
     output: none
   # Prepend unreleased changes to existing changelog
   - key: "<c-p>"
-    command: "git-cliff --config ~/dotfiles/git-cliff/cliff.toml --unreleased --prepend CHANGELOG.md"
+    command: "$HOME/dotfiles/bin/gc-smart --unreleased --prepend CHANGELOG.md"
     context: "global"
     description: "Prepend unreleased changes to changelog"
     output: none
   - key: "<c-l>"
-    command: "git-cliff --config ~/dotfiles/git-cliff/cliff.toml --latest"
+    command: "$HOME/dotfiles/bin/gc-smart --latest"
     context: "global"
     description: "Show latest changelog"
     output: popup
