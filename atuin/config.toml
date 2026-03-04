@@ -1,7 +1,7 @@
 ## Search mode prioritizes frequently used commands
 ## possible values: "fuzzy", "prefix", "fulltext", "skim"
 ## "skim" uses smart frecuency-based scoring (most used commands appear first)
-search_mode = "skim"
+search_mode = "fuzzy"
 
 ## which filter mode to use by default
 ## possible values: "global", "host", "session", "session-preload", "directory", "workspace"
