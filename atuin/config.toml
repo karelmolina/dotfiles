@@ -6,7 +6,6 @@ search_mode = "fuzzy"
 ## which filter mode to use by default
 ## possible values: "global", "host", "session", "session-preload", "directory", "workspace"
 ## consider using search.filters to customize the enablement and order of filter modes
-filter_mode = "session"
 style = "compact"
 invert = true
 
