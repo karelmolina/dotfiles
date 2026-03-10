@@ -192,4 +192,9 @@ export PATH="$HOME/.opencode/bin:$PATH"
 # Enable shims for mise tools
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
+# LuaRocks
+if command -v luarocks &>/dev/null; then
+    eval "$(luarocks path --bin)"
+fi
+
 export LIBVA_DRIVER_NAME=nvidia
