@@ -1,4 +1,6 @@
-# Engram Artifact Convention (shared across all SDD skills)
+# Engram Artifact Convention (reference documentation)
+
+> **NOTE**: Critical engram calls (`mem_search`, `mem_save`, `mem_get_observation`) are now inlined directly in each skill's SKILL.md file. This document is supplementary reference — sub-agents do NOT need to read it to function correctly.
 
 ## Naming Rules
 

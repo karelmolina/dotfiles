@@ -23,23 +23,55 @@ From the orchestrator:
 
 Read and follow `skills/_shared/persistence-contract.md` for mode resolution rules.
 
-- If mode is `engram`: Read and follow `skills/_shared/engram-convention.md`. Artifact type: `tasks`. Retrieve `proposal`, `spec`, and `design` as dependencies.
+- If mode is `engram`:
+
+  **Read dependencies** (two-step — search returns truncated previews):
+  1. `mem_search(query: "sdd/{change-name}/proposal", project: "{project}")` → get ID
+  2. `mem_get_observation(id: {id})` → full proposal (REQUIRED)
+  3. `mem_search(query: "sdd/{change-name}/spec", project: "{project}")` → get ID
+  4. `mem_get_observation(id: {id})` → full spec (REQUIRED)
+  5. `mem_search(query: "sdd/{change-name}/design", project: "{project}")` → get ID
+  6. `mem_get_observation(id: {id})` → full design (REQUIRED)
+
+  **Save your artifact**:
+  ```
+  mem_save(
+    title: "sdd/{change-name}/tasks",
+    topic_key: "sdd/{change-name}/tasks",
+    type: "architecture",
+    project: "{project}",
+    content: "{your full tasks markdown}"
+  )
+  ```
+  `topic_key` enables upserts — saving again updates, not duplicates.
+
+  (See `skills/_shared/engram-convention.md` for full naming conventions.)
 - If mode is `openspec`: Read and follow `skills/_shared/openspec-convention.md`.
 - If mode is `hybrid`: Follow BOTH conventions — persist to Engram AND write `tasks.md` to filesystem. Retrieve dependencies from Engram (primary) with filesystem fallback.
 - If mode is `none`: Return result only. Never create or modify project files.
 
 ## What to Do
 
-### Step 1: Analyze the Design
+### Step 1: Load Skill Registry
+
+**Do this FIRST, before any other work.**
+
+1. Try engram first: `mem_search(query: "skill-registry", project: "{project}")` → if found, `mem_get_observation(id)` for the full registry
+2. If engram not available or not found: read `.atl/skill-registry.md` from the project root
+3. If neither exists: proceed without skills (not an error)
+
+From the registry, identify and read any skills whose triggers match your task. Also read any project convention files listed in the registry.
+
+### Step 2: Analyze the Design
 
 From the design document, identify:
 - All files that need to be created/modified/deleted
 - The dependency order (what must come first)
 - Testing requirements per component
 
-### Step 2: Write tasks.md
+### Step 3: Write tasks.md
 
-Create the task file:
+**IF mode is `openspec` or `hybrid`:** Create the task file:
 
 ```
 openspec/changes/{change-name}/
@@ -48,6 +80,8 @@ openspec/changes/{change-name}/
 ├── design.md
 └── tasks.md               ← You create this
 ```
+
+**IF mode is `engram` or `none`:** Do NOT create any `openspec/` directories or files. Compose the tasks content in memory — you will persist it in Step 4.
 
 #### Task File Format
 
@@ -113,7 +147,28 @@ Phase 5: Cleanup (if needed)
   └─ Documentation, remove dead code, polish
 ```
 
-### Step 3: Return Summary
+### Step 4: Persist Artifact
+
+**This step is MANDATORY — do NOT skip it.**
+
+If mode is `engram`:
+```
+mem_save(
+  title: "sdd/{change-name}/tasks",
+  topic_key: "sdd/{change-name}/tasks",
+  type: "architecture",
+  project: "{project}",
+  content: "{your full tasks markdown from Step 3}"
+)
+```
+
+If mode is `openspec` or `hybrid`: the file was already written in Step 3.
+
+If mode is `hybrid`: also call `mem_save` as above (write to BOTH backends).
+
+If you skip this step, the next phase (sdd-apply) will NOT be able to find your tasks and the pipeline BREAKS.
+
+### Step 5: Return Summary
 
 Return to the orchestrator:
 
@@ -121,7 +176,7 @@ Return to the orchestrator:
 ## Tasks Created
 
 **Change**: {change-name}
-**Location**: openspec/changes/{change-name}/tasks.md
+**Location**: `openspec/changes/{change-name}/tasks.md` (openspec/hybrid) | Engram `sdd/{change-name}/tasks` (engram) | inline (none)
 
 ### Breakdown
 | Phase | Tasks | Focus |
