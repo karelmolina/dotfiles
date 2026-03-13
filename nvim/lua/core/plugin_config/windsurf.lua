@@ -9,9 +9,6 @@ vim.g.codeium_filetypes = {
   opencode_terminal = false,
 }
 
--- Disable windsurf by default in all buffers, enable only in specific filetypes
-vim.g.codeium_enabled = false
-
 -- Check if we're using windsurf.nvim (Lua) or windsurf.vim (Vimscript)
 local has_windsurf_nvim, windsurf = pcall(require, "codeium")
 
@@ -52,17 +49,4 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "FileType" }, {
     end
   end,
   desc = "Disable Windsurf autocomplete in opencode.nvim buffers",
-})
-
--- Additional check when entering insert mode in opencode buffers
-vim.api.nvim_create_autocmd("InsertEnter", {
-  pattern = { "*" },
-  callback = function(args)
-    local buf_ft = vim.bo[args.buf].filetype
-    if buf_ft:match("^opencode") then
-      vim.b[args.buf].codeium_enabled = false
-      vim.b.codeium_enabled = false
-    end
-  end,
-  desc = "Ensure Windsurf stays disabled in opencode buffers",
 })
