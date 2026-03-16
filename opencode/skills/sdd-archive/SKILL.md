@@ -21,21 +21,25 @@ From the orchestrator:
 
 ## Execution and Persistence Contract
 
-Read and follow `skills/_shared/persistence-contract.md` for mode resolution rules.
-
 - If mode is `engram`:
 
-  **Read ALL artifacts** (two-step for each — search returns truncated previews):
-  1. `mem_search(query: "sdd/{change-name}/proposal", project: "{project}")` → get ID
-  2. `mem_get_observation(id: {id})` → full proposal
-  3. `mem_search(query: "sdd/{change-name}/spec", project: "{project}")` → get ID
-  4. `mem_get_observation(id: {id})` → full spec
-  5. `mem_search(query: "sdd/{change-name}/design", project: "{project}")` → get ID
-  6. `mem_get_observation(id: {id})` → full design
-  7. `mem_search(query: "sdd/{change-name}/tasks", project: "{project}")` → get ID
-  8. `mem_get_observation(id: {id})` → full tasks
-  9. `mem_search(query: "sdd/{change-name}/verify-report", project: "{project}")` → get ID
-  10. `mem_get_observation(id: {id})` → full verification report
+  **CRITICAL: `mem_search` returns 300-char PREVIEWS, not full content. You MUST call `mem_get_observation(id)` for EVERY artifact. If you skip this, you will archive with incomplete data.**
+
+  **STEP A — SEARCH** (get IDs only — content is truncated):
+  1. `mem_search(query: "sdd/{change-name}/proposal", project: "{project}")` → save ID
+  2. `mem_search(query: "sdd/{change-name}/spec", project: "{project}")` → save ID
+  3. `mem_search(query: "sdd/{change-name}/design", project: "{project}")` → save ID
+  4. `mem_search(query: "sdd/{change-name}/tasks", project: "{project}")` → save ID
+  5. `mem_search(query: "sdd/{change-name}/verify-report", project: "{project}")` → save ID
+
+  **STEP B — RETRIEVE FULL CONTENT** (mandatory for each):
+  6. `mem_get_observation(id: {proposal_id})` → full proposal
+  7. `mem_get_observation(id: {spec_id})` → full spec
+  8. `mem_get_observation(id: {design_id})` → full design
+  9. `mem_get_observation(id: {tasks_id})` → full tasks
+  10. `mem_get_observation(id: {verify_report_id})` → full verification report
+
+  **DO NOT use search previews as source material.**
 
   **Record all observation IDs** — include them in the archive report for full traceability.
 
@@ -49,7 +53,7 @@ Read and follow `skills/_shared/persistence-contract.md` for mode resolution rul
     content: "{your archive report with all observation IDs for lineage}"
   )
   ```
-  `topic_key` enables upserts — saving again updates, not duplicates.
+  `topic_key` enables upserts — saving again updates, not duplicates. (Read `skills/_shared/sdd-phase-common.md`.)
 
   (See `skills/_shared/engram-convention.md` for full naming conventions.)
 - If mode is `openspec`: Read and follow `skills/_shared/openspec-convention.md`. Perform merge and archive folder moves.
@@ -58,15 +62,11 @@ Read and follow `skills/_shared/persistence-contract.md` for mode resolution rul
 
 ## What to Do
 
-### Step 1: Load Skill Registry
+### Step 1: Load Skills
 
-**Do this FIRST, before any other work.**
+The orchestrator provides your skill path in the launch prompt. Load it now. If no path was provided, proceed without additional skills.
 
-1. Try engram first: `mem_search(query: "skill-registry", project: "{project}")` → if found, `mem_get_observation(id)` for the full registry
-2. If engram not available or not found: read `.atl/skill-registry.md` from the project root
-3. If neither exists: proceed without skills (not an error)
-
-From the registry, identify and read any skills whose triggers match your task. Also read any project convention files listed in the registry.
+> Read `skills/_shared/sdd-phase-common.md` for the engram upsert note and return envelope format.
 
 ### Step 2: Sync Delta Specs to Main Specs
 
@@ -188,4 +188,4 @@ Ready for the next change.
 - The archive is an AUDIT TRAIL — never delete or modify archived changes
 - If `openspec/changes/archive/` doesn't exist, create it
 - Apply any `rules.archive` from `openspec/config.yaml`
-- Return a structured envelope with: `status`, `executive_summary`, `detailed_report` (optional), `artifacts`, `next_recommended`, and `risks`
+- Return a structured envelope with: `status`, `executive_summary`, `detailed_report` (optional), `artifacts`, `next_recommended`, and `risks` (read `skills/_shared/sdd-phase-common.md` for the full envelope spec)
