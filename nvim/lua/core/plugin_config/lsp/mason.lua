@@ -40,7 +40,7 @@ mason_null_ls.setup({
   ensure_installed = {
     "prettierd", -- ts/js formatter
     "stylua", -- lua formatter
-    "eslint", -- ts/js linter
+    "eslint-lsp",
     "djlint",
     "graphql-language-service-cli", -- graphql formatter
     -- "rubocop",

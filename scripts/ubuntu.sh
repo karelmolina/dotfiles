@@ -37,24 +37,110 @@ step1_update_system() {
 step2_core_deps() {
     echo_info "Installing core dependencies..."
 
-    # Ensure add-apt-repository is available
-    sudo apt install -y software-properties-common
+    local failed_packages=()
+    local installed_packages=()
+    local skipped_packages=()
 
-    # Install build essentials and core packages
-    sudo apt install -y build-essential
+    # Helper function to check if package exists in repos
+    package_exists() {
+        apt-cache show "$1" &>/dev/null
+    }
 
-    sudo apt install -y \
-        git curl wget neovim ripgrep fd-find fzf zsh stow \
-        tree htop unzip zip p7zip-full jq yq httpie \
-        xclip wl-clipboard \
-        fontconfig libfreetype6-dev g++ gcc cmake ninja-build \
-        python3-dev python3-pip clang \
-        zoxide lazygit
+    # Helper function to try install a package
+    try_install() {
+        local pkg="$1"
+        if dpkg -l "$pkg" &>/dev/null && dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "install ok installed"; then
+            echo_info "  $pkg already installed, skipping"
+            skipped_packages+=("$pkg")
+            return 0
+        fi
 
-    sudo apt install -y git-cola git-delta meld vim bat exa btop
+        if ! package_exists "$pkg"; then
+            echo_warn "  Package '$pkg' not found in repositories, skipping"
+            failed_packages+=("$pkg (not found)")
+            return 1
+        fi
 
+        echo_info "  Installing $pkg..."
+        if sudo apt install -y "$pkg" 2>&1 | tee -a "$LOG_FILE"; then
+            installed_packages+=("$pkg")
+            return 0
+        else
+            echo_warn "  Failed to install $pkg"
+            failed_packages+=("$pkg (install failed)")
+            return 1
+        fi
+    }
 
-    echo_success "Core dependencies installed"
+    # Ensure add-apt-repository is available first (critical)
+    echo_info "Ensuring software-properties-common is available..."
+    sudo apt install -y software-properties-common || echo_warn "Failed to install software-properties-common"
+
+    # Update package lists
+    echo_info "Updating package lists..."
+    sudo apt update || echo_warn "apt update had issues but continuing..."
+
+    # Install build essentials
+    echo_info "Installing build essentials..."
+    try_install "build-essential"
+
+    # Core development tools
+    echo_info "Installing core development tools..."
+    local core_packages=(
+        git curl wget neovim zsh stow
+        tree htop unzip zip p7zip-full
+        fontconfig libfreetype6-dev g++ gcc cmake ninja-build
+        python3-dev python3-pip clang
+    )
+
+    for pkg in "${core_packages[@]}"; do
+        try_install "$pkg"
+    done
+
+    # Modern CLI tools (some may not exist in older Ubuntu)
+    echo_info "Installing modern CLI tools..."
+    local modern_tools=(
+        ripgrep fd-find fzf jq yq httpie
+        xclip wl-clipboard zoxide lazygit
+    )
+
+    for pkg in "${modern_tools[@]}"; do
+        try_install "$pkg"
+    done
+
+    # Additional tools (these might have different names or not exist)
+    echo_info "Installing additional tools..."
+    local extra_tools=(
+        git-cola git-delta meld vim bat exa btop
+    )
+
+    for pkg in "${extra_tools[@]}"; do
+        try_install "$pkg"
+    done
+
+    # Install eza if exa failed (eza is the newer name)
+    if [[ " ${failed_packages[*]} " =~ " exa " ]]; then
+        echo_info "Trying eza as alternative to exa..."
+        try_install "eza"
+    fi
+
+    # Summary
+    echo ""
+    echo "=============================================="
+    echo "Core Dependencies Installation Summary"
+    echo "=============================================="
+    echo "Installed (${#installed_packages[@]}): ${installed_packages[*]}"
+    echo "Already present (${#skipped_packages[@]}): ${skipped_packages[*]}"
+    if [ ${#failed_packages[@]} -gt 0 ]; then
+        echo_warn "Failed (${#failed_packages[@]}): ${failed_packages[*]}"
+        echo_info "You may need to install these manually or they may not be available for your Ubuntu version"
+    fi
+
+    if [ ${#failed_packages[@]} -eq 0 ]; then
+        echo_success "All core dependencies installed successfully"
+    else
+        echo_warn "Some packages failed but continuing..."
+    fi
 }
 
 step3_terminals() {
