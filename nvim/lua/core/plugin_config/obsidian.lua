@@ -3,6 +3,10 @@ if not status_ok then
   return
 end
 
+if vim.fn.isdirectory("~/Projects/daily-notes") == 0 then
+  return
+end
+
 obsidian.setup({
   workspaces = {
     {
