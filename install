@@ -26,14 +26,14 @@ detect_version() {
 main() {
     local os=$(detect_os)
     local version=$(detect_version)
-    
+
     echo "=============================================="
     echo "Dotfiles Installer"
     echo "=============================================="
     echo "Detected OS: $os"
     echo "Version: $version"
     echo ""
-    
+
     case "$os" in
         fedora)
             echo "Running Fedora installer..."
@@ -48,7 +48,8 @@ main() {
             bash "$SCRIPT_DIR/scripts/popos.sh" "$@"
             ;;
         ubuntu)
-            echo "Ubuntu support coming soon!"
+            echo "Running Ubuntu installer..."
+            bash "$SCRIPT_DIR/scripts/ubuntu.sh" "$@"
             exit 1
             ;;
         debian)
