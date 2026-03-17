@@ -110,6 +110,24 @@ for key, table in pairs(options) do
   end
 end
 
+if vim.fn.has("wsl") == 1 then
+    vim.g.clipboard = {
+        name = 'WslClipboard',
+        copy = {
+            ['+'] = 'clip.exe',
+            ['*'] = 'clip.exe',
+        },
+        paste = {
+            ['+'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+            ['*'] = 'powershell.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+        },
+        cache_enabled = 0,
+    }
+
+    -- Use system clipboard for all yank/paste operations
+    vim.opt.clipboard = 'unnamedplus'
+end
+
 -- Enable logging
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
 -- local logFilePath = vim.fn.expand(vim.g.nvim_logfile)
