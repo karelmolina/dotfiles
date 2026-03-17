@@ -196,5 +196,3 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 if command -v luarocks &>/dev/null; then
     eval "$(luarocks path --bin)"
 fi
-
-export LIBVA_DRIVER_NAME=nvidia
