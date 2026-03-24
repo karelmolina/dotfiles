@@ -7,7 +7,7 @@
       "git commit *": "ask",
       "git push *": "ask",
       "git push": "ask",
-      "git push --force *": "ask",
+      "git push --force *": "deny",
       "git rebase *": "ask",
       "git reset --hard *": "ask"
     },
@@ -39,6 +39,136 @@
         "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
       },
       "enabled": true
+    }
+  },
+  "agent": {
+    "sdd-orchestrator": {
+      "mode": "primary",
+      "description": "Agent Teams Orchestrator - coordinates sub-agents, never does work inline",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-orchestrator.md}",
+      "permission": {
+        "task": {
+          "*": "deny",
+          "sdd-*": "allow"
+        }
+      },
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true,
+        "delegate": true,
+        "delegation_read": true,
+        "delegation_list": true
+      }
+    },
+    "sdd-init": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Bootstrap SDD context and project configuration",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-init.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-explore": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Investigate codebase and think through ideas",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-explore.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-propose": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Create change proposals from explorations",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-propose.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-spec": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Write detailed specifications from proposals",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-spec.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-design": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Create technical design from proposals",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-design.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-tasks": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Break down specs and designs into implementation tasks",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-tasks.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-apply": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Implement code changes from task definitions",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-apply.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-verify": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Validate implementation against specs",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-verify.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "sdd-archive": {
+      "mode": "subagent",
+      "hidden": true,
+      "description": "Archive completed change artifacts",
+      "prompt": "{file:~/dotfiles/opencode/prompts/sdd-archive.md}",
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
     }
   }
 }
