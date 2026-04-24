@@ -115,6 +115,12 @@ source $ZSH/oh-my-zsh.sh
 eval "$(starship init zsh)"
 
 # ============================================
+# Environment Variables
+# ============================================
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# ============================================
 # Additional Tools
 # ============================================
 
@@ -137,12 +143,6 @@ fi
 if [ -f ~/.fzf.zsh ]; then
     source ~/.fzf.zsh
 fi
-
-# ============================================
-# Environment Variables
-# ============================================
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
 
 # mise tools that don't use standard bin/ structure
 # Add all mise Go version bin directories (for go install binaries like gotop)
