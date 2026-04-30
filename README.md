@@ -10,7 +10,7 @@ This repository contains configuration files and installation scripts for:
 - **Shell**: Zsh with Oh-My-Zsh, Starship prompt
 - **Tools**: Tmux, btop, yazi, lazygit, lazydocker
 - **Version Management**: mise (formerly rtx) for Go, Node.js
-- **AI Assistant**: Opencode with SDD skills (sdd-commit, sdd-init, sdd-spec, etc.)
+- **AI Assistant**: Opencode with Gentleman AI + personal dotfiles overlay
 - **IDE**: Cursor with portable SDD configuration
 
 ## Quick Start
@@ -55,6 +55,7 @@ cd ~/dotfiles
 | **yazi** | Terminal file manager | `yazi/` |
 | **mise** | Version manager (Go, Node) | `mise/` |
 | **Atuin** | Shell history sync & search | `atuin/` |
+| **Opencode** | AI assistant with dotfiles overlay | `opencode/` |
 
 ### Key Features
 
@@ -143,6 +144,9 @@ ln -s ~/dotfiles/vim/vimrc ~/.vimrc
 # Zsh
 ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
 
+# Opencode (overlay sobre gentle-ai)
+~/dotfiles/scripts/opencode-sync.sh
+
 # Individual tools
 stow -d ~/dotfiles -t ~/.config btop
 ```
@@ -207,11 +211,13 @@ stow -d ~/dotfiles -t ~/.config atuin
 ln -s ~/dotfiles/atuin ~/.config/atuin
 ```
 
-### Opencode AI Assistant with SDD
+### Opencode AI Assistant with Gentleman AI + Dotfiles Overlay
 
-Configuration for [Opencode](https://opencode.ai) AI assistant with **Spec-Driven Development (SDD)** workflow. Based on the [Agent Teams Lite](https://github.com/Gentleman-Programming/agent-teams-lite) pattern by Gentleman Programming.
+Configuration for [Opencode](https://opencode.ai) AI assistant powered by [Gentleman AI](https://github.com/Gentleman-Programming/gentle-ai) with **Spec-Driven Development (SDD)** workflow.
 
 **What is SDD?** Instead of "vibe coding" and hoping for the best, you plan first: proposal → specs → design → tasks → implementation → verification. Structured, verifiable, repeatable.
+
+**The Overlay Pattern:** Gentleman AI instala la configuración base en `~/.config/opencode/`. Este dotfiles repo añade tus **personalizaciones** encima sin tocar el base.
 
 #### Architecture
 
@@ -244,29 +250,123 @@ Configuration for [Opencode](https://opencode.ai) AI assistant with **Spec-Drive
 | `/sdd-verify` | Validate implementation against specs |
 | `/sdd-archive` | Close change and persist final state |
 
-#### Skills (Sub-Agents)
-
-| Skill | Purpose | Location |
-|-------|---------|----------|
-| **sdd-init** | Bootstrap SDD directory structure | `opencode/skills/sdd-init/` |
-| **sdd-explore** | Read codebase, identify risks | `opencode/skills/sdd-explore/` |
-| **sdd-propose** | Create proposal with intent/scope | `opencode/skills/sdd-propose/` |
-| **sdd-spec** | Write delta specs (ADDED/MODIFIED/REMOVED) | `opencode/skills/sdd-spec/` |
-| **sdd-design** | Create technical design documents | `opencode/skills/sdd-design/` |
-| **sdd-tasks** | Break down into phased task checklist | `opencode/skills/sdd-tasks/` |
-| **sdd-apply** | Write code following specs (v2.0 with TDD) | `opencode/skills/sdd-apply/` |
-| **sdd-verify** | Validate with real test execution (v2.0) | `opencode/skills/sdd-verify/` |
-| **sdd-archive** | Merge deltas into main specs | `opencode/skills/sdd-archive/` |
-| **sdd-commit** | Conventional commits with auto-generation | `opencode/skills/sdd-commit/` |
-
 #### Setup
 
-```bash
-# Symlink opencode config
-ln -s ~/dotfiles/opencode ~/.config/opencode
+**1. Install Gentleman AI (base configuration):**
 
-# Or use the install script
-./install  # Includes opencode setup on Fedora
+```bash
+# macOS / Linux
+curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
+
+# Or via Homebrew
+brew tap Gentleman-Programming/homebrew-tap
+brew install gentle-ai
+```
+
+**2. Apply your dotfiles overlay:**
+
+```bash
+# Sync your personalizations onto the base config
+~/dotfiles/scripts/opencode-sync.sh
+
+# Or from the dotfiles directory
+./scripts/opencode-sync.sh
+```
+
+**3. After every gentle-ai update, re-sync:**
+
+```bash
+gentle-ai sync          # Updates base config
+~/dotfiles/scripts/opencode-sync.sh  # Re-applies your overlay
+```
+
+#### Overlay Structure
+
+```
+dotfiles/opencode/
+├── overlay.json          # Overrides de configuración (merge con opencode.json)
+├── skills/               # Tus skills personalizados (se añaden a los de gentle-ai)
+│   └── mi-skill/
+│       └── SKILL.md
+├── agents/               # Tus agentes personalizados
+│   └── mi-agente.md
+└── AGENTS.md             # Reglas adicionales (se concatenan al existente)
+```
+
+#### What Gets Merged
+
+| Component | Base (gentle-ai) | Overlay (dotfiles) | Result |
+|-----------|------------------|-------------------|---------|
+| `opencode.json` | Gentleman AI config | `overlay.json` | Deep merge |
+| `skills/` | SDD skills + extras | Your skills | Union (overlay wins on conflict) |
+| `AGENTS.md` | Gentleman rules | Your rules | Concatenated |
+| `commands/` | SDD commands | - | Kept as-is |
+
+#### Sync Script Features
+
+```bash
+# Normal sync
+~/dotfiles/scripts/opencode-sync.sh
+
+# Preview changes without applying
+~/dotfiles/scripts/opencode-sync.sh --dry-run
+
+# Restore from latest backup
+~/dotfiles/scripts/opencode-sync.sh --restore
+```
+
+**Features:**
+- **Automatic backups** before any modification
+- **Idempotent** - puedes correrlo múltiples veces
+- **Deep merge** de JSON con `jq`
+- **Skill override** - tus skills con mismo nombre sobreescriben los del base
+- **AGENTS.md append** - tus reglas se añaden al final
+
+#### Example: Adding a Custom Skill
+
+**1. Create skill directory:**
+```bash
+mkdir -p ~/dotfiles/opencode/skills/mi-skill
+```
+
+**2. Write skill instructions:**
+```bash
+cat > ~/dotfiles/opencode/skills/mi-skill/SKILL.md << 'EOF'
+# mi-skill
+
+Trigger: When user asks about X
+
+## Instructions
+1. Do this
+2. Then that
+EOF
+```
+
+**3. Sync:**
+```bash
+~/dotfiles/scripts/opencode-sync.sh
+```
+
+**4. Use in opencode:**
+El skill aparecerá automáticamente en la lista de skills disponibles.
+
+#### Example: Custom Configuration Override
+
+**`~/dotfiles/opencode/overlay.json`:**
+```json
+{
+  "mcp": {
+    "mi-mcp": {
+      "type": "local",
+      "command": ["/usr/local/bin/mi-mcp"]
+    }
+  },
+  "permission": {
+    "bash": {
+      "git push": "allow"
+    }
+  }
+}
 ```
 
 #### Example Workflow
@@ -291,17 +391,7 @@ AI:  Phase 1 complete (3/8 tasks)
      Continue with Phase 2?
 ```
 
-#### Configuration Files
-
-| File | Purpose |
-|------|---------|
-| `opencode/opencode.json` | Main config (MCP, agents) |
-| `opencode/AGENTS.md` | Agent personality & rules (Senior Architect, Rioplatense) |
-| `opencode/agents/sdd-orchestrator.md` | SDD orchestrator agent definition |
-| `opencode/commands/*.md` | Slash command definitions |
-| `opencode/skills/*/SKILL.md` | Sub-agent skill instructions |
-
-**Credits:** SDD workflow inspired by [Agent Teams Lite](https://github.com/Gentleman-Programming/agent-teams-lite) — zero dependencies, pure Markdown, works everywhere.
+**Credits:** SDD workflow by [Gentleman Programming](https://github.com/Gentleman-Programming/gentle-ai). Overlay pattern for dotfiles integration.
 
 ### Cursor IDE Configuration
 
@@ -339,6 +429,8 @@ All configurations are extensively commented. Key files:
 - `zsh/zshrc` - Shell configuration
 - `btop/btop.conf` - System monitor layout
 - `mise/config.toml` - Version management
+- `opencode/overlay.json` - Opencode configuration overrides
+- `opencode/skills/` - Custom AI skills
 
 ## Supported Platforms
 

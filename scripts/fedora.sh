@@ -20,6 +20,7 @@ declare -A STEPS=(
     [8]="Applications (Flatpak + DNF)"
     [9]="Dotfiles Stow"
     [10]="Cursor IDE Config"
+    [11]="Opencode + Gentleman AI Overlay"
     [all]="Run All Steps"
 )
 
@@ -172,6 +173,12 @@ step7_dev_tools() {
         curl -fsSL https://opencode.ai/install | bash
     fi
 
+    # gentle-ai (Gentleman AI stack)
+    if ! has_command gentle-ai; then
+        echo_info "Installing Gentleman AI..."
+        curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
+    fi
+
     # vicinae
     if ! has_command vicinae; then
         echo_info "Installing vicinae..."
@@ -285,6 +292,39 @@ step10_cursor() {
     echo_success "Cursor configuration ready"
 }
 
+step11_opencode() {
+    echo_info "Setting up Opencode with Gentleman AI overlay..."
+
+    # Check prerequisites
+    if ! has_command opencode; then
+        echo_warn "opencode not found. Install it first (step 7)."
+        return 1
+    fi
+
+    if ! has_command gentle-ai; then
+        echo_warn "gentle-ai not found. Install it first (step 7)."
+        return 1
+    fi
+
+    # Run the base gentle-ai installation if not already configured
+    if [ ! -d "$HOME/.config/opencode/skills" ]; then
+        echo_info "Running gentle-ai sync for base configuration..."
+        gentle-ai sync || echo_warn "gentle-ai sync failed, continuing..."
+    fi
+
+    # Apply dotfiles overlay
+    if [ -f "$DOTFILES_DIR/scripts/opencode-sync.sh" ]; then
+        echo_info "Applying dotfiles overlay..."
+        bash "$DOTFILES_DIR/scripts/opencode-sync.sh"
+    else
+        echo_warn "opencode-sync.sh not found in dotfiles"
+    fi
+
+    echo_success "Opencode + Gentleman AI configured"
+    echo_info "To re-apply overlay after gentle-ai updates:"
+    echo_info "  ~/dotfiles/scripts/opencode-sync.sh"
+}
+
 # ============================================
 # Interactive Menu
 # ============================================
@@ -297,7 +337,7 @@ show_menu() {
     echo "Available steps:"
     echo ""
 
-    for key in "${!STEPS[@]}"; do
+    for key in $(echo "${!STEPS[@]}" | tr ' ' '\n' | sort -n); do
         if [[ "$key" =~ ^[0-9]+$ ]]; then
             printf "  [%2s] %s\n" "$key" "${STEPS[$key]}"
         fi
@@ -321,7 +361,7 @@ parse_selection() {
     local -a selected=()
 
     if [[ "$input" == "all" ]] || [[ "$input" == "ALL" ]]; then
-        for i in {1..10}; do
+    for i in {1..11}; do
             selected+=($i)
         done
     elif [[ "$input" =~ ^[0-9]+-[0-9]+$ ]]; then
@@ -332,7 +372,7 @@ parse_selection() {
         done
     else
         for item in $input; do
-            if [[ "$item" =~ ^[0-9]+$ ]] && [ "$item" -ge 1 ] && [ "$item" -le 10 ]; then
+            if [[ "$item" =~ ^[0-9]+$ ]] && [ "$item" -ge 1 ] && [ "$item" -le 11 ]; then
                 selected+=($item)
             fi
         done
@@ -360,6 +400,7 @@ run_step() {
         8) step8_apps ;;
         9) step9_stow ;;
         10) step10_cursor ;;
+        11) step11_opencode ;;
     esac
 }
 
@@ -429,7 +470,7 @@ run_all() {
     echo "=============================================="
     echo ""
 
-    for i in {1..10}; do
+    for i in {1..11}; do
         run_step $i || echo_warn "Step $i had issues but continuing..."
     done
 
