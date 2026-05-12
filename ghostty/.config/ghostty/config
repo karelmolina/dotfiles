@@ -1,0 +1,41 @@
+# Ghostty Configuration
+# https://ghostty.org/docs/config
+
+# Font configuration
+font-family = JetBrains Mono
+font-size = 12
+
+# Window padding
+window-padding-x = 10
+window-padding-y = 10
+
+# Window decorations
+window-decoration = true
+
+# Cursor configuration
+cursor-style = block
+cursor-color = #44ffff
+
+# Copy on select (auto-copy selected text to clipboard)
+clipboard-read = allow
+clipboard-write = allow
+
+# Shell integration
+shell-integration = detect
+
+# Theme
+# Uncomment to use a specific theme:
+theme = Chalkboard
+
+# Bell configuration
+window-inherit-working-directory = true
+focus-follows-mouse = false
+
+# Background image configuration (matching kitty)
+background-image = ~/dotfiles/wallpapers/od_torvalds.png
+background-image-fit = cover
+background-image-position = center
+# Dim the background image (0.0 = invisible, 1.0 = fully visible)
+background-image-opacity = 0.2
+# Optional: adjust opacity to see the background better
+# background-opacity = 0.9

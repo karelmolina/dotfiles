@@ -1,0 +1,42 @@
+## Search mode prioritizes frequently used commands
+## possible values: "fuzzy", "prefix", "fulltext", "skim"
+## "skim" uses smart frecuency-based scoring (most used commands appear first)
+search_mode = "fuzzy"
+
+## which filter mode to use by default
+## possible values: "global", "host", "session", "session-preload", "directory", "workspace"
+## consider using search.filters to customize the enablement and order of filter modes
+style = "compact"
+invert = true
+
+## Number of lines to display in inline view (compact mode)
+inline_height = 10
+
+## Show preview of selected command with syntax highlighting
+show_preview = true
+preview_height = 5
+
+## Defaults to true. This matches history against a set of default regex, and will not save it if we get a match. Defaults include
+## 1. AWS key id
+## 2. Github pat (old and new)
+## 3. Slack oauth tokens (bot, user)
+## 4. Slack webhooks
+## 5. Stripe live/test keys
+secrets_filter = true
+
+## Defaults to true. If enabled, upon hitting enter Atuin will immediately execute the command,
+## whereas tab will put the command in the prompt for editing.
+## If set to false, both enter and tab will place the command in the prompt for editing.
+## This applies for new installs. Old installs will keep the old behaviour unless configured otherwise.
+enter_accept = true
+
+
+
+[sync]
+# Enable sync v2 by default
+# This ensures that sync v2 is enabled for new installs only
+# In a later release it will become the default across the board
+records = true
+
+[theme]
+name="catppuccin-mocha-mauve"

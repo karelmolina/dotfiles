@@ -1,0 +1,19 @@
+{
+  "javascript": [
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Launch Current File (pwa-node with node)",
+      "cwd": "${workspaceFolder}",
+      "runtimeArgs": [],
+      "runtimeExecutable": "node",
+      "args": ["${file}"],
+      "sourceMaps": true,
+      "protocol": "inspector",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
+      "env": { "NODE_ENV": "develop" }
+    }
+  ]
+}
