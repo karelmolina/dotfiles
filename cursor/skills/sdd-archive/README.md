@@ -1,1 +1,0 @@
-../../../opencode/skills/sdd-archive/SKILL.md
