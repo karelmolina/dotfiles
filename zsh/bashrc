@@ -1,0 +1,17 @@
+alias v="nvim"
+alias onion="project=onion_ nvim"
+
+if command -v eza &>/dev/null; then
+    alias ls='eza -l --icons -a --no-user'
+    alias ll='eza -l --icons --group-directories-first'
+    alias la='eza -la --icons --group-directories-first'
+    alias lt='eza --tree --icons --group-directories-first'
+fi
+
+# mise tools that don't use standard bin/ structure
+# Add all mise Go version bin directories (for go install binaries like gotop)
+for go_bin in $HOME/.local/share/mise/installs/go/*/bin; do
+    if [[ -d "$go_bin" ]]; then
+        export PATH="$go_bin:$PATH"
+    fi
+done
