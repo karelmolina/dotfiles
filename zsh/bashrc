@@ -15,3 +15,5 @@ for go_bin in $HOME/.local/share/mise/installs/go/*/bin; do
         export PATH="$go_bin:$PATH"
     fi
 done
+
+source ~/dotfiles/bash/aliases.bash

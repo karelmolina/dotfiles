@@ -1,6 +1,0 @@
-{
-  "_comment": "Este archivo se mergea con ~/.config/opencode/opencode.json. Las claves aquí sobreescriben las del base.",
-  "agent": {},
-  "mcp": {},
-  "permission": {}
-}

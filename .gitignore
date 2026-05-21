@@ -11,3 +11,5 @@ nvim/*_path.json
 
 # Git-cliff project-specific configs
 *.cliff.toml
+# Local Pi runtime state
+.atl/

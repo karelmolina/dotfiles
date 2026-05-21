@@ -1,7 +1,0 @@
-source $HOME/dotfiles/vim/plugins.vim
-
-if !exists('$INSTALL')
-    source $HOME/dotfiles/vim/vim_conf.vim
-    source $HOME/dotfiles/vim/key_remap.vim
-    source $HOME/dotfiles/vim/plugin_options.vim
-endif
