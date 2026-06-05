@@ -20,7 +20,6 @@ require("core.plugin_config.obsidian")
 require("core.plugin_config.rustaceanvim")
 require("core.plugin_config.kulala")
 require("core.plugin_config.snacks") -- Load before opencode (dependency)
-require("core.plugin_config.opencode")
 require("core.plugin_config.windsurf")
 
 require("core.plugin_config.lsp.mason")
