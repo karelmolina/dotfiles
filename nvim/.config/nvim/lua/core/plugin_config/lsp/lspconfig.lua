@@ -34,7 +34,10 @@ local lsp_servers = {
   html = {},
   cssls = {},
   emmet_ls = {
-    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
+    filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte", "php", "blade" },
+  },
+  intelephense = {
+    filetypes = { "php", "blade" },
   },
   lua_ls = {
     settings = {
@@ -201,6 +204,7 @@ for server, config in pairs(lsp_servers) do
       allow_incremental_sync = true,
     },
   })
+  vim.lsp.enable(server)
 end
 
 -- Clean up LSP tracking on buffer delete

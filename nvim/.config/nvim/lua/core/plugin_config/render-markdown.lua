@@ -4,6 +4,10 @@ if not status then
 end
 
 renderMarkdown.setup({
+  -- Neovim 0.12 compatibility: disable nested markdown rendering and custom
+  -- injections to avoid treesitter query predicate errors on code blocks.
+  nested = false,
+  injections = {},
   checkbox = {
     -- Checkboxes are a special instance of a 'list_item' that start with a 'shortcut_link'.
     -- There are two special states for unchecked & checked defined in the markdown grammar.
