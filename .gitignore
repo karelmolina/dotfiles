@@ -13,3 +13,6 @@ nvim/*_path.json
 *.cliff.toml
 # Local Pi runtime state
 .atl/
+
+karabiner/.config/karabiner/*
+!karabiner/.config/karabiner/karabiner.json
