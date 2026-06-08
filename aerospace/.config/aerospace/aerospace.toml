@@ -1,0 +1,203 @@
+# Config version (required for some features)
+config-version = 2
+
+# Start JankyBorders on launch for visual window focus feedback
+after-startup-command = [
+  'exec-and-forget borders active_color=0xff00ffff inactive_color=0xff583DA1 width=5.0'
+]
+
+start-at-login = true
+
+# Normalization keeps the window tree clean
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+accordion-padding = 30
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus across monitors
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+# Note: exec-on-workspace-change and on-focus-changed are not available
+# in aerospace 0.20.3. SketchyBar refreshes via polling instead.
+
+# Prevent accidental cmd-h hiding apps (common annoyance with tiling WMs)
+automatically-unhide-macos-hidden-apps = true
+
+[key-mapping]
+    preset = 'qwerty'
+
+[gaps]
+    inner.horizontal = 10
+    inner.vertical =   10
+    outer.left =       10
+    outer.bottom =     10
+    outer.top =        44
+    outer.right =      10
+
+# ──────────────────────────────────────────────
+# MAIN BINDINGS — All use Ctrl+Alt (Caps Lock)
+# ──────────────────────────────────────────────
+[mode.main.binding]
+
+    # Layout toggles
+    ctrl-alt-slash = 'layout tiles horizontal vertical'
+    ctrl-alt-comma = 'layout accordion horizontal vertical'
+
+    # Vim-style focus (h/j/k/l)
+    ctrl-alt-h = 'focus left'
+    ctrl-alt-j = 'focus down'
+    ctrl-alt-k = 'focus up'
+    ctrl-alt-l = 'focus right'
+
+    # Move windows (add Shift)
+    ctrl-alt-shift-h = 'move left'
+    ctrl-alt-shift-j = 'move down'
+    ctrl-alt-shift-k = 'move up'
+    ctrl-alt-shift-l = 'move right'
+
+    # Resize (quick smart resize)
+    ctrl-alt-minus = 'resize smart -50'
+    ctrl-alt-equal = 'resize smart +50'
+
+    # Numbered workspaces (1-5)
+    ctrl-alt-1 = 'workspace 1'
+    ctrl-alt-2 = 'workspace 2'
+    ctrl-alt-3 = 'workspace 3'
+    ctrl-alt-4 = 'workspace 4'
+    ctrl-alt-5 = 'workspace 5'
+
+    # Named workspaces — assign letters for quick access
+    ctrl-alt-e = 'workspace e'   # Email
+    ctrl-alt-m = 'workspace m'   # Messages
+    ctrl-alt-c = 'workspace c'   # Calendar
+    ctrl-alt-b = 'workspace b'   # Main project
+    ctrl-alt-s = 'workspace s'   # Slack/Discord
+    ctrl-alt-z = 'workspace z'   # Secondary project
+
+    # Move window to workspace (add Shift)
+    ctrl-alt-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    ctrl-alt-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    ctrl-alt-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    ctrl-alt-shift-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    ctrl-alt-shift-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    ctrl-alt-shift-e = 'move-node-to-workspace e --focus-follows-window'
+    ctrl-alt-shift-m = 'move-node-to-workspace m --focus-follows-window'
+    ctrl-alt-shift-c = 'move-node-to-workspace c --focus-follows-window'
+    ctrl-alt-shift-b = 'move-node-to-workspace b --focus-follows-window'
+    ctrl-alt-shift-s = 'move-node-to-workspace s --focus-follows-window'
+    ctrl-alt-shift-z = 'move-node-to-workspace z --focus-follows-window'
+
+    # Monitor navigation
+    ctrl-alt-n = 'focus-monitor --wrap-around next'
+    ctrl-alt-p = 'focus-monitor --wrap-around prev'
+    ctrl-alt-shift-n = 'move-node-to-monitor --wrap-around next'
+    ctrl-alt-shift-p = 'move-node-to-monitor --wrap-around prev'
+
+    # Workspace navigation
+    ctrl-alt-tab = 'workspace-back-and-forth'
+    ctrl-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+    # Window management
+    ctrl-alt-f = 'fullscreen'
+    ctrl-alt-w = 'close'
+    ctrl-alt-enter = 'exec-and-forget open -na wezterm'
+
+    # Disable macOS hide (conflicts with tiling)
+    cmd-h = []
+    cmd-alt-h = []
+
+    # Join windows into containers (like i3 grouping)
+    ctrl-alt-cmd-h = 'join-with left'
+    ctrl-alt-cmd-j = 'join-with down'
+    ctrl-alt-cmd-k = 'join-with up'
+    ctrl-alt-cmd-l = 'join-with right'
+
+    # Config reload
+    ctrl-alt-esc = [ 'reload-config', 'mode main' ]
+
+    # Enter modal modes
+    ctrl-alt-shift-semicolon = 'mode service'
+    ctrl-alt-a = 'mode apps'
+    ctrl-alt-r = 'mode resize'
+
+# ──────────────────────────────────────────
+# SERVICE MODE — Layout resets, volume, etc.
+# ──────────────────────────────────────────
+[mode.service.binding]
+    esc = ['reload-config', 'mode main']
+    r = ['flatten-workspace-tree', 'mode main']        # Reset layout
+    f = ['layout floating tiling', 'mode main']        # Toggle float
+    down = 'volume down'
+    up = 'volume up'
+    shift-down = ['volume set 0', 'mode main']
+    ctrl-alt-esc = [ 'reload-config', 'mode main' ]
+
+# ──────────────────────────────────────────
+# RESIZE MODE — Fine-tune window sizes with hjkl
+# ──────────────────────────────────────────
+[mode.resize.binding]
+    h = 'resize width -50'
+    j = 'resize height +50'
+    k = 'resize height -50'
+    l = 'resize width +50'
+    minus = 'resize smart -50'
+    equal = 'resize smart +50'
+    esc = 'mode main'
+    ctrl-alt-esc = [ 'reload-config', 'mode main' ]
+
+# ──────────────────────────────────────────
+# APPS MODE — Quick-launch apps
+# ──────────────────────────────────────────
+[mode.apps.binding]
+    m = ['workspace m', 'exec-and-forget open -a "Messages"', 'mode main']
+    w = ['workspace m', 'exec-and-forget open -a "WhatsApp"', 'mode main']
+    s = ['workspace s', 'exec-and-forget open -a "Slack"', 'mode main']
+    t = ['workspace m', 'exec-and-forget open -a "Telegram"', 'mode main']
+    d = ['workspace s', 'exec-and-forget open -a "Discord"', 'mode main']
+    c = ['workspace c', 'exec-and-forget open -a "Calendar"', 'mode main']
+    ctrl-alt-esc = [ 'reload-config', 'mode main' ]
+
+# ──────────────────────────────────────────
+# WINDOW DETECTION CALLBACKS
+# Auto-move apps to their designated workspaces
+# ──────────────────────────────────────────
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Messages'
+run = ['move-node-to-workspace m']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'WhatsApp'
+run = ['move-node-to-workspace m']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Telegram'
+run = ['move-node-to-workspace m']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Slack'
+run = ['move-node-to-workspace s']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Discord'
+run = ['move-node-to-workspace s']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Calendar'
+run = ['move-node-to-workspace c']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Mail'
+run = ['move-node-to-workspace e']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Outlook'
+run = ['move-node-to-workspace e']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Finder'
+run = ['layout floating']
+
+check-further-callbacks = true
