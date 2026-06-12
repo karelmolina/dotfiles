@@ -39,6 +39,7 @@ treesitter.setup({
     "blade",
     "markdown",
     "markdown_inline",
+    "dart",
   },
   modules = {},
   ignore_install = {},

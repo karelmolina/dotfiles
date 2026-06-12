@@ -3,7 +3,9 @@
 # Refresh all workspace indicators by querying aerospace directly
 FOCUSED=$(aerospace list-workspaces --focused 2>/dev/null || echo "")
 
-for sid in $(aerospace list-workspaces --all 2>/dev/null); do
+# Hardcode all configured aerospace workspaces so empty/unvisited ones still appear.
+# This must match the workspace ids defined in aerospace/.config/aerospace/aerospace.toml
+for sid in 1 2 3 4 5 e m c b s z; do
     WINDOWS=$(aerospace list-windows --workspace "$sid" --count 2>/dev/null || echo 0)
 
     if [ "$sid" = "$FOCUSED" ]; then
