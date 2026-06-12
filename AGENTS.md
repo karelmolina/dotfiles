@@ -9,8 +9,9 @@ Personal dotfiles for:
 - **Vim** (`vim/`) - Legacy Vim config (Pathogen + Vundle)
 - **Tmux** (`tmux/`) - Terminal multiplexer config
 - **Zsh** (`zsh/`) - Shell aliases and functions
-- **Kitty** (`kitty/`) - Terminal emulator config
-- **Opencode** (`opencode/`) - Opencode AI assistant configuration
+- **Terminal emulators** (`kitty/`, `wezterm/`, `ghostty/`) - Terminal configs
+- **Dev tools** (`mise/`, `btop/`, `lazygit/`, `atuin/`) - Tool configs
+- **macOS tools** (`aerospace/`, `karabiner/`, `sketchybar/`) - macOS-specific configs
 - **Utils** (`utils/`) - Utility scripts and templates
 - **Wallpapers** (`wallpapers/`) - Desktop backgrounds
 
@@ -18,9 +19,12 @@ Personal dotfiles for:
 
 ### Installation
 ```bash
-./install                    # Run main installation script (Fedora only)
-ln -s ~/dotfiles/nvim ~/.config/nvim
-ln -s ~/dotfiles/vim/vimrc ~/.vimrc
+./install                    # Run main installation script
+
+# Or stow individual packages to ~/.config/<package>
+cd ~/dotfiles && stow --target="$HOME/.config/nvim" nvim
+cd ~/dotfiles && stow --target="$HOME/.config/kitty" kitty
+cd ~/dotfiles && stow --target="$HOME/.config/tmux" tmux
 ```
 
 ### Neovim/Lua
@@ -157,7 +161,8 @@ nvim --headless -c "lua print(require('core.utils').is_available('telescope.nvim
 ## Important Notes
 
 - **Personal repo**: Respect existing preferences
-- **Symbolic links**: Configs deployed via symlinks (`~/.config/nvim` → `~/dotfiles/nvim`)
+- **Symbolic links**: Configs deployed via GNU Stow (`~/.config/nvim/init.lua` → `~/dotfiles/nvim/init.lua`)
+- **Stow target**: repo keeps a flat package layout (`nvim/init.lua`); `scripts/common.sh` stows each package to `$HOME/.config/<package>`
 - **Compatibility**: Both Vim and Neovim configs maintained
 - **No hardcoded paths**: Use `vim.fn.stdpath()` or env vars
 - **Backup before changes**: Test in subshell first

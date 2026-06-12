@@ -252,11 +252,10 @@ step9_stow() {
     stow_config "mise"
     stow_config "btop"
     stow_config "lazygit"
-    stow_config "zsh" "$HOME/.oh-my-zsh/custom"
+    link_zsh_custom
 
     dotlink "zsh/zshrc" ".zshrc"
     dotlink "zsh/starship.toml" ".config/starship.toml"
-    dotlink "mise/config.toml" ".config/mise/config.toml"
 
     echo_success "Dotfiles stowed"
 }

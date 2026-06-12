@@ -14,5 +14,5 @@ nvim/*_path.json
 # Local Pi runtime state
 .atl/
 
-karabiner/.config/karabiner/*
-!karabiner/.config/karabiner/karabiner.json
+karabiner/*
+!karabiner/karabiner.json

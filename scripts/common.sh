@@ -59,16 +59,40 @@ has_command() {
     command -v "$1" &>/dev/null
 }
 
-# Stow alternative - create symlinks for config directories
+# Stow a dotfiles package into ~/.config/<package>
+# This wrapper preserves the repo's flat package layout (e.g. nvim/init.lua)
+# while deploying to the standard XDG config location.
 stow_config() {
     local pkg="$1"
-    local target_dir="${2:-$HOME/.config}"
-    local src="$DOTFILES_DIR/$pkg"
+    local target="${2:-$HOME/.config/$pkg}"
 
-    if [ ! -d "$src" ]; then
+    if ! has_command stow; then
+        echo_error "GNU Stow is not installed"
+        return 1
+    fi
+
+    if [ ! -d "$DOTFILES_DIR/$pkg" ]; then
         echo_error "Package $pkg not found in dotfiles"
         return 1
     fi
+
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+        local backup_name="$target.backup.$(date +%Y%m%d%H%M%S)"
+        echo_warn "Backing up existing $target"
+        mv "$target" "$backup_name"
+    fi
+
+    mkdir -p "$target"
+
+    echo_info "Stowing $pkg to $target..."
+    (cd "$DOTFILES_DIR" && stow --target="$target" "$pkg")
+    echo_success "Stowed: $pkg"
+}
+
+# Link zsh custom files directly into oh-my-zsh/custom (not via stow)
+link_zsh_custom() {
+    local src="$DOTFILES_DIR/zsh"
+    local target_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
     mkdir -p "$target_dir"
 
@@ -84,7 +108,7 @@ stow_config() {
         ln -sf "$item" "$dest"
     done
 
-    echo_success "Stowed: $pkg"
+    echo_success "Linked zsh custom files to $target_dir"
 }
 
 # Install fonts from zip

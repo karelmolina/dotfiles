@@ -328,15 +328,7 @@ install_neovim() {
     mv "$HOME/.config/nvim" "$HOME/.config/$backup_name"
   fi
 
-  # Create symlink to dotfiles nvim config
-  if [ ! -L "$HOME/.config/nvim" ]; then
-    echo_info "Linking nvim configuration..."
-    mkdir -p "$HOME/.config"
-    ln -sf "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
-    echo_success "Neovim configuration linked"
-  else
-    echo_info "Neovim config already linked"
-  fi
+  stow_config "nvim"
 
   echo_info "To complete setup, open nvim and run :Lazy sync"
   return 0
@@ -406,25 +398,8 @@ setup_shell() {
     echo_info "atuin already installed"
   fi
 
-  # Backup existing .zshrc if not a symlink
-  if [ -f "$HOME/.zshrc" ] && [ ! -L "$HOME/.zshrc" ]; then
-    local backup_name=".zshrc.backup.$(date +%Y%m%d%H%M%S)"
-    echo_info "Backing up existing .zshrc to $backup_name..."
-    mv "$HOME/.zshrc" "$HOME/$backup_name"
-  fi
-
-  # Link zshrc from dotfiles
-  if [ ! -L "$HOME/.zshrc" ]; then
-    echo_info "Linking .zshrc..."
-    ln -sf "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc"
-  fi
-
-  # Link starship config
-  if [ ! -L "$HOME/.config/starship.toml" ]; then
-    echo_info "Linking starship.toml..."
-    mkdir -p "$HOME/.config"
-    ln -sf "$DOTFILES_DIR/zsh/starship.toml" "$HOME/.config/starship.toml"
-  fi
+  dotlink "zsh/zshrc" ".zshrc"
+  dotlink "zsh/starship.toml" ".config/starship.toml"
 
   # Set zsh as default shell
   if [ "$SHELL" != "/bin/zsh" ] && [ "$SHELL" != "/usr/bin/zsh" ]; then
@@ -471,15 +446,7 @@ setup_terminal() {
       mv "$HOME/.config/kitty" "$HOME/.config/$backup_name"
     fi
 
-    # Link kitty config
-    if [ ! -L "$HOME/.config/kitty" ]; then
-      echo_info "Linking kitty configuration..."
-      mkdir -p "$HOME/.config"
-      ln -sf "$DOTFILES_DIR/kitty" "$HOME/.config/kitty"
-      echo_success "kitty configuration linked"
-    else
-      echo_info "kitty config already linked"
-    fi
+    stow_config "kitty"
   else
     echo_warn "kitty not available. Skipping terminal configuration."
   fi
