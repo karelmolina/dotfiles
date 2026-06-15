@@ -324,6 +324,12 @@ local plugins = {
     "sphamba/smear-cursor.nvim",
     opts = {},
   },
+  -- lazy.nvim
+  {
+    "folke/snacks.nvim",
+    lazy = true,
+    config = false,
+  }
 }
 
 local opts = {
