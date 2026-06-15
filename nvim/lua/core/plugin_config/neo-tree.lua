@@ -57,6 +57,11 @@ neotree.setup({
         end,
       }, function(choice)
         local result = vals[choice]
+        if result then
+          vim.fn.setreg("+", result)
+          vim.fn.setreg('"', result)
+          vim.notify("Copied: " .. result, vim.log.levels.INFO)
+        end
       end)
     end,
     find_in_dir = function(state)
