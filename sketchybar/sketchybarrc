@@ -80,6 +80,21 @@ sketchybar --add item aerospace_refresh left \
     script="$PLUGIN_DIR/aerospace_refresh.sh" \
   --subscribe aerospace_refresh aerospace_workspace_change
 
+##### LEFT: Aerospace Mode Indicator #####
+sketchybar --add item aerospace_mode left \
+  --set aerospace_mode \
+    drawing=off \
+    icon= \
+    icon.padding_left=8 \
+    icon.padding_right=2 \
+    label.padding_left=2 \
+    label.padding_right=6 \
+    background.height=22 \
+    background.corner_radius=5 \
+    background.color=0x33ffffff \
+    update_freq=1 \
+    script="$PLUGIN_DIR/aerospace_mode.sh"
+
 ##### RIGHT: Separator helper #####
 # We add items in reverse order (right to left) for cleaner layout
 
