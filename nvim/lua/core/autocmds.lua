@@ -42,69 +42,6 @@ cmd("UpdateAllPackages", function()
   require("astronvim.utils.mason").update_all()
 end, { desc = "Update Plugins and Mason" })
 
--- ============================================================================
--- Opencode Project Directory Tracking
--- ============================================================================
--- Purpose: Track the current project directory for Opencode AI assistant
--- integration. This allows Opencode to always open in the correct project
--- context, even when switching between projects using neovim-project.
---
--- How it works:
---   1. On VimEnter, we capture the initial working directory
---   2. When DirChanged fires (e.g., from neovim-project switching),
---      we update the tracked directory after a short debounce period
---   3. Both toggleterm.lua and opencode.nvim config use vim.g.opencode_project_dir
---      to determine the correct working directory for Opencode sessions
---
--- vim.g.opencode_project_dir stores the currently tracked project directory
--- vim.g._opencode_dir_debounce stores the timer ID for debounce management
-
-local opencode_sync_group = augroup("OpencodeProjectSync", { clear = true })
-
--- Initialize project directory on startup
--- This captures the initial working directory so Opencode knows the project
--- context even before any directory changes occur
-autocmd("VimEnter", {
-  desc = "Initialize Opencode project directory on startup",
-  group = opencode_sync_group,
-  once = true,
-  callback = function()
-    vim.g.opencode_project_dir = vim.fn.getcwd()
-  end,
-})
-
--- Track directory changes with debounce to handle rapid project switches
--- Debounce prevents race conditions when neovim-project switches directories quickly
-autocmd("DirChanged", {
-  desc = "Update Opencode project directory on directory change (with debounce)",
-  group = opencode_sync_group,
-  pattern = "*",
-  callback = function(args)
-    -- Clear existing debounce timer if present (prevents overlapping updates)
-    if vim.g._opencode_dir_debounce then
-      vim.fn.timer_stop(vim.g._opencode_dir_debounce)
-    end
-
-    -- Set new debounce timer (100ms delay)
-    -- The timer ensures we only update after directory changes settle
-    vim.g._opencode_dir_debounce = vim.fn.timer_start(100, function()
-      vim.schedule(function()
-        -- args.file contains the new directory path from DirChanged event
-        -- Fallback to vim.fn.getcwd() if args.file is not available
-        vim.g.opencode_project_dir = args.file or vim.fn.getcwd()
-        
-        -- Notify sudo-tee's opencode.nvim about directory change
-        -- This triggers session reset and context unloading for new project
-        local ok, opencode = pcall(require, "opencode.core")
-        if ok and opencode.handle_directory_change then
-          opencode.handle_directory_change()
-        end
-      end)
-      vim.g._opencode_dir_debounce = nil
-    end)
-  end,
-})
-
 autocmd("FileType", {
   pattern = "sh",
   callback = function()

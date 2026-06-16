@@ -688,9 +688,9 @@ end
 -- obsidian
 wk.add({
   { "<leader>o", group = "Obsidian" },
-  { "<leader>ob", ":ObsidianQuickSwitch<cr>", desc = "Open Obsidian", mode = "n" },
-  { "<leader>od", ":ObsidianDailies<cr>", desc = "Open daily note", mode = "n" },
-  { "<leader>ot", ":ObsidianTemplate note<cr>", desc = "Open daily note", mode = "n" },
+  { "<leader>ob", "<cmd>ObsidianQuickSwitch<cr>", desc = "Open Obsidian", mode = "n" },
+  { "<leader>od", "<cmd>ObsidianDailies<cr>", desc = "Open daily note picker", mode = "n" },
+  { "<leader>ot", "<cmd>ObsidianTemplate note<cr>", desc = "Insert note template", mode = "n" },
   {
     "<leader>ch",
     function()
@@ -822,18 +822,3 @@ if is_available("kulala.nvim") then
   })
 end
 
--- Opencode (AI Assistant) - sudo-tee fork
-if is_available("opencode.nvim") then
-  wk.add({
-    { "<leader>o", group = "Opencode" },
-    { "<leader>og", function() require("opencode.api").toggle() end, desc = "Toggle opencode", mode = { "n", "t" } },
-    { "<leader>oi", function() require("opencode.api").open_input() end, desc = "Open opencode input", mode = "n" },
-    { "<leader>oI", function() require("opencode.api").open_input_new_session() end, desc = "Open opencode (new session)", mode = "n" },
-    { "<leader>os", function() require("opencode.api").select_session() end, desc = "Select opencode session", mode = "n" },
-    { "<leader>oq", function() require("opencode.api").close() end, desc = "Close opencode", mode = { "n", "t" } },
-    { "<leader>o/", function() require("opencode.api").quick_chat() end, desc = "Quick chat", mode = { "n", "x" } },
-    { "<leader>oy", function() require("opencode.api").add_visual_selection() end, desc = "Add selection to context", mode = "v" },
-    -- Toggle windsurf (disable in opencode windows to prevent interference with opencode completions)
-    { "<leader>ow", "<cmd>CodeiumToggle<CR>", desc = "Toggle windsurf autocomplete", mode = "n" },
-  })
-end

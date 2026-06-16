@@ -300,9 +300,24 @@ local plugins = {
     version = "*",
     lazy = true,
     event = "BufReadPre *.md",
+    cmd = {
+      "ObsidianQuickSwitch",
+      "ObsidianDailies",
+      "ObsidianTemplate",
+      "ObsidianToday",
+      "ObsidianYesterday",
+      "ObsidianTomorrow",
+      "ObsidianNew",
+      "ObsidianSearch",
+      "ObsidianTags",
+      "ObsidianWorkspace",
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    config = function()
+      require("core.plugin_config.obsidian")
+    end,
   },
   {
     "mrcjkb/rustaceanvim",

@@ -3,7 +3,8 @@ if not status_ok then
   return
 end
 
-if vim.fn.isdirectory("~/Projects/daily-notes") == 0 then
+local daily_notes_path = vim.fn.expand("~/Projects/daily-notes")
+if vim.fn.isdirectory(daily_notes_path) == 0 then
   return
 end
 
@@ -11,7 +12,7 @@ obsidian.setup({
   workspaces = {
     {
       name = "daily",
-      path = "~/Projects/daily-notes",
+      path = daily_notes_path,
     },
   },
   ui = {
