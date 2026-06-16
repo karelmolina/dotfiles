@@ -12,26 +12,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   command = [[%s/\s\+$//e]],
 })
 
--- RAM Optimization: Handle large files
-vim.api.nvim_create_autocmd({ "BufReadPre" }, {
-  pattern = "*",
-  callback = function()
-    local max_filesize = 1024 * 1024 -- 1 MB
-    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(0))
-    if ok and stats and stats.size > max_filesize then
-      -- Disable features for large files
-      vim.opt_local.swapfile = false
-      vim.opt_local.undofile = false
-      vim.opt_local.foldmethod = "manual"
-      vim.opt_local.foldenable = false
-      vim.opt_local.list = false
-      -- Disable LSP for very large files
-      vim.b.large_file = true
-      vim.notify("Large file detected (>1MB): Disabled swap, undo, folding, and LSP", vim.log.levels.WARN)
-    end
-  end,
-})
-
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
   pattern = "*.md",
   callback = function()
@@ -77,7 +57,7 @@ local options = {
     splitright = true, -- splitting a new window at the right of the current one
     swapfile = false,
     tabstop = 2, -- number of space in a tab
-    termguicolors = true, -- enable 24-bit RGB color in the TUI
+    -- termguicolors = true, -- enable 24-bit RGB color in the TUI
     timeoutlen = 300, -- shorten key timeout length a little bit for which-key
     undofile = true, -- enable persistent undo
     updatetime = 250, -- length of time to wait before triggering the plugin
