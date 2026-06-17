@@ -70,6 +70,8 @@ return {
       -- Visual cues
       require("mini.indentscope").setup()
       require("mini.trailspace").setup()
+      -- Keep trailspace trimming, but don't highlight trailing whitespace in red
+      vim.api.nvim_set_hl(0, "MiniTrailspace", {})
       require("mini.hipatterns").setup()
 
       -- Completion (LSP-aware, falls back to buffer words)
