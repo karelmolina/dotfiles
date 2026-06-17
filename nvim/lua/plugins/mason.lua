@@ -1,7 +1,7 @@
 return {
   {
     "williamboman/mason.nvim",
-    cmd = { "Mason", "MasonInstall", "MasonToolsInstall", "MasonToolsUpdate" },
+    lazy = false,
     build = ":MasonUpdate",
     opts = {
       PATH = "prepend",
@@ -18,22 +18,23 @@ return {
   {
     "whoissethdaniel/mason-tool-installer.nvim",
     dependencies = { "williamboman/mason.nvim" },
-    cmd = { "MasonToolsInstall", "MasonToolsUpdate", "MasonToolsClean" },
+    lazy = false,
     opts = {
       ensure_installed = {
         -- Formatters
         "stylua",
         "prettierd",
         "gofumpt",
-        "goimports",
+        "goimports-reviser",
         "golines",
         "pint",
         "blade-formatter",
+        "dart_format",
+        -- "rubocop", -- fails to install; install manually with `:MasonInstall rubocop` and check the error
         "shfmt",
 
         -- Linters
-        "eslint",
-        "rubocop",
+        "eslint_d",
         "shellcheck",
         "hadolint",
         "phpstan",
