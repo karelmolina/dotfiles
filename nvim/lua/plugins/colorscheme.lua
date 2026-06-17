@@ -1,16 +1,24 @@
 return {
   {
-    "echasnovski/mini.nvim",
+    "scottmckendry/cyberdream.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      -- Generate and apply a random hues colorscheme on startup.
-      -- mini.hues creates a coherent 8-color scheme from a background + foreground.
-      require("mini.hues").setup({
-        background = "#0f0f0f",
-        foreground = "#c0c0c0",
+      require("cyberdream").setup({
+        variant = "default",
+        transparent = false,
+        saturation = 1,
+        italic_comments = false,
+        hide_fillchars = false,
+        borderless_pickers = false,
+        terminal_colors = true,
+        extensions = {
+          mini = true,
+          notify = true,
+          snacks = true,
+        },
       })
-      vim.cmd("colorscheme randomhue")
+      vim.cmd("colorscheme cyberdream")
     end,
   },
 }
