@@ -1,0 +1,142 @@
+-- Core keymaps adapted from the previous full config to use mini.nvim + snacks.nvim.
+
+local map = vim.keymap.set
+
+-- Standard Operations
+map({ "n", "v" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = "Move cursor down" })
+map({ "n", "v" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = "Move cursor up" })
+map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+map("n", "<leader>q", "<cmd>confirm q<cr>", { desc = "Quit" })
+map("n", "<leader>n", "<cmd>enew<cr>", { desc = "New File" })
+map("n", "<C-s>", "<cmd>w!<cr>", { desc = "Force write" })
+map("n", "<C-q>", "<cmd>qa!<cr>", { desc = "Force quit" })
+map("n", "|", "<cmd>vsplit<cr>", { desc = "Vertical Split" })
+map("n", "-", "<cmd>split<cr>", { desc = "Horizontal Split" })
+map("n", "<leader>+", "<C-a>", { desc = "Increase number" })
+map("n", "<leader>-", "<C-x>", { desc = "Decrease number" })
+map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "No Highlight" })
+map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up" })
+map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down" })
+map({ "i", "v" }, "C-c", "<esc>", { desc = "Escape" })
+
+-- Buffers
+map("n", "<leader>bc", function()
+  local current = vim.api.nvim_get_current_buf()
+  local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+  for _, buf in ipairs(buffers) do
+    if buf.bufnr ~= current then
+      require("mini.bufremove").delete(buf.bufnr, false)
+    end
+  end
+end, { desc = "Delete other buffers but the current one" })
+
+-- Plugin Manager (lazy.nvim)
+map("n", "<leader>pi", function() require("lazy").install() end, { desc = "Install Plugins" })
+map("n", "<leader>ps", function() require("lazy").home() end, { desc = "Plugin Status" })
+map("n", "<leader>pS", function() require("lazy").sync() end, { desc = "Plugins Sync" })
+map("n", "<leader>pu", function() require("lazy").check() end, { desc = "Plugins check update" })
+map("n", "<leader>pU", function() require("lazy").update() end, { desc = "Plugins update" })
+
+-- Tabs
+map("n", "[t", function() vim.cmd.tabprevious() end, { desc = "Previous Tab" })
+map("n", "]t", function() vim.cmd.tabnext() end, { desc = "Next Tab" })
+map("n", "]nt", function() vim.cmd.tabnew() end, { desc = "New Tab" })
+
+-- Comments (mini.comment)
+map("n", "<leader>/", function()
+  return require("mini.comment").toggle_lines(vim.fn.line("."), vim.fn.line("."))
+end, { desc = "Toggle comment line" })
+map("v", "<leader>/", function()
+  local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+  vim.api.nvim_feedkeys(esc, "nx", false)
+  local line_start = vim.fn.line("'<")
+  local line_end = vim.fn.line("'>")
+  require("mini.comment").toggle_lines(line_start, line_end)
+end, { desc = "Toggle comment for selection" })
+
+-- Git (mini.diff + mini.git)
+map("n", "<leader>g", "", { desc = "Git" })
+map("n", "]g", function() MiniDiff.goto_hunk("next") end, { desc = "Next Git hunk" })
+map("n", "[g", function() MiniDiff.goto_hunk("prev") end, { desc = "Previous Git hunk" })
+map("n", "<leader>gp", function() MiniDiff.toggle_overlay() end, { desc = "Preview Git hunk" })
+map("n", "<leader>gh", function()
+  local line = vim.fn.line(".")
+  MiniDiff.do_hunks(0, "reset", { line_start = line, line_end = line })
+end, { desc = "Reset Git hunk" })
+map("n", "<leader>gR", function()
+  MiniDiff.do_hunks(0, "reset", { line_start = 1, line_end = vim.fn.line("$") })
+end, { desc = "Reset buffer" })
+map("n", "<leader>gs", function()
+  local line = vim.fn.line(".")
+  MiniDiff.do_hunks(0, "apply", { line_start = line, line_end = line })
+end, { desc = "Stage Git hunk" })
+map("n", "<leader>gS", function()
+  MiniDiff.do_hunks(0, "apply", { line_start = 1, line_end = vim.fn.line("$") })
+end, { desc = "Stage buffer" })
+map("n", "<leader>gu", function()
+  vim.notify("mini.diff does not support unstaging hunks", vim.log.levels.WARN)
+end, { desc = "Undo stage Git hunk (not supported)" })
+map("n", "<leader>gd", function() MiniDiff.toggle_overlay() end, { desc = "Diff overlay" })
+map("n", "<leader>gl", function() MiniGit.show_at_cursor() end, { desc = "Blame line" })
+map("n", "<leader>gL", function() MiniGit.show_at_cursor() end, { desc = "Blame line" })
+map("n", "<leader>gB", function() MiniGit.show_at_cursor() end, { desc = "Toggle git Blame" })
+
+-- File explorer (mini.files)
+map("n", "<leader>e", function() MiniFiles.open() end, { desc = "Toggle Explorer" })
+map("n", "<leader>E", function()
+  if vim.bo.filetype == "minifiles" then
+    vim.cmd.wincmd("p")
+  else
+    MiniFiles.open(vim.api.nvim_buf_get_name(0))
+  end
+end, { desc = "Toggle Explorer Focus" })
+map("n", "<leader>ol", function() MiniFiles.open() end, { desc = "Open Directory" })
+
+-- LSP symbols outline (snacks.picker)
+map("n", "<leader>lS", function() Snacks.picker.lsp_symbols() end, { desc = "Symbols outline" })
+
+-- Find / Picker (snacks.picker)
+map("n", "<leader>f", "", { desc = "Find" })
+map("n", "<leader>f<CR>", function() Snacks.picker.resume() end, { desc = "Resume search" })
+map("n", "<leader>f'", function() Snacks.picker.marks() end, { desc = "Find marks" })
+map("n", "<leader>f/", function() Snacks.picker.lines() end, { desc = "Find words in current buffer" })
+map("n", "<leader>fb", function() Snacks.picker.buffers() end, { desc = "Find buffers" })
+map("n", "<leader>fc", function() Snacks.picker.grep_word() end, { desc = "Find word under cursor" })
+map("n", "<leader>fC", function() Snacks.picker.commands() end, { desc = "Find commands" })
+map("n", "<leader>ff", function() Snacks.picker.files() end, { desc = "Find files" })
+map("n", "<leader>fF", function() Snacks.picker.files({ hidden = true, ignored = true }) end, { desc = "Find all files" })
+map("n", "<leader>fh", function() Snacks.picker.help() end, { desc = "Find help" })
+map("n", "<leader>fk", function() Snacks.picker.keymaps() end, { desc = "Find keymaps" })
+map("n", "<leader>fm", function() Snacks.picker.man() end, { desc = "Find man" })
+map("n", "<leader>fo", function() Snacks.picker.recent() end, { desc = "Find history" })
+map("n", "<leader>fr", function() Snacks.picker.registers() end, { desc = "Find registers" })
+map("n", "<leader>ft", function() Snacks.picker.colorschemes() end, { desc = "Find themes" })
+map("n", "<leader>fw", function() Snacks.picker.grep() end, { desc = "Find words" })
+map("n", "<leader>fW", function() Snacks.picker.grep({ hidden = true, ignored = true }) end, { desc = "Find words in all files" })
+map("n", "<leader>fN", function() Snacks.picker.notifications() end, { desc = "Find notifications" })
+
+-- Git pickers (snacks.picker)
+map("n", "<leader>gb", function() Snacks.picker.git_branches() end, { desc = "Git branches" })
+map("n", "<leader>gc", function() Snacks.picker.git_log() end, { desc = "Git commits" })
+map("n", "<leader>gC", function() Snacks.picker.git_log_file() end, { desc = "Git buffer commits" })
+map("n", "<leader>gt", function() Snacks.picker.git_status() end, { desc = "Git status" })
+map("n", "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse" })
+map("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
+
+-- Terminal (snacks.terminal)
+map("n", "<leader>t", "", { desc = "Terminal" })
+map("n", "<leader>tf", function() Snacks.terminal(nil, { win = { position = "float" } }) end, { desc = "Terminal float" })
+map("n", "<leader>th", function() Snacks.terminal(nil, { win = { position = "bottom", height = 0.3 } }) end, { desc = "Terminal horizontal split" })
+map("n", "<leader>tv", function() Snacks.terminal(nil, { win = { position = "right", width = 0.4 } }) end, { desc = "Terminal vertical split" })
+
+-- LSP pickers (snacks.picker)
+map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition" })
+map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
+map("n", "gr", function() Snacks.picker.lsp_references() end, { desc = "References" })
+map("n", "gI", function() Snacks.picker.lsp_implementations() end, { desc = "Goto Implementation" })
+map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Goto T[y]pe Definition" })
+map("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols" })
+map("n", "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols" })
+
+-- Disable <C-l> remap from original config
+map("n", "<C-l>", "<C-l>", { noremap = true })

@@ -126,12 +126,13 @@ vim +PluginInstall +qa
 ### File Organization (minimal lazy.nvim setup)
 ```
 nvim/
-├── init.lua              # Entry point: loads options then lazy bootstrap
+├── init.lua              # Entry point: loads options, keymaps, then lazy bootstrap
 ├── .stylua.toml          # Lua formatter config
 └── lua/
     ├── config.lua        # Lazy bootstrap + plugin spec setup
     ├── core/
-    │   └── options.lua   # Basic Vim options and leader keys
+    │   ├── options.lua   # Basic Vim options and leader keys
+    │   └── keymaps.lua   # Keymaps mapped to mini.nvim + snacks.nvim
     └── plugins/
         ├── mini.lua      # echasnovski/mini.nvim modules
         ├── snacks.lua    # folke/snacks.nvim modules + keymaps

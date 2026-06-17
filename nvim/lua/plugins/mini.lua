@@ -10,8 +10,9 @@ return {
       -- UI chrome
       require("mini.statusline").setup()
       require("mini.tabline").setup()
-      require("mini.notify").setup()
-      require("mini.starter").setup()
+
+      -- Buffers
+      require("mini.bufremove").setup()
 
       -- Editing helpers
       require("mini.pairs").setup()
@@ -20,24 +21,64 @@ return {
       require("mini.operators").setup()
 
       -- Navigation
-      require("mini.files").setup()
-      require("mini.pick").setup()
+      require("mini.files").setup({
+        mappings = {
+          close = "q",
+          go_in = "l",
+          go_in_plus = "L",
+          go_out = "h",
+          go_out_plus = "H",
+          reset = "<BS>",
+          reveal_cwd = "@",
+          show_help = "g?",
+          synchronize = "=",
+          trim_left = "<",
+          trim_right = ">",
+        },
+        windows = {
+          max_number = math.huge,
+          preview = true,
+          width_focus = 30,
+          width_nofocus = 15,
+          width_preview = 40,
+        },
+      })
       require("mini.bracketed").setup()
       require("mini.jump2d").setup()
-      require("mini.move").setup()
+      require("mini.move").setup({
+        mappings = {
+          left = "",
+          right = "",
+          down = "<leader>j",
+          up = "<leader>k",
+          line_left = "",
+          line_right = "",
+          line_down = "<leader>j",
+          line_up = "<leader>k",
+        },
+      })
 
       -- Git / diff
-      require("mini.diff").setup()
+      require("mini.diff").setup({
+        view = {
+          style = "sign",
+          signs = { add = "+", change = "~", delete = "-" },
+        },
+      })
       require("mini.git").setup()
 
       -- Visual cues
-      require("mini.cursorword").setup()
       require("mini.indentscope").setup()
       require("mini.trailspace").setup()
       require("mini.hipatterns").setup()
 
       -- Completion (LSP-aware, falls back to buffer words)
-      require("mini.completion").setup()
+      require("mini.completion").setup({
+        mappings = {
+          force_twostep = "<C-Space>",
+          force_fallback = "<A-Space>",
+        },
+      })
 
       -- Sessions
       require("mini.sessions").setup()
