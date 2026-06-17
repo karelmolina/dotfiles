@@ -145,5 +145,17 @@ map("n", "gy", function() Snacks.picker.lsp_type_definitions() end, { desc = "Go
 map("n", "<leader>ss", function() Snacks.picker.lsp_symbols() end, { desc = "LSP Symbols" })
 map("n", "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, { desc = "LSP Workspace Symbols" })
 
+-- Kulala (REST client)
+map("n", "<leader>r", "", { desc = "REST" })
+map({ "n", "v" }, "<leader>rs", function() require("kulala").run() end, { desc = "Run request" })
+map({ "n", "v" }, "<leader>ra", function() require("kulala").run_all() end, { desc = "Run all requests" })
+map({ "n", "v" }, "<leader>rr", function() require("kulala").replay() end, { desc = "Replay last request" })
+map("n", "<leader>re", function() require("kulala").set_selected_env() end, { desc = "Select environment" })
+map("n", "<leader>rf", function() require("kulala").search() end, { desc = "Search request" })
+map("n", "<leader>rx", function() require("kulala").scripts_clear_global() end, { desc = "Clear globals" })
+map({ "n", "v" }, "<leader>rC", function() require("kulala").from_curl() end, { desc = "Import cURL from clipboard" })
+map({ "n", "v" }, "<leader>rc", function() require("kulala").copy() end, { desc = "Copy request as cURL" })
+map("n", "<leader>rb", function() require("kulala").scratchpad() end, { desc = "Open scratchpad" })
+
 -- Disable <C-l> remap from original config
 map("n", "<C-l>", "<C-l>", { noremap = true })
