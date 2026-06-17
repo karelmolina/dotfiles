@@ -80,6 +80,14 @@ return {
         },
       })
 
+      -- Disable mini.completion in snacks picker input so results stay visible
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "snacks_picker_input",
+        callback = function(args)
+          vim.b[args.buf].minicompletion_disable = true
+        end,
+      })
+
       -- Sessions
       require("mini.sessions").setup()
 
