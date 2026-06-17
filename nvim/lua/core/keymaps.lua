@@ -117,9 +117,8 @@ map("n", "<leader>gt", function() Snacks.picker.git_status() end, { desc = "Git 
 map("n", "<leader>gB", function() Snacks.gitbrowse() end, { desc = "Git Browse" })
 map("n", "<leader>gg", function() Snacks.lazygit() end, { desc = "Lazygit" })
 
--- Terminal (snacks.terminal)
 map("n", "<leader>t", "", { desc = "Terminal" })
-map("n", "<leader>tf", function() Snacks.terminal(nil, { win = { position = "float" } }) end, { desc = "Terminal float" })
+map({ "n", "t" }, "<C-\\>", function() Snacks.terminal.toggle(nil, { win = { position = "float" } }) end, { desc = "Terminal float toggle" })
 map("n", "<leader>th", function() Snacks.terminal(nil, { win = { position = "bottom", height = 0.3 } }) end, { desc = "Terminal horizontal split" })
 map("n", "<leader>tv", function() Snacks.terminal(nil, { win = { position = "right", width = 0.4 } }) end, { desc = "Terminal vertical split" })
 
