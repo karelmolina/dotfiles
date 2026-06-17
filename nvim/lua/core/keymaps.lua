@@ -82,15 +82,9 @@ map("n", "<leader>gL", function() MiniGit.show_at_cursor() end, { desc = "Blame 
 map("n", "<leader>gB", function() MiniGit.show_at_cursor() end, { desc = "Toggle git Blame" })
 
 -- File explorer (mini.files)
-map("n", "<leader>e", function() MiniFiles.open() end, { desc = "Toggle Explorer" })
-map("n", "<leader>E", function()
-  if vim.bo.filetype == "minifiles" then
-    vim.cmd.wincmd("p")
-  else
-    MiniFiles.open(vim.api.nvim_buf_get_name(0))
-  end
-end, { desc = "Toggle Explorer Focus" })
-map("n", "<leader>ol", function() MiniFiles.open() end, { desc = "Open Directory" })
+map("n", "<leader>e", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end, { desc = "Toggle Explorer" })
+map("n", "<leader>E", function() MiniFiles.open() end, { desc = "Toggle Explorer (root)" })
+map("n", "<leader>ol", function() MiniFiles.open(vim.api.nvim_buf_get_name(0)) end, { desc = "Open Directory" })
 
 -- LSP symbols outline (snacks.picker)
 map("n", "<leader>lS", function() Snacks.picker.lsp_symbols() end, { desc = "Symbols outline" })

@@ -13,6 +13,10 @@ return {
         "dart",
         "javascript",
         "typescript",
+        "css",
+        "html",
+        "latex",
+        "scss",
       })
     end,
     config = function()
