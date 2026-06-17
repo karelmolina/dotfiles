@@ -129,6 +129,13 @@ map("n", "<leader>tf", function() Snacks.terminal(nil, { win = { position = "flo
 map("n", "<leader>th", function() Snacks.terminal(nil, { win = { position = "bottom", height = 0.3 } }) end, { desc = "Terminal horizontal split" })
 map("n", "<leader>tv", function() Snacks.terminal(nil, { win = { position = "right", width = 0.4 } }) end, { desc = "Terminal vertical split" })
 
+-- Formatting & linting
+map("n", "<leader>l", "", { desc = "Format/Lint" })
+map("n", "<leader>lf", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, { desc = "Format buffer" })
+map("v", "<leader>lf", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, { desc = "Format selection" })
+map("n", "<leader>ll", function() require("lint").try_lint() end, { desc = "Run linter" })
+map("n", "<leader>li", "<cmd>ConformInfo<cr>", { desc = "Conform info" })
+
 -- LSP pickers (snacks.picker)
 map("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "Goto Definition" })
 map("n", "gD", function() Snacks.picker.lsp_declarations() end, { desc = "Goto Declaration" })
