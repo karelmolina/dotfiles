@@ -1,824 +1,282 @@
-local util = require("core.utils")
-local is_available = util.is_available
-local icons = require("core.utils.icons")
-local wk = require("which-key")
+-- Core keymaps adapted from the previous full config to use mini.nvim + snacks.nvim.
+
+local map = vim.keymap.set
 
 -- Standard Operations
-wk.add({
-  { "j", "v:count == 0 ? 'gj' : 'j'", mode = { "n", "v" }, expr = true, desc = "Move cursor down" },
-  { "k", "v:count == 0 ? 'gk' : 'k'", mode = { "n", "v" }, expr = true, desc = "Move cursor up" },
-  { "<leader>w", "<cmd>w<cr>", desc = "Save", mode = "n" },
-  { "<leader>q", "<cmd>confirm q<cr>", desc = "Quit", mode = "n" },
-  { "<leader>n", "<cmd>enew<cr>", desc = "New File", mode = "n" },
-  { "<C-s>", "<cmd>w!<cr>", desc = "Force write", mode = "n" },
-  { "<C-q>", "<cmd>qa!<cr>", desc = "Force quit", mode = "n" },
-  { "|", "<cmd>vsplit<cr>", desc = "Vertical Split", mode = "n" },
-  { "-", "<cmd>split<cr>", desc = "Horizontal Split", mode = "n" },
-  { "<leader>+", "<C-a>", desc = "Increase number", mode = "n" },
-  { "<leader>-", "<C-x>", desc = "Decrease number", mode = "n" },
-  { "<leader>h", "<cmd>nohlsearch<cr>", desc = "No Highlight", mode = "n" },
-  { "<leader>k", ":m .-2<cr>==", desc = "Move line up", mode = "n" },
-  { "<leader>j", ":m .+1<cr>==", desc = "Move line down", mode = "n" },
-  { "<leader>k", ":m <-2<cr>==gv", desc = "Move line up", mode = "v" },
-  { "<leader>j", ":m '>+1<cr>==gv", desc = "Move line down", mode = "v" },
-  { "<C-u>", "<C-u>zz", desc = "Scroll up", mode = "n" },
-  { "<C-d>", "<C-d>zz", desc = "Scroll down", mode = "n" },
-  { "C-c", "<esc>", desc = "Escape", mode = "i" },
-  { "C-c", "<esc>", desc = "Escape", mode = "v" },
-  {
-    "<leader>bc",
-    ":silent! %bdelete|edit#|bdelete#<CR>",
-    desc = "Delete other buffers but the current one",
-    mode = "n",
-  },
-})
+map({ "n", "v" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = "Move cursor down" })
+map({ "n", "v" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = "Move cursor up" })
+map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save" })
+map("n", "<leader>q", "<cmd>confirm q<cr>", { desc = "Quit" })
+map("n", "<leader>n", "<cmd>enew<cr>", { desc = "New File" })
+map("n", "<C-s>", "<cmd>w!<cr>", { desc = "Force write" })
+map("n", "<C-q>", "<cmd>qa!<cr>", { desc = "Force quit" })
+map("n", "|", "<cmd>vsplit<cr>", { desc = "Vertical Split" })
+map("n", "-", "<cmd>split<cr>", { desc = "Horizontal Split" })
+map("n", "<leader>+", "<C-a>", { desc = "Increase number" })
+map("n", "<leader>-", "<C-x>", { desc = "Decrease number" })
+map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "No Highlight" })
+map("n", "<C-u>", "<C-u>zz", { desc = "Scroll up" })
+map("n", "<C-d>", "<C-d>zz", { desc = "Scroll down" })
+map({ "i", "v" }, "C-c", "<esc>", { desc = "Escape" })
 
--- Plugin Manager
-wk.add({
-  mode = { "n" },
-  { "<leader>p", group = "Plugin Manager" },
-  {
-    "<leader>pi",
-    function()
-      require("lazy").install()
-    end,
-    desc = "Install Plugins",
-  },
-  {
-    "<leader>ps",
-    function()
-      require("lazy").home()
-    end,
-    desc = "Plugin Status",
-  },
-  {
-    "<leader>pS",
-    function()
-      require("lazy").sync()
-    end,
-    desc = "Plugins Sync",
-  },
-  {
-    "<leader>pu",
-    function()
-      require("lazy").check()
-    end,
-    desc = "Plugins check update",
-  },
-  {
-    "<leader>pU",
-    function()
-      require("lazy").update()
-    end,
-    desc = "Plugins update",
-  },
-  {
-    "<leader>pa",
-    "<cmd>UpdateAllPackages<cr>",
-    desc = "Update Plugins and Mason Packages",
-  },
-})
-
--- Navigate Tabs
-wk.add({
-  {
-    "[t",
-    function()
-      vim.cmd.tabprevious()
-    end,
-    desc = "Previous Tab",
-    mode = "n",
-  },
-  {
-    "]t",
-    function()
-      vim.cmd.tabnext()
-    end,
-    desc = "Next Tab",
-    mode = "n",
-  },
-  {
-    "]nt",
-    function()
-      vim.cmd.tabnew()
-    end,
-    desc = "New Tab",
-    mode = "n",
-  },
-})
-
--- Comment Mappings
-if is_available("Comment.nvim") then
-  wk.add({
-    {
-      "<leader>/",
-      function()
-        require("Comment.api").toggle.linewise.count(vim.v.count > 0 and vim.v.count or 1)
-      end,
-      desc = "Toggle comment line",
-      mode = "n",
-    },
-    {
-      "<leader>/",
-      "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>",
-      desc = "Toggle comment for selection",
-      mode = "v",
-    },
-  })
-end
-
--- GitSigns Mappings
-if is_available("gitsigns.nvim") then
-  local gitsigns = require("gitsigns")
-
-  wk.add({
-    { "<leader>g", group = "Git" },
-    {
-      "]g",
-      function()
-        gitsigns.nav_hunk("next")
-      end,
-      desc = "Next Git hunk",
-      mode = "n",
-    },
-    {
-      "[g",
-      function()
-        gitsigns.nav_hunk("prev")
-      end,
-      desc = "Previous Git hunk",
-      mode = "n",
-    },
-    {
-      "<leader>gl",
-      function()
-        gitsigns.blame_line({ full = true })
-      end,
-      desc = "Blame line",
-      mode = "n",
-    },
-    {
-      "<leader>gL",
-      function()
-        gitsigns.blame_line({ full = true })
-      end,
-      desc = "Blame line",
-      mode = "n",
-    },
-    {
-      "<leader>gp",
-      function()
-        gitsigns.preview_hunk()
-      end,
-      desc = "Preview Git hunk",
-      mode = "n",
-    },
-    {
-      "<leader>gh",
-      function()
-        gitsigns.reset_hunk()
-      end,
-      desc = "Reset Git hunk",
-      mode = "n",
-    },
-    {
-      "<leader>gR",
-      function()
-        gitsigns.reset_buffer()
-      end,
-      desc = "Reset buffer",
-      mode = "n",
-    },
-    {
-      "<leader>gs",
-      function()
-        gitsigns.stage_hunk()
-      end,
-      desc = "Stage Git hunk",
-      mode = "n",
-    },
-    {
-      "<leader>gS",
-      function()
-        gitsigns.stage_buffer()
-      end,
-      desc = "Stage buffer",
-      mode = "n",
-    },
-    {
-      "<leader>gu",
-      function()
-        gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-      end,
-      desc = "Undo stage Git hunk",
-      mode = "n",
-    },
-    {
-      "<leader>gd",
-      function()
-        gitsigns.diffthis()
-      end,
-      desc = "Diff",
-      mode = "n",
-    },
-    {
-      "<leader>gB",
-      function()
-        gitsigns.toggle_current_line_blame()
-      end,
-      desc = "Toggle git Blame",
-      mode = "n",
-    },
-  })
-end
-
--- NeoTree Mappings
-if is_available("neo-tree.nvim") then
-  wk.add({
-    { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Explorer", mode = "n" },
-    {
-      "<leader>E",
-      function()
-        if vim.bo.filetype == "neo-tree" then
-          vim.cmd.wincmd("p")
-        else
-          vim.cmd.Neotree("focus")
-        end
-      end,
-      desc = "Toggle Explorer Focus",
-      mode = "n",
-    },
-  })
-end
-
--- Mason Mappings
-if is_available("mason.nvim") then
-  wk.add({
-    { "<leader>pm", "<cmd>Mason<cr>", desc = "Mason Installer", mode = "n" },
-    { "<leader>pM", "<cmd>MasonUpdateAll<cr>", desc = "Mason Update", mode = "n" },
-  })
-end
-
--- SymbolsOutline (Aerial) Mappings
-if is_available("aerial.nvim") then
-  wk.add({
-    { "<leader>l", group = "LSP" },
-    {
-      "<leader>lS",
-      function()
-        require("aerial").toggle()
-      end,
-      desc = "Symbols outline",
-      mode = "n",
-    },
-  })
-end
-
--- Telescope Mappings
-if is_available("telescope.nvim") then
-  wk.add({
-    mode = { "n" },
-    { "<leader>f", group = icons.Search .. "Find" },
-    { "<leader>g", group = "Git" },
-    {
-      "<leader>gb",
-      function()
-        require("telescope.builtin").git_branches({ use_file_path = true })
-      end,
-      desc = "Git branches",
-    },
-    {
-      "<leader>gc",
-      function()
-        require("telescope.builtin").git_commits({ use_file_path = true })
-      end,
-      desc = "Git commits",
-    },
-    {
-      "<leader>gC",
-      function()
-        require("telescope.builtin").git_bcommits({ use_file_path = true })
-      end,
-      desc = "Git buffer commits",
-    },
-    {
-      "<leader>gt",
-      function()
-        require("telescope.builtin").git_status({ use_file_path = true })
-      end,
-      desc = "Git status",
-    },
-    {
-      "<leader>f<CR>",
-      function()
-        require("telescope.builtin").resume()
-      end,
-      desc = "Resume search",
-    },
-    {
-      "<leader>f'",
-      function()
-        require("telescope.builtin").marks()
-      end,
-      desc = "Find marks",
-    },
-    {
-      "<leader>f/",
-      function()
-        require("telescope.builtin").current_buffer_fuzzy_find()
-      end,
-      desc = "Find words in current buffer",
-    },
-    {
-      "<leader>fb",
-      function()
-        require("telescope.builtin").buffers()
-      end,
-      desc = "Find buffers",
-    },
-    {
-      "<leader>fc",
-      function()
-        require("telescope.builtin").grep_string()
-      end,
-      desc = "Find word under cursor",
-    },
-    {
-      "<leader>fC",
-      function()
-        require("telescope.builtin").commands()
-      end,
-      desc = "Find commands",
-    },
-    {
-      "<leader>ff",
-      function()
-        require("telescope.builtin").find_files()
-      end,
-      desc = "Find files",
-    },
-    {
-      "<leader>fF",
-      function()
-        require("telescope.builtin").find_files({ hidden = true, no_ignore = true })
-      end,
-      desc = "Find all files",
-    },
-    {
-      "<leader>fh",
-      function()
-        require("telescope.builtin").help_tags()
-      end,
-      desc = "Find help",
-    },
-    {
-      "<leader>fk",
-      function()
-        require("telescope.builtin").keymaps()
-      end,
-      desc = "Find keymaps",
-    },
-    {
-      "<leader>fm",
-      function()
-        require("telescope.builtin").man_pages()
-      end,
-      desc = "Find man",
-    },
-    {
-      "<leader>fo",
-      function()
-        require("telescope.builtin").oldfiles()
-      end,
-      desc = "Find history",
-    },
-    {
-      "<leader>fr",
-      function()
-        require("telescope.builtin").registers()
-      end,
-      desc = "Find registers",
-    },
-    {
-      "<leader>ft",
-      function()
-        require("telescope.builtin").colorscheme({ enable_preview = true })
-      end,
-      desc = "Find themes",
-    },
-    {
-      "<leader>fw",
-      function()
-        require("telescope.builtin").live_grep()
-      end,
-      desc = "Find words",
-    },
-    {
-      "<leader>fW",
-      function()
-        require("telescope.builtin").live_grep({
-          additional_args = function(args)
-            return vim.list_extend(args, { "--hidden", "--no-ignore" })
-          end,
-        })
-      end,
-      desc = "Find words in all files",
-    },
-    {
-      "<leader>fn",
-      ":Telescope file_browser path=./node_modules<CR>",
-      desc = "Find node_modules",
-    },
-    {
-      "<leader>fp",
-      ":Telescope neovim-project discover<CR>",
-      desc = "Find project root",
-    },
-    {
-      "<leader>fhp",
-      ":Telescope neovim-project history<CR>",
-      desc = "Find sessions",
-    },
-    {
-      "<leader>f\\",
-      ":NeovimProjectLoadRecent<CR>",
-      desc = "Load recent projects",
-    },
-  })
-
-  if is_available("nvim-notify") then
-    wk.add({
-      {
-        "<leader>fN",
-        function()
-          require("telescope").extensions.notify.notify()
-        end,
-        desc = "Find notifications",
-      },
-    })
+-- Buffers
+map("n", "<leader>bc", function()
+  local current = vim.api.nvim_get_current_buf()
+  local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+  for _, buf in ipairs(buffers) do
+    if buf.bufnr ~= current then
+      require("mini.bufremove").delete(buf.bufnr, false)
+    end
   end
-end
+end, { desc = "Delete other buffers but the current one" })
 
--- Terminal Mappings
-if is_available("toggleterm.nvim") then
-  wk.add({
-    { "<leader>t", group = "Terminal" },
-    { "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", desc = "ToggleTerm float", mode = "n" },
-    {
-      "<leader>th",
-      "<cmd>ToggleTerm size=10 direction=horizontal<cr>",
-      desc = "ToggleTerm horizontal split",
-      mode = "n",
-    },
-    { "<leader>tv", "<cmd>ToggleTerm size=80 direction=vertical<cr>", desc = "ToggleTerm vertical split", mode = "n" },
-  })
-  if vim.fn.executable("lazygit") == 1 then
-    wk.add({
-      { "<leader>g", group = "LazyGit" },
-      { "<leader>gg", "<cmd>lua _lazygit_toggle() <CR>", desc = "ToggleTerm lazygit", mode = "n" },
-    })
-  end
-end
+-- Plugin Manager (lazy.nvim)
+map("n", "<leader>pi", function()
+  require("lazy").install()
+end, { desc = "Install Plugins" })
+map("n", "<leader>ps", function()
+  require("lazy").home()
+end, { desc = "Plugin Status" })
+map("n", "<leader>pS", function()
+  require("lazy").sync()
+end, { desc = "Plugins Sync" })
+map("n", "<leader>pu", function()
+  require("lazy").check()
+end, { desc = "Plugins check update" })
+map("n", "<leader>pU", function()
+  require("lazy").update()
+end, { desc = "Plugins update" })
 
--- DAP Mappings
-if is_available("nvim-dap") then
-  local dap = require("dap")
-  wk.add({
-    { "<leader>d", group = "Debugger", mode = { "n", "v" } },
-    {
-      "<leader>da",
-      function()
-        local command = vim.fn.input("Enter Command to Run: ")
-        if command then
-          dap.run({
-            type = "node-terminal",
-            request = "launch",
-            name = "Run Command",
-            cwd = vim.fn.getcwd(),
-            runtimeArgs = { command },
-          })
-        end
-      end,
-    },
-    {
-      "<leader>db",
-      function()
-        dap.toggle_breakpoint()
-      end,
-      desc = "Toggle Breakpoint",
-      mode = "n",
-    },
-    {
-      "<leader>dB",
-      function()
-        dap.clear_breakpoints()
-      end,
-      desc = "Clear Breakpoints",
-      mode = "n",
-    },
-    {
-      "<leader>dc",
-      function()
-        dap.continue()
-      end,
-      desc = "Continue",
-      mode = "n",
-    },
-    {
-      "<leader>dC",
-      function()
-        vim.ui.input({ prompt = "Condition: " }, function(condition)
-          if condition then
-            dap.set_breakpoint(condition)
-          end
-        end)
-      end,
-      desc = "Conditional Breakpoint",
-      mode = "n",
-    },
-    {
-      "<leader>di",
-      function()
-        dap.step_into()
-      end,
-      desc = "Step Into",
-      mode = "n",
-    },
-    {
-      "<leader>do",
-      function()
-        dap.step_over()
-      end,
-      desc = "Step Over",
-      mode = "n",
-    },
-    {
-      "<leader>dO",
-      function()
-        dap.step_out()
-      end,
-      desc = "Step Out",
-      mode = "n",
-    },
-    {
-      "<leader>dq",
-      function()
-        dap.close()
-        dap.terminate()
-      end,
-      desc = "Exit current Dap",
-      mode = "n",
-    },
-    {
-      "<leader>dp",
-      function()
-        dap.pause()
-      end,
-      desc = "Pause",
-      mode = "n",
-    },
-    {
-      "<leader>dr",
-      function()
-        dap.repl.open()
-      end,
-      desc = "Open REPL",
-      mode = "n",
-    },
-    {
-      "<leader>ds",
-      function()
-        dap.run_to_cursor()
-      end,
-      desc = "Run to cursor",
-      mode = "n",
-    },
-  })
+-- Tabs
+map("n", "[t", function()
+  vim.cmd.tabprevious()
+end, { desc = "Previous Tab" })
+map("n", "]t", function()
+  vim.cmd.tabnext()
+end, { desc = "Next Tab" })
+map("n", "]nt", function()
+  vim.cmd.tabnew()
+end, { desc = "New Tab" })
 
-  if is_available("nvim-dap-ui") then
-    wk.add({
-      {
-        "<leader>dE",
-        function()
-          vim.ui.input({ prompt = "Expression: " }, function(expression)
-            if expression then
-              require("dapui").eval(expression, { enter = true })
-            end
-          end)
-        end,
-        desc = "Evaluate Input",
-        mode = { "n", "v" },
-      },
-      {
-        "<leader>du",
-        function()
-          require("dapui").toggle()
-        end,
-        desc = "Toggle UI",
-        mode = "n",
-      },
-      {
-        "<leader>dR",
-        function()
-          local dapui = require("dapui")
-          dapui.close()
-          dapui.open()
-        end,
-        desc = "Restart UI",
-        mode = "n",
-      },
-      {
-        "<leader>dh",
-        function()
-          require("dap.ui.widgets").hover()
-        end,
-        desc = "Debugger Hover",
-        mode = "n",
-      },
-    })
-  end
-end
+-- Comments (mini.comment)
+map("n", "<leader>/", function()
+  return require("mini.comment").toggle_lines(vim.fn.line("."), vim.fn.line("."))
+end, { desc = "Toggle comment line" })
+map("v", "<leader>/", function()
+  local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
+  vim.api.nvim_feedkeys(esc, "nx", false)
+  local line_start = vim.fn.line("'<")
+  local line_end = vim.fn.line("'>")
+  require("mini.comment").toggle_lines(line_start, line_end)
+end, { desc = "Toggle comment for selection" })
 
--- Code Folding Mappings (UFO)
-if is_available("nvim-ufo") then
-  wk.add({
-    {
-      "zR",
-      function()
-        require("ufo").openAllFolds()
-      end,
-      desc = "Open all folds",
-      mode = "n",
-    },
-    {
-      "zM",
-      function()
-        require("ufo").closeAllFolds()
-      end,
-      desc = "Close all folds",
-      mode = "n",
-    },
-    {
-      "zr",
-      function()
-        require("ufo").openFoldsExceptKinds()
-      end,
-      desc = "Open folds except kind",
-      mode = "n",
-    },
-    {
-      "zm",
-      function()
-        require("ufo").closeFoldsWith()
-      end,
-      desc = "Close folds with kind",
-      mode = "n",
-    },
-    {
-      "zp",
-      function()
-        require("ufo").peekFoldedLinesUnderCursor()
-      end,
-      desc = "Peek folds under cursor",
-      mode = "n",
-    },
-  })
-end
+-- Git (mini.diff + mini.git)
+map("n", "<leader>g", "", { desc = "Git" })
+map("n", "]g", function()
+  MiniDiff.goto_hunk("next")
+end, { desc = "Next Git hunk" })
+map("n", "[g", function()
+  MiniDiff.goto_hunk("prev")
+end, { desc = "Previous Git hunk" })
+map("n", "<leader>gp", function()
+  MiniDiff.toggle_overlay()
+end, { desc = "Preview Git hunk" })
+map("n", "<leader>gh", function()
+  local line = vim.fn.line(".")
+  MiniDiff.do_hunks(0, "reset", { line_start = line, line_end = line })
+end, { desc = "Reset Git hunk" })
+map("n", "<leader>gR", function()
+  MiniDiff.do_hunks(0, "reset", { line_start = 1, line_end = vim.fn.line("$") })
+end, { desc = "Reset buffer" })
+map("n", "<leader>gs", function()
+  local line = vim.fn.line(".")
+  MiniDiff.do_hunks(0, "apply", { line_start = line, line_end = line })
+end, { desc = "Stage Git hunk" })
+map("n", "<leader>gS", function()
+  MiniDiff.do_hunks(0, "apply", { line_start = 1, line_end = vim.fn.line("$") })
+end, { desc = "Stage buffer" })
+map("n", "<leader>gu", function()
+  vim.notify("mini.diff does not support unstaging hunks", vim.log.levels.WARN)
+end, { desc = "Undo stage Git hunk (not supported)" })
+map("n", "<leader>gd", function()
+  MiniDiff.toggle_overlay()
+end, { desc = "Diff overlay" })
+map("n", "<leader>gl", function()
+  MiniGit.show_at_cursor()
+end, { desc = "Blame line" })
+map("n", "<leader>gL", function()
+  MiniGit.show_at_cursor()
+end, { desc = "Blame line" })
+map("n", "<leader>gB", function()
+  MiniGit.show_at_cursor()
+end, { desc = "Toggle git Blame" })
 
--- obsidian
-wk.add({
-  { "<leader>o", group = "Obsidian" },
-  { "<leader>ob", "<cmd>ObsidianQuickSwitch<cr>", desc = "Open Obsidian", mode = "n" },
-  { "<leader>od", "<cmd>ObsidianDailies<cr>", desc = "Open daily note picker", mode = "n" },
-  { "<leader>ot", "<cmd>ObsidianTemplate note<cr>", desc = "Insert note template", mode = "n" },
-  {
-    "<leader>ch",
-    function()
-      return require("obsidian").util.toggle_checkbox()
-    end,
-    desc = "Toggle checkbox",
-    mode = { "n", "v" },
-  },
-  {
-    "<leader>cr",
-    function()
-      return require("obsidian").util.smart_action()
-    end,
-    desc = "Toggle checkbox",
-    mode = { "n", "v" },
-  },
-})
+-- File explorer (neo-tree)
+map("n", "<leader>e", "<cmd>Neotree toggle reveal<cr>", { desc = "Toggle Explorer" })
+map("n", "<leader>E", "<cmd>Neotree toggle<cr>", { desc = "Toggle Explorer (root)" })
+map("n", "<leader>ol", "<cmd>Neotree reveal<cr>", { desc = "Open Directory" })
 
--- oil nvim
-wk.add({
-  { "<leader>ol", "<cmd>Oil<cr>", desc = "Open Directory", mode = "n" },
-})
+-- LSP symbols outline (snacks.picker)
+map("n", "<leader>lS", function()
+  Snacks.picker.lsp_symbols()
+end, { desc = "Symbols outline" })
 
--- twilight nvim
-wk.add({
-  { "<leader>tw", "<cmd>Twilight<cr>", desc = "Toggle Twilight", mode = "n" },
-})
+-- Find / Picker (snacks.picker)
+map("n", "<leader>f", "", { desc = "Find" })
+map("n", "<leader>f<CR>", function()
+  Snacks.picker.resume()
+end, { desc = "Resume search" })
+map("n", "<leader>f'", function()
+  Snacks.picker.marks()
+end, { desc = "Find marks" })
+map("n", "<leader>f/", function()
+  Snacks.picker.lines()
+end, { desc = "Find words in current buffer" })
+map("n", "<leader>fb", function()
+  Snacks.picker.buffers()
+end, { desc = "Find buffers" })
+map("n", "<leader>fc", function()
+  Snacks.picker.grep_word()
+end, { desc = "Find word under cursor" })
+map("n", "<leader>fC", function()
+  Snacks.picker.commands()
+end, { desc = "Find commands" })
+map("n", "<leader>ff", function()
+  Snacks.picker.files()
+end, { desc = "Find files" })
+map("n", "<leader>fF", function()
+  Snacks.picker.files({ hidden = true, ignored = true })
+end, { desc = "Find all files" })
+map("n", "<leader>fh", function()
+  Snacks.picker.help()
+end, { desc = "Find help" })
+map("n", "<leader>fk", function()
+  Snacks.picker.keymaps()
+end, { desc = "Find keymaps" })
+map("n", "<leader>fm", function()
+  Snacks.picker.man()
+end, { desc = "Find man" })
+map("n", "<leader>fo", function()
+  Snacks.picker.recent()
+end, { desc = "Find history" })
+map("n", "<leader>fr", function()
+  Snacks.picker.registers()
+end, { desc = "Find registers" })
+map("n", "<leader>ft", function()
+  Snacks.picker.colorschemes()
+end, { desc = "Find themes" })
+map("n", "<leader>fw", function()
+  Snacks.picker.grep()
+end, { desc = "Find words" })
+map("n", "<leader>fW", function()
+  Snacks.picker.grep({ hidden = true, ignored = true })
+end, { desc = "Find words in all files" })
+map("n", "<leader>fg", function()
+  Snacks.picker.git_status()
+end, { desc = "Find git modified files" })
+map("n", "<leader>fN", function()
+  Snacks.picker.notifications()
+end, { desc = "Find notifications" })
 
--- Vim Mappings
-vim.keymap.set("n", "<C-l>", "false")
--- wk.add({
---   { "<C-l>", false, mode = "n" }, -- Disable this keymap
--- })
+-- Git pickers (snacks.picker)
+map("n", "<leader>gb", function()
+  Snacks.picker.git_branches()
+end, { desc = "Git branches" })
+map("n", "<leader>gc", function()
+  Snacks.picker.git_log()
+end, { desc = "Git commits" })
+map("n", "<leader>gC", function()
+  Snacks.picker.git_log_file()
+end, { desc = "Git buffer commits" })
+map("n", "<leader>gt", function()
+  Snacks.picker.git_status()
+end, { desc = "Git status" })
+map("n", "<leader>gB", function()
+  Snacks.gitbrowse()
+end, { desc = "Git Browse" })
+map("n", "<leader>gg", function()
+  Snacks.lazygit()
+end, { desc = "Lazygit" })
 
--- Spectre
-if is_available("nvim-spectre") then
-  local spectre = require("spectre")
-  wk.add({
-    {
-      "<leader>S",
-      function()
-        spectre.toggle()
-      end,
-      desc = "Toggle Spectre",
-      mode = "n",
-    },
-    {
-      "<leader>sw",
-      function()
-        spectre.open_visual({ select_word = true })
-      end,
-      desc = "Search current word",
-      mode = "n",
-    },
-    {
-      "<leader>sw",
-      function()
-        spectre.open_visual()
-      end,
-      desc = "Search current word",
-      mode = "v",
-    },
-    {
-      "<leader>sf",
-      function()
-        spectre.open_file_search({ select_word = true })
-      end,
-      desc = "Search current file",
-      mode = "n",
-    },
-  })
-end
+map("n", "<leader>t", "", { desc = "Terminal" })
+map({ "n", "t" }, "<C-\\>", function()
+  Snacks.terminal.toggle(nil, { win = { position = "float" } })
+end, { desc = "Terminal float toggle" })
+map("n", "<leader>th", function()
+  Snacks.terminal(nil, { win = { position = "bottom", height = 0.3 } })
+end, { desc = "Terminal horizontal split" })
+map("n", "<leader>tv", function()
+  Snacks.terminal(nil, { win = { position = "right", width = 0.4 } })
+end, { desc = "Terminal vertical split" })
 
--- Kulala
-if is_available("kulala.nvim") then
-  local kulala = require("kulala")
-  wk.add({
-    { "<leader>r", group = "REST", mode = { "n", "v" } },
-    {
-      "<leader>rs",
-      function()
-        kulala.run()
-      end,
-      desc = "Run Request",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>r<CR>",
-      function()
-        kulala.replay()
-      end,
-      desc = "Run last Request",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>re",
-      function()
-        kulala.set_selected_env()
-      end,
-      desc = "Select Environment",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>rx",
-      function()
-        kulala.scripts_clear_global()
-      end,
-      desc = "Clear Globals",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>rf",
-      function()
-        kulala.search()
-      end,
-      desc = "Search Request",
-      mode = { "n", "v" },
-    },
-    {
-      "<leader>ri",
-      function()
-        vim.schedule(function() end)
-        kulala.from_curl()
-      end,
-      desc = "Import cURL from clipboard",
-      mode = { "n", "v" },
-    },
-    { "<leader>rc", "<cmd>KulalaScratchToCurl<CR>", desc = "Copy current request as cURL", mode = { "n", "v" } },
-  })
-end
+-- Formatting & linting
+map("n", "<leader>l", "", { desc = "Format/Lint" })
+map("n", "<leader>lf", function()
+  require("conform").format({ async = true, lsp_format = "fallback" })
+end, { desc = "Format buffer" })
+map("v", "<leader>lf", function()
+  require("conform").format({ async = true, lsp_format = "fallback" })
+end, { desc = "Format selection" })
+map("n", "<leader>ll", function()
+  require("lint").try_lint()
+end, { desc = "Run linter" })
+map("n", "<leader>li", "<cmd>ConformInfo<cr>", { desc = "Conform info" })
 
+-- LSP pickers (snacks.picker)
+map("n", "gd", function()
+  Snacks.picker.lsp_definitions()
+end, { desc = "Goto Definition" })
+map("n", "gD", function()
+  Snacks.picker.lsp_declarations()
+end, { desc = "Goto Declaration" })
+map("n", "gr", function()
+  Snacks.picker.lsp_references()
+end, { desc = "References" })
+map("n", "gI", function()
+  Snacks.picker.lsp_implementations()
+end, { desc = "Goto Implementation" })
+map("n", "gy", function()
+  Snacks.picker.lsp_type_definitions()
+end, { desc = "Goto T[y]pe Definition" })
+map("n", "<leader>ss", function()
+  Snacks.picker.lsp_symbols()
+end, { desc = "LSP Symbols" })
+map("n", "<leader>sS", function()
+  Snacks.picker.lsp_workspace_symbols()
+end, { desc = "LSP Workspace Symbols" })
+
+-- Kulala (REST client)
+map("n", "<leader>r", "", { desc = "REST" })
+map({ "n", "v" }, "<leader>rs", function()
+  require("kulala").run()
+end, { desc = "Run request" })
+map({ "n", "v" }, "<leader>ra", function()
+  require("kulala").run_all()
+end, { desc = "Run all requests" })
+map({ "n", "v" }, "<leader>rr", function()
+  require("kulala").replay()
+end, { desc = "Replay last request" })
+map("n", "<leader>re", function()
+  require("kulala").set_selected_env()
+end, { desc = "Select environment" })
+map("n", "<leader>rf", function()
+  require("kulala").search()
+end, { desc = "Search request" })
+map("n", "<leader>rx", function()
+  require("kulala").scripts_clear_global()
+end, { desc = "Clear globals" })
+map({ "n", "v" }, "<leader>rC", function()
+  require("kulala").from_curl()
+end, { desc = "Import cURL from clipboard" })
+map({ "n", "v" }, "<leader>rc", function()
+  require("kulala").copy()
+end, { desc = "Copy request as cURL" })
+map("n", "<leader>rb", function()
+  require("kulala").scratchpad()
+end, { desc = "Open scratchpad" })
+
+-- Disable <C-l> remap from original config
+map("n", "<C-l>", "<C-l>", { noremap = true })
+
+-- markdown preview
+map("n", "<leader>m", "<Plug>MarkdownPreviewToggle", { desc = "Markdown preview" })

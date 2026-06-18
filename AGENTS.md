@@ -30,13 +30,13 @@ cd ~/dotfiles && stow --target="$HOME/.config/tmux" tmux
 ### Neovim/Lua
 ```bash
 # Format Lua (stylua.toml in nvim/.stylua.toml)
-stylua --config-path nvim/.stylua.toml nvim/lua/
+stylua --config-path nvim/.stylua.toml nvim/
 
 # Syntax check
-luacheck nvim/lua/ 2>/dev/null || echo "luacheck not installed"
+luacheck nvim/ 2>/dev/null || echo "luacheck not installed"
 
-# Test single plugin config
-nvim --headless -c "lua require('core.plugin_config.telescope')" +qa
+# Test config loads
+nvim --headless -u nvim/init.lua -c "echo 'config-loaded'" -c "qa!"
 
 # Health check & plugin update
 nvim --checkhealth
@@ -68,7 +68,7 @@ vim +PluginInstall +qa
 
 ## Code Style Guidelines
 
-### Lua (nvim/lua/)
+### Lua (nvim/)
 - **Indentation**: 2 spaces (configured in `.stylua.toml`)
 - **Naming**: `snake_case` for modules/variables, `camelCase` for API calls
 - **Imports**: Group by: 1) stdlib, 2) local modules, 3) plugins
@@ -112,50 +112,60 @@ vim +PluginInstall +qa
 ### Key Bindings
 - Leader: `<Space>` (`vim.g.mapleader = " "`)
 - Local leader: `,` (`vim.g.maplocalleader = ","`)
-- Define in `core/keymaps.lua`
-- Use `which-key.nvim` for hints
+- Currently defined in `lua/core/options.lua`; add a dedicated `lua/keymaps.lua` module as the config grows
+- Use `which-key.nvim` for hints once registered as a plugin
 
 ### LSP Setup
+> Not active in the minimal config. Re-enable by adding the usual LSP plugins under `lua/plugins/`.
 - **mason.nvim**: Manage LSP servers
 - **nvim-lspconfig**: Configure servers
 - **null-ls.nvim**: Formatters/linters
 - **Diagnostics**: Mode 3 (all visible)
-- Location: `core/plugin_config/lsp/`
+- Typical location: `lua/plugins/lsp.lua`
 
-### File Organization
+### File Organization (minimal lazy.nvim setup)
 ```
 nvim/
-├── init.lua              # Entry point
-├── lua/
-│   ├── config.lua        # Lazy plugin specs
-│   ├── core/
-│   │   ├── options.lua   # Vim options
-│   │   ├── keymaps.lua   # Key bindings
-│   │   ├── autocmds.lua  # Autocommands
-│   │   ├── colorscheme.lua
-│   │   ├── plugin_config/# Plugin configs
-│   │   │   ├── lsp/     # LSP-specific
-│   │   │   └── *.lua    # Individual plugins
-│   │   └── utils/       # Helper functions
-│   └── config.lua       # Plugin definitions
+├── init.lua              # Entry point: loads options, keymaps, then lazy bootstrap
+├── .stylua.toml          # Lua formatter config
+└── lua/
+    ├── config.lua        # Lazy bootstrap + plugin spec setup
+    ├── core/
+    │   ├── options.lua   # Basic Vim options and leader keys
+    │   └── keymaps.lua   # Keymaps mapped to mini.nvim + snacks.nvim
+    └── plugins/
+        ├── mini.lua      # echasnovski/mini.nvim modules
+        ├── snacks.lua    # folke/snacks.nvim modules + keymaps
+        └── *.lua         # Additional plugin categories
+```
+
+Plugins are imported automatically from `lua/plugins/` via `lua/config.lua`:
+```lua
+require("lazy").setup({
+  spec = {
+    { import = "plugins" },
+  },
+  checker = { enabled = true },
+})
 ```
 
 ## Testing Single Components
 
-### Test specific plugin
+### Test full config load
+> Important: `~/.config/nvim` currently points to `~/dotfiles/nvim`. When testing `nvim-mini/nvim`, use a separate `NVIM_APPNAME` and prepend this repo to `runtimepath`:
 ```bash
-nvim --headless -c "lua require('core.plugin_config.lualine')" +qa
+NVIM_APPNAME=nvim-mini-test nvim --headless -u nvim/init.lua --cmd "set runtimepath^=/Users/karelmolina/nvim-mini/nvim" -c "qa!"
 echo "Exit code: $?"
 ```
 
-### Test colorscheme
+### Test a specific plugin spec (after adding plugins)
 ```bash
-nvim --headless -c "lua require('core.colorschemes.tokio')" -c "colorscheme tokyonight" +qa
+nvim --headless -u nvim/init.lua -c "lua require('lazy').load({ plugins = { 'plugin-name' } })" +qa
 ```
 
-### Test utils
+### Test a Lua module
 ```bash
-nvim --headless -c "lua print(require('core.utils').is_available('telescope.nvim'))" +qa
+nvim --headless -u nvim/init.lua -c "lua print(require('plugins.treesitter'))" +qa
 ```
 
 ## Important Notes

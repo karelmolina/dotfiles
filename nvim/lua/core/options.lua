@@ -1,4 +1,6 @@
 -- general
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 vim.cmd([[ set noswapfile ]])
 vim.opt.shortmess:append("I") -- disable startup message
 vim.opt.shortmess:append("c") -- disable completion menu messages
@@ -10,26 +12,6 @@ vim.opt.shortmess:append("W") -- disable file written messages
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
   command = [[%s/\s\+$//e]],
-})
-
--- RAM Optimization: Handle large files
-vim.api.nvim_create_autocmd({ "BufReadPre" }, {
-  pattern = "*",
-  callback = function()
-    local max_filesize = 1024 * 1024 -- 1 MB
-    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(0))
-    if ok and stats and stats.size > max_filesize then
-      -- Disable features for large files
-      vim.opt_local.swapfile = false
-      vim.opt_local.undofile = false
-      vim.opt_local.foldmethod = "manual"
-      vim.opt_local.foldenable = false
-      vim.opt_local.list = false
-      -- Disable LSP for very large files
-      vim.b.large_file = true
-      vim.notify("Large file detected (>1MB): Disabled swap, undo, folding, and LSP", vim.log.levels.WARN)
-    end
-  end,
 })
 
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
@@ -53,10 +35,12 @@ local options = {
     cursorline = true, -- highlight the text line of the cursor
     expandtab = true, -- enable the use of space in tab
     fileencoding = "utf-8", -- file content encoding for the buffer
-    foldenable = true, -- enable fold for nvim-ufo
-    foldlevel = 99, -- set high foldlevel for nvim-ufo
-    foldlevelstart = 99, -- start with all code unfolded
-    foldmethod = "manual",
+    foldenable = true, -- enable folding
+    foldlevel = 99, -- start with all folds open
+    foldlevelstart = 99, -- start with all folds open
+    foldmethod = "expr", -- use treesitter/lsp-based folding
+    foldexpr = "v:lua.vim.treesitter.foldexpr()",
+    foldtext = "", -- show the first line of the fold with syntax highlighting
     foldcolumn = vim.fn.has("nvim-0.9") == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
     hlsearch = true, -- Make line numbers default
     history = 50, -- reduced from 100 to save memory
@@ -77,7 +61,7 @@ local options = {
     splitright = true, -- splitting a new window at the right of the current one
     swapfile = false,
     tabstop = 2, -- number of space in a tab
-    termguicolors = true, -- enable 24-bit RGB color in the TUI
+    -- termguicolors = true, -- enable 24-bit RGB color in the TUI
     timeoutlen = 300, -- shorten key timeout length a little bit for which-key
     undofile = true, -- enable persistent undo
     updatetime = 250, -- length of time to wait before triggering the plugin
@@ -109,6 +93,31 @@ for key, table in pairs(options) do
     vim[key][setting] = value
   end
 end
+
+-- Cleaner fold UI
+vim.opt.fillchars:append({
+  fold = " ",
+  foldopen = "",
+  foldclose = "",
+  foldsep = " ",
+})
+
+-- Custom foldtext: preserve treesitter highlighting and show closing line
+function _G.custom_foldtext()
+  local ok, foldtext = pcall(vim.treesitter.foldtext)
+  if not ok or type(foldtext) ~= "table" then
+    foldtext = { { vim.fn.getline(vim.v.foldstart) } }
+  end
+
+  local end_line = vim.trim(vim.fn.getline(vim.v.foldend))
+  local count = vim.v.foldend - vim.v.foldstart + 1
+  table.insert(foldtext, { " ... ", "Comment" })
+  table.insert(foldtext, { end_line, "Comment" })
+  table.insert(foldtext, { " (" .. count .. " lines)", "Comment" })
+  return foldtext
+end
+
+vim.opt.foldtext = "v:lua.custom_foldtext()"
 
 -- Enable logging
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
