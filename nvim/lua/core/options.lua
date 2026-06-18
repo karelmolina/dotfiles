@@ -35,10 +35,12 @@ local options = {
     cursorline = true, -- highlight the text line of the cursor
     expandtab = true, -- enable the use of space in tab
     fileencoding = "utf-8", -- file content encoding for the buffer
-    foldenable = true, -- enable fold for nvim-ufo
-    foldlevel = 99, -- set high foldlevel for nvim-ufo
-    foldlevelstart = 99, -- start with all code unfolded
-    foldmethod = "manual",
+    foldenable = true, -- enable folding
+    foldlevel = 99, -- start with all folds open
+    foldlevelstart = 99, -- start with all folds open
+    foldmethod = "expr", -- use treesitter/lsp-based folding
+    foldexpr = "v:lua.vim.treesitter.foldexpr()",
+    foldtext = "", -- show the first line of the fold with syntax highlighting
     foldcolumn = vim.fn.has("nvim-0.9") == 1 and "1" or nil, -- show foldcolumn in nvim 0.9
     hlsearch = true, -- Make line numbers default
     history = 50, -- reduced from 100 to save memory
@@ -91,6 +93,14 @@ for key, table in pairs(options) do
     vim[key][setting] = value
   end
 end
+
+-- Cleaner fold UI
+vim.opt.fillchars:append({
+  fold = " ",
+  foldopen = "",
+  foldclose = "",
+  foldsep = " ",
+})
 
 -- Enable logging
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
