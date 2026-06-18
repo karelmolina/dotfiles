@@ -274,3 +274,6 @@ end, { desc = "Open scratchpad" })
 
 -- Disable <C-l> remap from original config
 map("n", "<C-l>", "<C-l>", { noremap = true })
+
+-- markdown preview
+map("n", "<leader>m", "<Plug>MarkdownPreviewToggle", { desc = "Markdown preview" })
