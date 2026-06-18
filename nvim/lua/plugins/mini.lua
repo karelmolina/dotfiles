@@ -21,28 +21,6 @@ return {
       require("mini.operators").setup()
 
       -- Navigation
-      require("mini.files").setup({
-        mappings = {
-          close = "q",
-          go_in = "l",
-          go_in_plus = "L",
-          go_out = "h",
-          go_out_plus = "H",
-          reset = "<BS>",
-          reveal_cwd = "@",
-          show_help = "g?",
-          synchronize = "=",
-          trim_left = "<",
-          trim_right = ">",
-        },
-        windows = {
-          max_number = math.huge,
-          preview = true,
-          width_focus = 30,
-          width_nofocus = 15,
-          width_preview = 40,
-        },
-      })
       require("mini.bracketed").setup()
       require("mini.jump2d").setup()
       require("mini.move").setup({
