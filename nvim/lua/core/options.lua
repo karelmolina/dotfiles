@@ -102,6 +102,23 @@ vim.opt.fillchars:append({
   foldsep = " ",
 })
 
+-- Custom foldtext: preserve treesitter highlighting and show closing line
+function _G.custom_foldtext()
+  local ok, foldtext = pcall(vim.treesitter.foldtext)
+  if not ok or type(foldtext) ~= "table" then
+    foldtext = { { vim.fn.getline(vim.v.foldstart) } }
+  end
+
+  local end_line = vim.trim(vim.fn.getline(vim.v.foldend))
+  local count = vim.v.foldend - vim.v.foldstart + 1
+  table.insert(foldtext, { " ... ", "Comment" })
+  table.insert(foldtext, { end_line, "Comment" })
+  table.insert(foldtext, { " (" .. count .. " lines)", "Comment" })
+  return foldtext
+end
+
+vim.opt.foldtext = "v:lua.custom_foldtext()"
+
 -- Enable logging
 -- vim.api.nvim_set_var('nvim_logfile', '~/nvim.log')
 -- local logFilePath = vim.fn.expand(vim.g.nvim_logfile)
