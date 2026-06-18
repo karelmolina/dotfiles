@@ -84,6 +84,9 @@ return {
             cwd = node.type == "directory" and path or vim.fn.fnamemodify(path, ":h"),
           })
         end,
+        find_git_modified = function(state)
+          Snacks.picker.git_status()
+        end,
       },
       event_handlers = {
         {
@@ -120,6 +123,8 @@ return {
           ["[b"] = "prev_source",
           ["]b"] = "next_source",
           Y = "copy_selector",
+          F = "find_in_dir",
+          g = "find_git_modified",
           h = "parent_or_close",
           l = "child_or_open",
           o = "open",
