@@ -32,6 +32,14 @@
       "sessions": 0,
       "memories": 4,
       "prompts": 0
+    },
+    {
+      "id": "4867a4e7",
+      "created_by": "karelmolina",
+      "created_at": "2026-06-18T19:53:27Z",
+      "sessions": 1,
+      "memories": 33,
+      "prompts": 0
     }
   ]
 }
