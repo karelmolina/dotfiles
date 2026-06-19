@@ -22,7 +22,12 @@ return {
 
       -- Navigation
       require("mini.bracketed").setup()
-      require("mini.jump2d").setup()
+      require("mini.jump2d").setup({
+        mappings = {
+          -- Avoid shadowing <CR> in neo-tree and other interfaces.
+          start_jumping = "<leader>J",
+        },
+      })
       require("mini.move").setup({
         mappings = {
           left = "",

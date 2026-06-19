@@ -93,6 +93,9 @@ return {
           event = "neo_tree_buffer_enter",
           handler = function(_)
             vim.opt_local.signcolumn = "auto"
+            -- Disable mini.jump2d labels inside neo-tree so they don't
+            -- interfere with navigation and opening files.
+            vim.b.minijump2d_disable = true
           end,
         },
         {
@@ -135,12 +138,14 @@ return {
       require("neo-tree").setup(opts)
 
       -- Open neo-tree when Neovim starts on a directory (e.g. `nvim .`)
+      -- Use toggle = false so the first <CR> on a file opens it instead of
+      -- toggling the tree closed again.
       vim.api.nvim_create_autocmd("VimEnter", {
         desc = "Open neo-tree when starting on a directory",
         callback = function()
           local arg = vim.fn.argv(0)
           if arg and vim.fn.isdirectory(arg) == 1 then
-            require("neo-tree.command").execute({ toggle = true, dir = arg })
+            require("neo-tree.command").execute({ toggle = false, dir = arg })
           end
         end,
         once = true,
