@@ -21,6 +21,12 @@ return {
     lazy = false,
     opts = {
       ensure_installed = {
+        -- LSP servers
+        "typescript-language-server",
+        "gopls",
+        "intelephense",
+        "ruby-lsp",
+
         -- Formatters
         "stylua",
         "prettierd",
