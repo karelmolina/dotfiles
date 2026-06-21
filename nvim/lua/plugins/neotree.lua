@@ -7,7 +7,6 @@ return {
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
     },
-    cmd = "Neotree",
     opts = {
       auto_clean_after_session_restore = true,
       close_if_last_window = false,
@@ -101,7 +100,16 @@ return {
         {
           event = "file_opened",
           handler = function(file_path)
-            require("neo-tree.command").execute({ action = "close" })
+            -- Close neo-tree only if it's still visible in a sidebar window.
+            -- When neo-tree was opened full-window on startup, the file buffer
+            -- replaces it, so there's nothing to close.
+            for _, win in ipairs(vim.api.nvim_list_wins()) do
+              local bufname = vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win))
+              if bufname:match("neo%-tree") then
+                require("neo-tree.command").execute({ action = "close" })
+                return
+              end
+            end
           end,
         },
       },
@@ -137,15 +145,19 @@ return {
     config = function(_, opts)
       require("neo-tree").setup(opts)
 
-      -- Open neo-tree when Neovim starts on a directory (e.g. `nvim .`)
-      -- Use toggle = false so the first <CR> on a file opens it instead of
-      -- toggling the tree closed again.
+      -- Open neo-tree when Neovim starts on a directory (e.g. `nvim .`).
+      -- Use `position = "current"` so it replaces the empty buffer created for
+      -- the directory argument; selecting a file will then replace neo-tree.
       vim.api.nvim_create_autocmd("VimEnter", {
         desc = "Open neo-tree when starting on a directory",
         callback = function()
           local arg = vim.fn.argv(0)
           if arg and vim.fn.isdirectory(arg) == 1 then
-            require("neo-tree.command").execute({ toggle = false, dir = arg })
+            require("neo-tree.command").execute({
+              toggle = false,
+              dir = arg,
+              position = "current",
+            })
           end
         end,
         once = true,
