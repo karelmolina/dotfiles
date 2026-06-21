@@ -1,0 +1,193 @@
+# Amethyst configuration inspired by the aerospace setup in this dotfiles repo.
+# Docs: https://github.com/ianyh/Amethyst/blob/development/docs/configuration-files.md
+# Place at ~/.config/amethyst/amethyst.yml (or ~/.amethyst.yml).
+
+# Layouts to cycle through. Order matters.
+layouts:
+  - tall
+  - wide
+  - fullscreen
+  - column
+  - bsp
+  - two-pane
+  - 3column-left
+
+# Modifier keys - mirror the aerospace Ctrl+Alt bindings.
+# mod1  -> ctrl + alt       (option + control on macOS)
+# mod2  -> ctrl + alt + shift
+mod1:
+  - option
+  - control
+
+mod2:
+  - option
+  - control
+  - shift
+
+# ─────────────────────────────────────────────────────────────
+# GENERAL OPTIONS
+# ─────────────────────────────────────────────────────────────
+
+# Gaps and padding (matches aerospace gaps)
+window-margins: true
+window-margin-size: 10
+
+screen-padding-left: 10
+screen-padding-right: 10
+screen-padding-top: 44    # leave room for sketchybar / menu bar
+screen-padding-bottom: 10
+
+# Mouse follows focus when changing monitors/windows
+mouse-follows-focus: true
+focus-follows-mouse: false
+
+# Disable mouse-driven window changes by default
+mouse-swaps-windows: false
+mouse-resizes-windows: false
+
+# Window behavior
+float-small-windows: true
+small-window-size: 500
+window-minimum-width: 0
+window-minimum-height: 0
+window-max-count: 0
+window-resize-step: 5
+new-windows-to-main: false
+follow-space-thrown-windows: true
+restore-layouts-on-launch: true
+
+# Floating apps (blacklist mode)
+floating-is-blacklist: true
+floating:
+  - com.apple.finder
+
+# HUD
+enables-layout-hud: true
+enables-layout-hud-on-space-change: true
+enables-window-count-hud: false
+debug-layout-info: false
+
+# Menu bar / status bar
+hide-menu-bar-icon: false
+ignore-menu-bar: false
+disable-padding-on-builtin-display: false
+
+# ─────────────────────────────────────────────────────────────
+# COMMANDS
+# ─────────────────────────────────────────────────────────────
+
+# Layout cycling
+cycle-layout:
+  mod: mod1
+  key: space
+
+cycle-layout-backward:
+  mod: mod2
+  key: space
+
+# Direct layout selection
+select-tall-layout:
+  mod: mod1
+  key: a
+
+select-wide-layout:
+  mod: mod1
+  key: s
+
+select-fullscreen-layout:
+  mod: mod1
+  key: f
+
+select-column-layout:
+  mod: mod1
+  key: d
+
+# Focus movement (Amethyst uses clockwise/counter-clockwise, not directional)
+focus-ccw:
+  mod: mod1
+  key: j
+
+focus-cw:
+  mod: mod1
+  key: k
+
+focus-main:
+  mod: mod1
+  key: m
+
+# Move / swap windows
+swap-ccw:
+  mod: mod2
+  key: j
+
+swap-cw:
+  mod: mod2
+  key: k
+
+swap-main:
+  mod: mod2
+  key: enter
+
+# Main pane resizing
+shrink-main:
+  mod: mod1
+  key: h
+
+expand-main:
+  mod: mod1
+  key: l
+
+increase-main:
+  mod: mod1
+  key: comma
+
+decrease-main:
+  mod: mod1
+  key: period
+
+# Screen / monitor navigation
+focus-screen-ccw:
+  mod: mod1
+  key: p
+
+focus-screen-cw:
+  mod: mod1
+  key: n
+
+swap-screen-ccw:
+  mod: mod2
+  key: h
+
+swap-screen-cw:
+  mod: mod2
+  key: l
+
+# Spaces (macOS native)
+throw-space-left:
+  mod: mod2
+  key: left
+
+throw-space-right:
+  mod: mod2
+  key: right
+
+# Window state
+toggle-float:
+  mod: mod1
+  key: t
+
+toggle-tiling:
+  mod: mod2
+  key: t
+
+reevaluate-windows:
+  mod: mod1
+  key: z
+
+display-current-layout:
+  mod: mod1
+  key: i
+
+relaunch-amethyst:
+  mod: mod2
+  key: z

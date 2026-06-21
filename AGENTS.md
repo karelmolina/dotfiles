@@ -11,7 +11,7 @@ Personal dotfiles for:
 - **Zsh** (`zsh/`) - Shell aliases and functions
 - **Terminal emulators** (`kitty/`, `wezterm/`, `ghostty/`) - Terminal configs
 - **Dev tools** (`mise/`, `btop/`, `lazygit/`, `atuin/`) - Tool configs
-- **macOS tools** (`aerospace/`, `karabiner/`, `sketchybar/`) - macOS-specific configs
+- **macOS tools** (`aerospace/`, `amethyst/`, `karabiner/`, `sketchybar/`) - macOS-specific configs
 - **Utils** (`utils/`) - Utility scripts and templates
 - **Wallpapers** (`wallpapers/`) - Desktop backgrounds
 
