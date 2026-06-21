@@ -146,3 +146,40 @@ function vpnlogs() {
   local idx=$REPLY
   openvpn3 log --session-path "${session_paths[$idx]}"
 }
+
+# Launch lazysql with its local .env loaded (if present)
+function lazysql() {
+  local config_dir="${HOME}/.config/lazysql"
+  local env_file="${config_dir}/.env"
+  local config_file="${config_dir}/config.toml"
+
+  if [[ -f "$env_file" ]]; then
+    source "$env_file"
+  else
+    echo "lazysql: no .env found at $env_file" >&2
+    echo "lazysql: run: cp ~/dotfiles/lazysql/.env.example ~/.config/lazysql/.env" >&2
+  fi
+
+  command lazysql -config "$config_file" "$@"
+}
+
+function git-cliff() {
+  local config_dir="${HOME}/.config/git-cliff"
+  local env_file="${config_dir}/.env"
+
+  if [[ -f "$env_file" ]]; then
+    set -a
+    source "$env_file"
+    set +a
+  else
+    echo "git-cliff: no .env found at $env_file" >&2
+    echo "git-cliff: run: cp ~/dotfiles/git-cliff/.env.example ~/.config/git-cliff/.env" >&2
+  fi
+
+  if ! command -v git-cliff >/dev/null 2>&1; then
+    echo "git-cliff: command not found" >&2
+    return 1
+  fi
+
+  command git-cliff "$@"
+}
