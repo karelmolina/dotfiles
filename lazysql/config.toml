@@ -1,0 +1,22 @@
+# LazySQL configuration
+# Docs: https://github.com/jorgerojas26/lazysql
+#
+# Sensitive values are read from environment variables via ${env:VAR_NAME}.
+# Copy lazysql/.env.example -> lazysql/.env, fill it in, then either:
+#   - run: source lazysql/.env && lazysql
+#   - or use direnv / a shell alias that sources the .env before launching lazysql
+
+[[database]]
+Name = 'MariaDB via SSH'
+Provider = 'mysql'
+DBName = '${env:LAZYSQL_MARIADB_DB_NAME}'
+URL = 'mysql://${env:LAZYSQL_MARIADB_DB_USER}:${env:LAZYSQL_MARIADB_DB_PASSWORD}@localhost:${port}/${env:LAZYSQL_MARIADB_DB_NAME}?tls=false'
+Commands = [
+  { Command = 'ssh -i ${env:LAZYSQL_MARIADB_SSH_KEY} -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=60 -o ServerAliveCountMax=3 -o LogLevel=ERROR -N ${env:LAZYSQL_MARIADB_SSH_USER}@${env:LAZYSQL_MARIADB_SSH_HOST} -L ${port}:localhost:3306',WaitForPort = '${port}', Timeout = 60 },
+]
+
+[[database]]
+Name = 'Localhost Horus'
+Provider = 'mysql'
+DBName = 'horus'
+URL = 'mysql://sail:password@localhost:3306/horus?tls=false'

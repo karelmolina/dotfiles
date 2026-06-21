@@ -16,3 +16,7 @@ nvim/*_path.json
 
 karabiner/*
 !karabiner/karabiner.json
+
+# Local environment secrets
+.env
+lazysql/.env
