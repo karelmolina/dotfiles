@@ -126,17 +126,24 @@ vim +PluginInstall +qa
 ### File Organization (minimal lazy.nvim setup)
 ```
 nvim/
-├── init.lua              # Entry point: loads options, keymaps, then lazy bootstrap
+├── init.lua              # Entry point: loads options, keymaps, lazy bootstrap, then colorscheme
 ├── .stylua.toml          # Lua formatter config
 └── lua/
     ├── config.lua        # Lazy bootstrap + plugin spec setup
     ├── core/
     │   ├── options.lua   # Basic Vim options and leader keys
-    │   └── keymaps.lua   # Keymaps mapped to mini.nvim + snacks.nvim
+    │   ├── keymaps.lua   # Keymaps mapped to mini.nvim + snacks.nvim
+    │   ├── colorscheme.lua          # Applies the selected colorscheme
+    │   └── colorschemes/            # Per-theme setup files
+    │       ├── init.lua
+    │       ├── cyberdream.lua
+    │       ├── kanagawa.lua
+    │       └── tokio.lua
     └── plugins/
-        ├── mini.lua      # echasnovski/mini.nvim modules
-        ├── snacks.lua    # folke/snacks.nvim modules + keymaps
-        └── *.lua         # Additional plugin categories
+        ├── colorscheme.lua          # Colorscheme plugin specs
+        ├── mini.lua                 # echasnovski/mini.nvim modules
+        ├── snacks.lua               # folke/snacks.nvim modules + keymaps
+        └── *.lua                    # Additional plugin categories
 ```
 
 Plugins are imported automatically from `lua/plugins/` via `lua/config.lua`:
@@ -148,6 +155,11 @@ require("lazy").setup({
   checker = { enabled = true },
 })
 ```
+
+### Colorscheme Selection
+- Default colorscheme is `cyberdream`
+- Set the `theme` environment variable to switch: `theme=kanagawa nvim` or `theme=tokyonight nvim`
+- Available themes: `cyberdream`, `kanagawa`, `tokyonight`
 
 ## Testing Single Components
 
