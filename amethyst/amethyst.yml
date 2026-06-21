@@ -34,7 +34,7 @@ window-margin-size: 10
 
 screen-padding-left: 10
 screen-padding-right: 10
-screen-padding-top: 44    # leave room for sketchybar / menu bar
+screen-padding-top: 0
 screen-padding-bottom: 10
 
 # Mouse follows focus when changing monitors/windows
