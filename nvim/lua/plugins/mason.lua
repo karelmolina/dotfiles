@@ -29,7 +29,7 @@ return {
         "golines",
         "pint",
         "blade-formatter",
-        "dart_format",
+        -- "dart_format" is not a Mason package; it ships with the Dart SDK (dart format)
         -- "rubocop", -- fails to install; install manually with `:MasonInstall rubocop` and check the error
         "shfmt",
 
