@@ -230,3 +230,4 @@ nvim --headless -u nvim/init.lua -c "lua print(require('plugins.treesitter'))" +
 - Keep `.stylua.toml` in sync with indentation settings
 - Update `install` script when adding new dependencies
 - Update `registry.toml` when adding, removing, or changing the active status of a config
+- **Apps that overwrite config files in-place** (e.g., Karabiner-Elements writing to `~/.config/karabiner/karabiner.json`) can break stow symlinks. `scripts/common.sh` now runs `repair_stow_symlinks()` after each `stow_config()` call to detect and repair these cases automatically

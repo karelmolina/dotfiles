@@ -87,6 +87,62 @@ stow_config() {
     echo_info "Stowing $pkg to $target..."
     (cd "$DOTFILES_DIR" && stow --target="$target" "$pkg")
     echo_success "Stowed: $pkg"
+
+    repair_stow_symlinks "$pkg" "$target"
+}
+
+# Validate and repair symlinks created by stow.
+#
+# Some applications (e.g., Karabiner-Elements) write config changes directly to
+# the file path, which replaces stow's symlink with a regular file. Subsequent
+# stow runs do not repair this because stow refuses to overwrite existing files.
+# This function detects such breakage and restores the symlink.
+#
+# Usage: repair_stow_symlinks <package> [target]
+repair_stow_symlinks() {
+    local pkg="$1"
+    local target="${2:-$HOME/.config/$pkg}"
+    local src_dir="$DOTFILES_DIR/$pkg"
+    local repaired=0
+
+    if [ ! -d "$src_dir" ]; then
+        return 0
+    fi
+
+    while IFS= read -r -d '' src_item; do
+        local rel_path="${src_item#"$src_dir"/}"
+        local target_item="$target/$rel_path"
+
+        # Target does not exist; nothing to validate.
+        [ -e "$target_item" ] || [ -L "$target_item" ] || continue
+
+        # If target resolves to the source item (directly or through a
+        # symlinked ancestor), it's correctly linked.
+        local actual expected
+        actual=$(realpath "$target_item" 2>/dev/null)
+        expected=$(realpath "$src_item" 2>/dev/null)
+        if [ -n "$actual" ] && [ -n "$expected" ] && [ "$actual" = "$expected" ]; then
+            continue
+        fi
+
+        # For non-symlinked directories, recurse via find instead of replacing
+        # the whole directory (it may contain mixed stowed/non-stowed contents).
+        if [ -d "$target_item" ]; then
+            continue
+        fi
+
+        local backup_name
+        backup_name="$target_item.backup.$(date +%Y%m%d%H%M%S)"
+        echo_warn "Stow symlink broken: $target_item is not linked to $pkg/$rel_path; backing up and repairing"
+        rm -rf "$backup_name" 2>/dev/null || true
+        mv "$target_item" "$backup_name"
+        ln -sfn "$src_item" "$target_item"
+        repaired=$((repaired + 1))
+    done < <(find "$src_dir" -mindepth 1 -print0)
+
+    if [ $repaired -gt 0 ]; then
+        echo_success "Repaired $repaired broken symlink(s) for $pkg"
+    fi
 }
 
 # Link zsh custom files directly into oh-my-zsh/custom (not via stow)

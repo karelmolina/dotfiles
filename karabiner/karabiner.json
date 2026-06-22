@@ -1,7 +1,7 @@
 {
   "profiles": [
     {
-      "name": "Default profile",
+      "name": "Macos",
       "selected": true,
       "complex_modifications": {
         "rules": [
