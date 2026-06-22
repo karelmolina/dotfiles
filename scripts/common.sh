@@ -180,3 +180,154 @@ is_popos() {
   fi
   return 1
 }
+
+# ============================================
+# Registry helpers (registry.toml)
+# ============================================
+
+REGISTRY_FILE="${DOTFILES_DIR}/registry.toml"
+
+# Ensure the registry file exists
+registry_ensure() {
+  if [ ! -f "$REGISTRY_FILE" ]; then
+    echo_error "Registry file not found: $REGISTRY_FILE"
+    return 1
+  fi
+}
+
+# Extract a simple quoted value for a key within a package section.
+# Usage: _registry_value <package> <key>
+_registry_value() {
+  local pkg="$1"
+  local key="$2"
+
+  awk -v pkg="$pkg" -v key="$key" '
+    /^\[.*\]$/ {
+      gsub(/^\[|\]$/, "", $0)
+      current = $0
+      next
+    }
+    current == pkg {
+      line = $0
+      sub(/^[ \t]+/, "", line)
+      if (line ~ "^" key "[ \t]*=") {
+        sub(/^[^=]+=[ \t]*/, "", line)
+        gsub(/^"|"$/, "", line)
+        print line
+        exit
+      }
+    }
+  ' "$REGISTRY_FILE"
+}
+
+# Get the status of a package for a given OS
+# Usage: registry_status <package> <os>
+registry_status() {
+  local pkg="$1"
+  local os="$2"
+
+  registry_ensure || return 1
+  _registry_value "$pkg" "$os"
+}
+
+# Get the install method of a package (stow, link, custom, none)
+# Usage: registry_method <package>
+registry_method() {
+  local pkg="$1"
+
+  registry_ensure || return 1
+  _registry_value "$pkg" "method"
+}
+
+# Get the link target of a package (only for method=link)
+# Usage: registry_target <package>
+registry_target() {
+  local pkg="$1"
+
+  registry_ensure || return 1
+  _registry_value "$pkg" "target"
+}
+
+# List all packages marked active for a given OS
+# Usage: registry_list_active <os>
+registry_list_active() {
+  local os="$1"
+
+  registry_ensure || return 1
+
+  awk -v os="$os" '
+    /^\[.*\]$/ {
+      gsub(/^\[|\]$/, "", $0)
+      current = $0
+      next
+    }
+    current != "" && current != "meta" {
+      line = $0
+      sub(/^[ \t]+/, "", line)
+      if (line ~ "^" os "[ \t]*=[ \t]*\"active\"") {
+        print current
+        current = ""
+      }
+    }
+  ' "$REGISTRY_FILE"
+}
+
+# Stow or link all active packages for the current OS
+# Usage: stow_active_configs <os>
+stow_active_configs() {
+  local os="$1"
+
+  echo_info "Synchronizing active configurations for $os..."
+
+  if [ "${DRY_RUN:-false}" = true ]; then
+    echo_info "[DRY RUN] Would synchronize active configurations for $os"
+    return 0
+  fi
+
+  local active_pkgs
+  active_pkgs=$(registry_list_active "$os") || return 1
+
+  for pkg in $active_pkgs; do
+    local method
+    method=$(registry_method "$pkg")
+    method=${method:-stow}
+
+    case "$pkg" in
+      zsh)
+        echo_info "Skipping $pkg (handled by shell setup)"
+        ;;
+      wallpapers)
+        echo_info "Skipping $pkg (manual copy)"
+        ;;
+      bin)
+        echo_info "Linking $pkg scripts..."
+        mkdir -p "$HOME/.local/bin"
+        for script in "$DOTFILES_DIR/bin"/*; do
+          [ -e "$script" ] || continue
+          local basename
+          basename=$(basename "$script")
+          ln -sf "$script" "$HOME/.local/bin/$basename"
+        done
+        echo_success "Linked: bin -> $HOME/.local/bin"
+        ;;
+      *)
+        if [ "$method" = "link" ]; then
+          local target
+          target=$(registry_target "$pkg")
+          target="${target/\$HOME/$HOME}"
+          if [ -z "$target" ]; then
+            echo_error "No target configured for $pkg"
+            continue
+          fi
+          mkdir -p "$(dirname "$target")"
+          ln -sf "$DOTFILES_DIR/$pkg" "$target"
+          echo_success "Linked: $pkg -> $target"
+        elif [ "$method" = "stow" ]; then
+          stow_config "$pkg"
+        else
+          echo_info "Skipping $pkg (method=$method)"
+        fi
+        ;;
+    esac
+  done
+}

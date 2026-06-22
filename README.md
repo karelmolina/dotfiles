@@ -1,6 +1,6 @@
 # Dotfiles Repository
 
-Personal dotfiles for a modern, productive Linux development environment. Optimized for Fedora with automated installation and comprehensive tool configuration.
+Personal dotfiles for a modern, productive development environment. Optimized for macOS and Omarchy Linux with automated installation and comprehensive tool configuration.
 
 ## Overview
 
@@ -8,14 +8,13 @@ This repository contains configuration files and installation scripts for:
 - **Terminal Emulators**: Kitty, Ghostty, WezTerm
 - **Editors**: Neovim (Lua-based), Vim
 - **Shell**: Zsh with Oh-My-Zsh, Starship prompt
-- **Tools**: Tmux, btop, yazi, lazygit, lazydocker
-- **Version Management**: mise (formerly rtx) for Go, Node.js
-- **AI Assistant**: Opencode with Gentleman AI + personal dotfiles overlay
-- **IDE**: Cursor with portable SDD configuration
+- **Tools**: btop, lazygit, lazysql, Atuin
+- **Version Management**: mise for Go, Node.js
+- **Workflow**: SDD (Spec-Driven Development) with Gentleman AI, configured per-project
 
 ## Quick Start
 
-### Fedora (Primary)
+### macOS
 
 ```bash
 # Clone and install
@@ -42,20 +41,23 @@ cd ~/dotfiles
 
 ### Core Applications
 
-| Tool | Purpose | Config Location |
-|------|---------|-----------------|
-| **Neovim** | Modern Vim editor | `nvim/` |
-| **Vim** | Legacy Vim config | `vim/` |
-| **Tmux** | Terminal multiplexer | `tmux/` |
-| **Zsh** | Shell with aliases & functions | `zsh/` |
-| **Kitty** | GPU-accelerated terminal | `kitty/` |
-| **Ghostty** | Fast native terminal | `ghostty/` |
-| **WezTerm** | Cross-platform terminal | `wezterm/` |
-| **btop** | Resource monitor (RAM-focused) | `btop/` |
-| **yazi** | Terminal file manager | `yazi/` |
-| **mise** | Version manager (Go, Node) | `mise/` |
-| **Atuin** | Shell history sync & search | `atuin/` |
-| **Opencode** | AI assistant with dotfiles overlay | `opencode/` |
+| Tool | Purpose | Config Location | Status |
+|------|---------|-----------------|--------|
+| **Neovim** | Modern Vim editor | `nvim/` | Active |
+| **Vim** | Legacy Vim config | `vim/` | Inactive |
+| **Zsh** | Shell with aliases & functions | `zsh/` | Active |
+| **Kitty** | GPU-accelerated terminal | `kitty/` | Active |
+| **Ghostty** | Fast native terminal | `ghostty/` | Active |
+| **WezTerm** | Cross-platform terminal | `wezterm/` | Active |
+| **btop** | Resource monitor (RAM-focused) | `btop/` | Active |
+| **mise** | Version manager (Go, Node) | `mise/` | Active |
+| **Atuin** | Shell history sync & search | `atuin/` | Active |
+| **lazygit** | Terminal UI for git | `lazygit/` | Active |
+| **lazysql** | Terminal SQL client | `lazysql/` | Active |
+| **amethyst** | Tiling window manager (macOS) | `amethyst/` | Active |
+| **aerospace** | Tiling window manager (macOS) | `aerospace/` | Inactive |
+| **sketchybar** | Custom macOS status bar | `sketchybar/` | Inactive |
+| **Tmux** | Terminal multiplexer | `tmux/` | Inactive |
 
 ### Key Features
 
@@ -81,21 +83,21 @@ cd ~/dotfiles
 
 ### Prerequisites
 
-- **Fedora**: Version 43+ (primary target)
+- **macOS**: With Homebrew installed (or let the installer install it)
 - **Omarchy Linux**: Any version (complementary tools)
 - Git, curl
 - Internet connection for package downloads
 
-### Fedora Automated Install
+### Automated Install
 
 ```bash
 ./install
 ```
 
 This will:
-1. Detect your OS (currently Fedora supported)
-2. Install all packages via dnf/flatpak
-3. Stow configuration files to `~/.config/`
+1. Detect your OS (currently macOS or Omarchy Linux supported)
+2. Install packages via Homebrew (macOS) or system package manager (Omarchy)
+3. Stow or link active configuration files to `~/.config/`
 4. Set up shell configuration
 
 ### Omarchy Linux Installation
@@ -124,32 +126,11 @@ tools without modifying Omarchy's opinionated defaults:
 - Neovim configuration (dotfiles nvim)
 - Zsh enhancements (oh-my-zsh, starship, atuin)
 - Kitty terminal configuration
-- Development tools (opencode, vicinae installers)
 
 **What Omarchy already provides (skipped):**
-- Terminal emulator (Omarchy uses specific terminal)
 - Window manager configuration
 - System utilities
 - Base fonts
-
-### Manual Component Setup
-
-```bash
-# Neovim
-ln -s ~/dotfiles/nvim ~/.config/nvim
-
-# Vim
-ln -s ~/dotfiles/vim/vimrc ~/.vimrc
-
-# Zsh
-ln -s ~/dotfiles/zsh/zshrc ~/.zshrc
-
-# Opencode (overlay sobre gentle-ai)
-~/dotfiles/scripts/opencode-sync.sh
-
-# Individual tools
-stow -d ~/dotfiles -t ~/.config btop
-```
 
 ## Configuration Details
 
@@ -202,225 +183,13 @@ Magical shell history with sync, search, and smart filtering:
 - `Enter` - Execute selected command immediately
 - `Tab` - Edit selected command before executing
 
-**Installation**:
-```bash
-# Via stow
-stow -d ~/dotfiles -t ~/.config atuin
+### SDD Workflow
 
-# Or symlink
-ln -s ~/dotfiles/atuin ~/.config/atuin
-```
+These dotfiles are designed to work with **Spec-Driven Development (SDD)** via [Gentleman AI](https://github.com/Gentleman-Programming/gentle-ai).
 
-### Opencode AI Assistant with Gentleman AI + Dotfiles Overlay
+SDD means planning first: proposal → specs → design → tasks → implementation → verification. Structured, verifiable, repeatable.
 
-Configuration for [Opencode](https://opencode.ai) AI assistant powered by [Gentleman AI](https://github.com/Gentleman-Programming/gentle-ai) with **Spec-Driven Development (SDD)** workflow.
-
-**What is SDD?** Instead of "vibe coding" and hoping for the best, you plan first: proposal → specs → design → tasks → implementation → verification. Structured, verifiable, repeatable.
-
-**The Overlay Pattern:** Gentleman AI instala la configuración base en `~/.config/opencode/`. Este dotfiles repo añade tus **personalizaciones** encima sin tocar el base.
-
-#### Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  ORCHESTRATOR (Opencode main agent)                         │
-│  • Detects when SDD is needed                               │
-│  • Launches sub-agents via Task tool                        │
-│  • Tracks state between phases                              │
-└──────────────┬──────────────────────────────────────────────┘
-               │
-    ┌──────────┴──────────────────────────────────────────┐
-    │                                                      │
-    ▼          ▼          ▼         ▼         ▼           ▼
-┌────────┐┌────────┐┌────────┐┌────────┐┌────────┐┌────────┐
-│EXPLORE ││PROPOSE ││  SPEC  ││ DESIGN ││ TASKS  ││ APPLY  │
-└────────┘└────────┘└────────┘└────────┘└────────┘└────────┘
-```
-
-#### Available Commands
-
-| Command | What It Does |
-|---------|--------------|
-| `/sdd-init` | Initialize SDD context in current project |
-| `/sdd-explore <topic>` | Investigate an idea, compare approaches |
-| `/sdd-new <name>` | Start a new change (explore + proposal) |
-| `/sdd-continue` | Run next dependency-ready phase |
-| `/sdd-ff <name>` | Fast-forward: proposal → specs → design → tasks |
-| `/sdd-apply` | Implement tasks in batches |
-| `/sdd-verify` | Validate implementation against specs |
-| `/sdd-archive` | Close change and persist final state |
-
-#### Setup
-
-**1. Install Gentleman AI (base configuration):**
-
-```bash
-# macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
-
-# Or via Homebrew
-brew tap Gentleman-Programming/homebrew-tap
-brew install gentle-ai
-```
-
-**2. Apply your dotfiles overlay:**
-
-```bash
-# Sync your personalizations onto the base config
-~/dotfiles/scripts/opencode-sync.sh
-
-# Or from the dotfiles directory
-./scripts/opencode-sync.sh
-```
-
-**3. After every gentle-ai update, re-sync:**
-
-```bash
-gentle-ai sync          # Updates base config
-~/dotfiles/scripts/opencode-sync.sh  # Re-applies your overlay
-```
-
-#### Overlay Structure
-
-```
-dotfiles/opencode/
-├── overlay.json          # Overrides de configuración (merge con opencode.json)
-├── skills/               # Tus skills personalizados (se añaden a los de gentle-ai)
-│   └── mi-skill/
-│       └── SKILL.md
-├── agents/               # Tus agentes personalizados
-│   └── mi-agente.md
-└── AGENTS.md             # Reglas adicionales (se concatenan al existente)
-```
-
-#### What Gets Merged
-
-| Component | Base (gentle-ai) | Overlay (dotfiles) | Result |
-|-----------|------------------|-------------------|---------|
-| `opencode.json` | Gentleman AI config | `overlay.json` | Deep merge |
-| `skills/` | SDD skills + extras | Your skills | Union (overlay wins on conflict) |
-| `AGENTS.md` | Gentleman rules | Your rules | Concatenated |
-| `commands/` | SDD commands | - | Kept as-is |
-
-#### Sync Script Features
-
-```bash
-# Normal sync
-~/dotfiles/scripts/opencode-sync.sh
-
-# Preview changes without applying
-~/dotfiles/scripts/opencode-sync.sh --dry-run
-
-# Restore from latest backup
-~/dotfiles/scripts/opencode-sync.sh --restore
-```
-
-**Features:**
-- **Automatic backups** before any modification
-- **Idempotent** - puedes correrlo múltiples veces
-- **Deep merge** de JSON con `jq`
-- **Skill override** - tus skills con mismo nombre sobreescriben los del base
-- **AGENTS.md append** - tus reglas se añaden al final
-
-#### Example: Adding a Custom Skill
-
-**1. Create skill directory:**
-```bash
-mkdir -p ~/dotfiles/opencode/skills/mi-skill
-```
-
-**2. Write skill instructions:**
-```bash
-cat > ~/dotfiles/opencode/skills/mi-skill/SKILL.md << 'EOF'
-# mi-skill
-
-Trigger: When user asks about X
-
-## Instructions
-1. Do this
-2. Then that
-EOF
-```
-
-**3. Sync:**
-```bash
-~/dotfiles/scripts/opencode-sync.sh
-```
-
-**4. Use in opencode:**
-El skill aparecerá automáticamente en la lista de skills disponibles.
-
-#### Example: Custom Configuration Override
-
-**`~/dotfiles/opencode/overlay.json`:**
-```json
-{
-  "mcp": {
-    "mi-mcp": {
-      "type": "local",
-      "command": ["/usr/local/bin/mi-mcp"]
-    }
-  },
-  "permission": {
-    "bash": {
-      "git push": "allow"
-    }
-  }
-}
-```
-
-#### Example Workflow
-
-```
-You: /sdd-new add-dark-mode
-
-AI:  Analyzing codebase... React + Tailwind detected.
-     ✓ proposal.md created
-       Intent: Add dark mode toggle
-       Scope: Theme context, toggle component, CSS variables
-
-You: /sdd-continue
-
-AI:  ✓ specs/ui/spec.md — 3 requirements, 7 scenarios
-     ✓ design.md — CSS variables approach
-     ✓ tasks.md — 3 phases, 8 tasks
-
-You: /sdd-apply
-
-AI:  Phase 1 complete (3/8 tasks)
-     Continue with Phase 2?
-```
-
-**Credits:** SDD workflow by [Gentleman Programming](https://github.com/Gentleman-Programming/gentle-ai). Overlay pattern for dotfiles integration.
-
-### Cursor IDE Configuration
-
-Portable Cursor IDE configuration with SDD workflow support:
-
-| Component | Purpose | Location |
-|-----------|---------|----------|
-| **cursor.json** | Main config (MCP, permissions) | `cursor/cursor.json` |
-| **cursorrules** | Agent personality & rules | `cursor/cursorrules.template` |
-| **agents/** | SDD orchestrator agent | `cursor/agents/` |
-| **commands/** | 8 SDD commands | `cursor/commands/` |
-| **skills/** | 10 SDD skills documentation | `cursor/skills/` |
-
-**Setup in any project:**
-```bash
-# Quick setup with auto-detection
-~/dotfiles/scripts/cursor-setup.sh
-
-# Or manual setup
-ln -s ~/dotfiles/cursor ~/.cursor
-cp ~/dotfiles/cursor/cursorrules.template .cursorrules
-# Edit .cursorrules with project-specific context
-```
-
-**Features:**
-- Same mentoring personality as Opencode (Senior Architect, Rioplatense Spanish)
-- Full SDD workflow: `sdd new`, `sdd ff`, `sdd apply`, etc.
-- Engram MCP integration for persistent memory
-- Security-focused permissions (denies access to secrets/env files)
+Gentleman AI / Opencode / Cursor settings are now configured **per-project**, not globally in this repo.
 
 ## Customization
 
@@ -429,19 +198,16 @@ All configurations are extensively commented. Key files:
 - `zsh/zshrc` - Shell configuration
 - `btop/btop.conf` - System monitor layout
 - `mise/config.toml` - Version management
-- `opencode/overlay.json` - Opencode configuration overrides
-- `opencode/skills/` - Custom AI skills
+- `registry.toml` - Active/inactive config status per OS
 
 ## Supported Platforms
 
 | OS | Status | Installer |
 |----|--------|-----------|
-| **Fedora 43+** | Fully supported | `./install` |
-| **Omarchy Linux** | Fully supported | `./scripts/omarchy.sh` |
-| Ubuntu | Planned | - |
-| Debian | Planned | - |
-| Arch | Planned | - |
-| macOS | Planned | - |
+| **macOS** | Fully supported | `./install` |
+| **Omarchy Linux** | Fully supported | `./install` or `./scripts/omarchy.sh` |
+
+Configurations are tracked in `registry.toml`, which declares which tools are active, inactive, or unsupported on each OS.
 
 ## Contributing
 

@@ -1,0 +1,150 @@
+# Dotfiles configuration registry
+# Tracks which configurations are active per supported operating system.
+#
+# Status values:
+#   active      - Currently used and should be installed/synchronized.
+#   inactive    - Kept for reference but not currently used; do not install.
+#   unsupported - Not applicable for this OS.
+#
+# Install methods:
+#   stow  - Deploy with GNU Stow to ~/.config/<package> (default).
+#   link  - Symlink the package directory to the configured target.
+#   none  - Not installed automatically (e.g. wallpapers, docs).
+
+[meta]
+version = "1.0.0"
+supported_os = ["macos", "omarchy"]
+
+[aerospace]
+macos = "inactive"
+omarchy = "unsupported"
+method = "stow"
+description = "Tiling window manager for macOS"
+notes = "Replaced by amethyst; config kept for reference"
+
+[amethyst]
+macos = "active"
+omarchy = "unsupported"
+method = "stow"
+description = "Tiling window manager for macOS"
+notes = "Current window manager on macOS"
+
+[atuin]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Shell history sync and search"
+notes = ""
+
+[btop]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "System resource monitor"
+notes = ""
+
+[ghostty]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Terminal emulator"
+notes = ""
+
+[git-cliff]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Changelog generator"
+notes = ""
+
+[karabiner]
+macos = "active"
+omarchy = "unsupported"
+method = "stow"
+description = "Keyboard customizer for macOS"
+notes = ""
+
+[kitty]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "GPU-based terminal emulator"
+notes = ""
+
+[lazygit]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Terminal UI for git"
+notes = ""
+
+[lazysql]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Terminal SQL client"
+notes = ""
+
+[mise]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Dev tools version manager"
+notes = ""
+
+[nvim]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Neovim configuration"
+notes = ""
+
+[sketchybar]
+macos = "inactive"
+omarchy = "unsupported"
+method = "stow"
+description = "Custom macOS status bar"
+notes = "Not currently used; config kept for reference"
+
+[tmux]
+macos = "inactive"
+omarchy = "inactive"
+method = "stow"
+description = "Terminal multiplexer"
+notes = "No longer used; config kept for reference"
+
+[vim]
+macos = "inactive"
+omarchy = "inactive"
+method = "stow"
+description = "Legacy Vim configuration"
+notes = "Neovim is the active editor; config kept for reference"
+
+[wallpapers]
+macos = "active"
+omarchy = "active"
+method = "none"
+description = "Desktop wallpapers"
+notes = "Manual copy or set as desktop background"
+
+[wezterm]
+macos = "active"
+omarchy = "active"
+method = "stow"
+description = "Terminal emulator"
+notes = ""
+
+[zsh]
+macos = "active"
+omarchy = "active"
+method = "custom"
+description = "Zsh shell configuration"
+notes = "Handled separately by install scripts"
+
+[bin]
+macos = "active"
+omarchy = "active"
+method = "link"
+target = "$HOME/.local/bin"
+description = "Custom utility scripts"
+notes = ""

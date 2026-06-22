@@ -97,8 +97,7 @@ detect_omarchy() {
     echo -n "Continue anyway? [y/N]: "
     read -r response
     if [[ ! "$response" =~ ^[Yy]$ ]]; then
-      echo_info "Exiting. For other distributions, see:"
-      echo_info "  - Fedora: ./scripts/fedora.sh"
+      echo_info "Exiting. This script is designed for Omarchy Linux."
       exit 0
     fi
     return 1
@@ -628,6 +627,11 @@ run_step() {
       ;;
     7)
       backup_existing_configs
+      stow_active_configs "omarchy"
+      echo_info "Configuring git hooks..."
+      if [ -d "$DOTFILES_DIR/.git" ]; then
+        (cd "$DOTFILES_DIR" && git config core.hooksPath .githooks)
+      fi
       echo_info "Dotfiles integration complete"
       ;;
     *)
@@ -680,10 +684,10 @@ test_detection() {
   echo "Omarchy Detection Test Suite"
   echo "=============================================="
   echo ""
-  
+
   local passed=0
   local failed=0
-  
+
   # Test 1: Check is_omarchy function exists
   echo -n "Test 1: is_omarchy function exists... "
   if type is_omarchy &>/dev/null; then
@@ -693,7 +697,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 2: Check is_fedora function exists
   echo -n "Test 2: is_fedora function exists... "
   if type is_fedora &>/dev/null; then
@@ -703,7 +707,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 3: Check has_command utility works
   echo -n "Test 3: has_command utility... "
   if has_command bash && has_command sh; then
@@ -713,7 +717,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 4: Bash version check (need 4.0+)
   echo -n "Test 4: Bash version compatibility... "
   local bash_version="${BASH_VERSION%%.*}"
@@ -724,7 +728,7 @@ test_detection() {
     echo "FAILED (v$BASH_VERSION < 4.0)"
     ((failed++))
   fi
-  
+
   # Test 5: Detect current environment
   echo -n "Test 5: Current environment detection... "
   local env_type="unknown"
@@ -735,7 +739,7 @@ test_detection() {
   fi
   echo "PASSED (detected: $env_type)"
   ((passed++))
-  
+
   # Test 6: Check Omarchy constants are defined
   echo -n "Test 6: Omarchy constants defined... "
   if [ -n "$OMARCHY_CONFIG_DIR" ] && [ -n "$OMARCHY_VERSION_FILE" ]; then
@@ -745,7 +749,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 7: Check dotfiles directory
   echo -n "Test 7: Dotfiles directory accessible... "
   if [ -d "$DOTFILES_DIR" ]; then
@@ -755,7 +759,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 8: Check required commands available
   echo -n "Test 8: Required commands (curl, git, tar)... "
   if has_command curl && has_command git && has_command tar; then
@@ -765,11 +769,11 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 9: Validation of spec scenarios
   echo -n "Test 9: Spec scenario validation... "
   local spec_valid=true
-  
+
   # Check that is_omarchy handles missing os-release gracefully
   if [ ! -f /etc/os-release ] && ! is_omarchy 2>/dev/null; then
     spec_valid=true
@@ -779,7 +783,7 @@ test_detection() {
   else
     spec_valid=false
   fi
-  
+
   if [ "$spec_valid" = true ]; then
     echo "PASSED"
     ((passed++))
@@ -787,7 +791,7 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   # Test 10: Error handling test
   echo -n "Test 10: Error handling (invalid step)... "
   if ! run_step 999 2>/dev/null; then
@@ -797,12 +801,12 @@ test_detection() {
     echo "FAILED"
     ((failed++))
   fi
-  
+
   echo ""
   echo "=============================================="
   echo "Test Results: $passed passed, $failed failed"
   echo "=============================================="
-  
+
   return $failed
 }
 
@@ -810,12 +814,12 @@ test_detection() {
 # Usage: TEST_OMARCHY=1 ./omarchy.sh --test
 simulate_omarchy_env() {
   echo_info "Simulating Omarchy environment for testing..."
-  
+
   # Create mock Omarchy directories
   local mock_dir="/tmp/omarchy-test-$$"
   mkdir -p "$mock_dir/.omarchy"
   mkdir -p "$mock_dir/etc/omarchy"
-  
+
   # Create mock os-release file
   cat > "$mock_dir/etc/os-release" << 'EOF'
 ID=omarchy
@@ -823,7 +827,7 @@ NAME="Omarchy Linux"
 PRETTY_NAME="Omarchy Linux"
 VERSION_ID="1.0"
 EOF
-  
+
   echo "Created mock Omarchy environment at: $mock_dir"
   echo ""
   echo "To test detection with simulated environment:"
@@ -831,7 +835,7 @@ EOF
   echo "  2. Run: $0 --test"
   echo ""
   echo "To cleanup: rm -rf $mock_dir"
-  
+
   export TEST_OMARCHY_DIR="$mock_dir"
 }
 
@@ -841,10 +845,10 @@ validate_spec_compliance() {
   echo "Spec Compliance Validation"
   echo "=============================================="
   echo ""
-  
+
   local requirements_met=0
   local total_requirements=6
-  
+
   # Requirement 1: Multi-layer detection exists
   echo -n "[REQ-1] Multi-layer detection implemented... "
   if type is_omarchy &>/dev/null; then
@@ -860,7 +864,7 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   # Requirement 2: Non-destructive configuration
   echo -n "[REQ-2] Backup functionality exists... "
   if type backup_existing_configs &>/dev/null; then
@@ -869,7 +873,7 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   # Requirement 3: Skip backup option
   echo -n "[REQ-3] Skip backup flag supported... "
   if [ -n "$SKIP_BACKUP" ]; then
@@ -878,7 +882,7 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   # Requirement 4: Dry run mode
   echo -n "[REQ-4] Dry run mode supported... "
   if [ -n "$DRY_RUN" ]; then
@@ -887,7 +891,7 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   # Requirement 5: Error handling
   echo -n "[REQ-5] Error handling implemented... "
   if grep -q "echo_error" "$0" && grep -q "return 1" "$0"; then
@@ -896,7 +900,7 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   # Requirement 6: Interactive mode
   echo -n "[REQ-6] Interactive mode available... "
   if type run_interactive &>/dev/null && type show_menu &>/dev/null; then
@@ -905,12 +909,12 @@ validate_spec_compliance() {
   else
     echo "NOT MET"
   fi
-  
+
   echo ""
   echo "=============================================="
   echo "Requirements: $requirements_met/$total_requirements met"
   echo "=============================================="
-  
+
   if [ $requirements_met -eq $total_requirements ]; then
     echo "✓ All spec requirements validated successfully"
     return 0
@@ -926,10 +930,10 @@ run_edge_case_tests() {
   echo "Edge Case Testing"
   echo "=============================================="
   echo ""
-  
+
   local tests_passed=0
   local tests_failed=0
-  
+
   # Edge case 1: Empty selection
   echo -n "Edge 1: Empty menu selection... "
   local result
@@ -941,7 +945,7 @@ run_edge_case_tests() {
     echo "ISSUE"
     ((tests_failed++))
   fi
-  
+
   # Edge case 2: Invalid step number
   echo -n "Edge 2: Invalid step number (999)... "
   if ! run_step 999 2>/dev/null; then
@@ -951,7 +955,7 @@ run_edge_case_tests() {
     echo "ISSUE"
     ((tests_failed++))
   fi
-  
+
   # Edge case 3: Negative step number
   echo -n "Edge 3: Negative step number (-1)... "
   result=$(parse_selection "-1")
@@ -962,7 +966,7 @@ run_edge_case_tests() {
     echo "ISSUE"
     ((tests_failed++))
   fi
-  
+
   # Edge case 4: Range selection
   echo -n "Edge 4: Range selection (1-3)... "
   result=$(parse_selection "1-3")
@@ -973,7 +977,7 @@ run_edge_case_tests() {
     echo "ISSUE"
     ((tests_failed++))
   fi
-  
+
   # Edge case 5: Missing dotfiles directory
   echo -n "Edge 5: Missing dotfiles check... "
   if type ensure_dotfiles &>/dev/null; then
@@ -983,7 +987,7 @@ run_edge_case_tests() {
     echo "ISSUE"
     ((tests_failed++))
   fi
-  
+
   # Edge case 6: Bash version check
   echo -n "Edge 6: Bash version validation... "
   local bash_major="${BASH_VERSION%%.*}"
@@ -994,12 +998,12 @@ run_edge_case_tests() {
     echo "FAILED (v$BASH_VERSION < 4.0)"
     ((tests_failed++))
   fi
-  
+
   echo ""
   echo "=============================================="
   echo "Edge Cases: $tests_passed passed, $tests_failed failed"
   echo "=============================================="
-  
+
   return $tests_failed
 }
 
@@ -1010,22 +1014,22 @@ run_all_tests() {
   echo "#  Omarchy Installation Script Test Suite    #"
   echo "##############################################"
   echo ""
-  
+
   local total_exit=0
-  
+
   # Check for test mode flags
   if [ -n "$TEST_OMARCHY" ] || [ -n "$TEST_OMARCHY_DIR" ]; then
     simulate_omarchy_env
   fi
-  
+
   test_detection || total_exit=1
   echo ""
-  
+
   validate_spec_compliance || total_exit=1
   echo ""
-  
+
   run_edge_case_tests || total_exit=1
-  
+
   echo ""
   echo "##############################################"
   if [ $total_exit -eq 0 ]; then
@@ -1035,7 +1039,7 @@ run_all_tests() {
   fi
   echo "##############################################"
   echo ""
-  
+
   return $total_exit
 }
 
@@ -1170,7 +1174,7 @@ main() {
         ;;
     esac
   done
-  
+
   # Run test mode if requested
   if [ "$TEST_MODE" = true ]; then
     run_all_tests

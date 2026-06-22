@@ -8,73 +8,43 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 detect_os() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
-        echo "$ID"
+        if [ "$ID" = "omarchy" ]; then
+            echo "omarchy"
+        else
+            echo "unsupported"
+        fi
     elif [ "$(uname -s)" = "Darwin" ]; then
         echo "macos"
     else
-        echo "unknown"
-    fi
-}
-
-detect_version() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        echo "$VERSION_ID"
+        echo "unsupported"
     fi
 }
 
 main() {
-    local os=$(detect_os)
-    local version=$(detect_version)
+    local os
+    os=$(detect_os)
 
     echo "=============================================="
     echo "Dotfiles Installer"
     echo "=============================================="
     echo "Detected OS: $os"
-    echo "Version: $version"
     echo ""
 
     case "$os" in
-        fedora)
-            echo "Running Fedora installer..."
-            bash "$SCRIPT_DIR/scripts/fedora.sh" "$@"
-            ;;
         omarchy)
             echo "Running Omarchy installer..."
             bash "$SCRIPT_DIR/scripts/omarchy.sh" "$@"
             ;;
-        pop)
-            echo "Running Pop!_OS installer..."
-            bash "$SCRIPT_DIR/scripts/popos.sh" "$@"
-            ;;
-        ubuntu)
-            echo "Running Ubuntu installer..."
-            bash "$SCRIPT_DIR/scripts/ubuntu.sh" "$@"
-            exit 1
-            ;;
-        debian)
-            echo "Debian support coming soon!"
-            exit 1
-            ;;
-        arch)
-            echo "Arch support coming soon!"
-            exit 1
-            ;;
         macos)
-            echo "macOS support coming soon!"
-            exit 1
+            echo "Running macOS installer..."
+            bash "$SCRIPT_DIR/scripts/macos.sh" "$@"
             ;;
         *)
             echo "ERROR: Unsupported operating system: $os"
             echo ""
             echo "Supported systems:"
-            echo "  - Fedora (43+)"
-            echo "  - Pop!_OS"
+            echo "  - macOS"
             echo "  - Omarchy Linux"
-            echo "  - Ubuntu (coming soon)"
-            echo "  - Debian (coming soon)"
-            echo "  - Arch (coming soon)"
-            echo "  - macOS (coming soon)"
             exit 1
             ;;
     esac

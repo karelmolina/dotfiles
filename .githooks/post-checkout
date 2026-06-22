@@ -1,0 +1,89 @@
+#!/bin/bash
+# Post-merge hook: notify when deployed configs become inactive/unsupported.
+# This runs after `git pull` merges changes.
+
+set -e
+
+DOTFILES_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+source "$DOTFILES_DIR/scripts/common.sh"
+
+detect_os() {
+  if [ "$(uname -s)" = "Darwin" ]; then
+    echo "macos"
+  elif is_omarchy; then
+    echo "omarchy"
+  else
+    echo "unknown"
+  fi
+}
+
+# Determine the default deployment target for a package
+default_target_for() {
+  local pkg="$1"
+  case "$pkg" in
+    bin)
+      echo "$HOME/.local/bin"
+      ;;
+    zsh)
+      echo "$HOME/.zshrc"
+      ;;
+    *)
+      echo "$HOME/.config/$pkg"
+      ;;
+  esac
+}
+
+main() {
+  local os
+  os=$(detect_os)
+  if [ "$os" = "unknown" ]; then
+    exit 0
+  fi
+
+  echo ""
+  echo "[dotfiles] Checking configuration status after update..."
+
+  local warnings=()
+
+  while IFS= read -r pkg; do
+    [ -z "$pkg" ] && continue
+    [[ "$pkg" == "meta" ]] && continue
+
+    local status
+    status=$(registry_status "$pkg" "$os")
+
+    if [ "$status" = "inactive" ] || [ "$status" = "unsupported" ]; then
+      local target
+      target=$(registry_target "$pkg")
+      if [ -z "$target" ]; then
+        target=$(default_target_for "$pkg")
+      fi
+
+      # Expand $HOME in target path
+      target="${target/\$HOME/$HOME}"
+
+      if [ -L "$target" ]; then
+        local link_dest
+        link_dest=$(readlink "$target")
+        if [[ "$link_dest" == "$DOTFILES_DIR"* ]]; then
+          warnings+=("$pkg is marked '$status' for $os but still linked at $target")
+        fi
+      fi
+    fi
+  done < <(awk '/^\[.*\]$/ { gsub(/^\[|\]$/, ""); print }' "$DOTFILES_DIR/registry.toml")
+
+  if [ ${#warnings[@]} -gt 0 ]; then
+    echo ""
+    echo "⚠️  The following configs are no longer active/unsupported on $os but still deployed:"
+    for warning in "${warnings[@]}"; do
+      echo "   - $warning"
+    done
+    echo ""
+    echo "   Run './install' to re-sync active configs, or remove the links manually."
+    echo ""
+  else
+    echo "[dotfiles] All deployed configs match registry status."
+  fi
+}
+
+main "$@"

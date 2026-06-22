@@ -7,25 +7,29 @@ Guidelines for agentic coding agents working in this dotfiles repository.
 Personal dotfiles for:
 - **Neovim** (`nvim/`) - Lua-based config with Lazy plugin manager
 - **Vim** (`vim/`) - Legacy Vim config (Pathogen + Vundle)
-- **Tmux** (`tmux/`) - Terminal multiplexer config
+- **Tmux** (`tmux/`) - Terminal multiplexer config (inactive, kept for reference)
 - **Zsh** (`zsh/`) - Shell aliases and functions
 - **Terminal emulators** (`kitty/`, `wezterm/`, `ghostty/`) - Terminal configs
-- **Dev tools** (`mise/`, `btop/`, `lazygit/`, `atuin/`) - Tool configs
+- **Dev tools** (`mise/`, `btop/`, `lazygit/`, `lazysql/`, `atuin/`, `git-cliff/`) - Tool configs
 - **macOS tools** (`aerospace/`, `amethyst/`, `karabiner/`, `sketchybar/`) - macOS-specific configs
-- **Utils** (`utils/`) - Utility scripts and templates
+- **Utils** (`utils/`, `bin/`) - Utility scripts and templates
 - **Wallpapers** (`wallpapers/`) - Desktop backgrounds
+- **Registry** (`registry.toml`) - Active/inactive/unsupported status per OS
 
 ## Build/Lint/Test Commands
 
 ### Installation
 ```bash
-./install                    # Run main installation script
+./install                    # Run main installation script (macOS or Omarchy)
 
 # Or stow individual packages to ~/.config/<package>
 cd ~/dotfiles && stow --target="$HOME/.config/nvim" nvim
 cd ~/dotfiles && stow --target="$HOME/.config/kitty" kitty
 cd ~/dotfiles && stow --target="$HOME/.config/tmux" tmux
 ```
+
+The installer reads `registry.toml` to determine which configurations are active for
+the detected operating system. Only `macos` and `omarchy` are supported.
 
 ### Neovim/Lua
 ```bash
@@ -47,11 +51,14 @@ nvim --headless "+Lazy update" +qa
 ```bash
 # Syntax checks
 bash -n install
+bash -n scripts/common.sh
+bash -n scripts/macos.sh
+bash -n scripts/omarchy.sh
 zsh -n zsh/aliases.zsh
 zsh -n zsh/functions.zsh
 
 # Lint (if shellcheck available)
-shellcheck install zsh/aliases.zsh 2>/dev/null || true
+shellcheck install scripts/common.sh scripts/macos.sh 2>/dev/null || true
 
 # Test shell function
 source zsh/aliases.zsh && which y
@@ -161,6 +168,31 @@ require("lazy").setup({
 - Set the `theme` environment variable to switch: `theme=kanagawa nvim` or `theme=tokyonight nvim`
 - Available themes: `cyberdream`, `kanagawa`, `tokyonight`
 
+### Dotfiles Registry (`registry.toml`)
+
+`registry.toml` is the source of truth for which configurations are active per OS.
+
+**Status values:**
+- `active` - Currently used and synchronized by the installer
+- `inactive` - Kept in the repo for reference but not deployed
+- `unsupported` - Not applicable for the OS
+
+**Install methods:**
+- `stow` (default) - Deploy with GNU Stow to `~/.config/<package>`
+- `link` - Symlink the package directory to a configured `target`
+- `custom` - Handled by OS-specific install logic (e.g. `zsh`)
+- `none` - Not installed automatically (e.g. `wallpapers`)
+
+**Example:**
+```toml
+[amethyst]
+macos = "active"
+omarchy = "unsupported"
+method = "stow"
+description = "Tiling window manager for macOS"
+notes = "Current window manager on macOS"
+```
+
 ## Testing Single Components
 
 ### Test full config load
@@ -184,7 +216,9 @@ nvim --headless -u nvim/init.lua -c "lua print(require('plugins.treesitter'))" +
 
 - **Personal repo**: Respect existing preferences
 - **Symbolic links**: Configs deployed via GNU Stow (`~/.config/nvim/init.lua` → `~/dotfiles/nvim/init.lua`)
-- **Stow target**: repo keeps a flat package layout (`nvim/init.lua`); `scripts/common.sh` stows each package to `$HOME/.config/<package>`
+- **Stow target**: repo keeps a flat package layout (`nvim/init.lua`); `scripts/common.sh` stows each active package to `$HOME/.config/<package>` based on `registry.toml`
+- **Registry**: `registry.toml` is the source of truth for which configs are active on `macos` and `omarchy`
+- **Git hooks**: `.githooks/post-merge` and `.githooks/post-checkout` notify you when a deployed config becomes inactive or unsupported
 - **Compatibility**: Both Vim and Neovim configs maintained
 - **No hardcoded paths**: Use `vim.fn.stdpath()` or env vars
 - **Backup before changes**: Test in subshell first
@@ -195,3 +229,4 @@ nvim --headless -u nvim/init.lua -c "lua print(require('plugins.treesitter'))" +
 - Don't modify plugin configs without testing
 - Keep `.stylua.toml` in sync with indentation settings
 - Update `install` script when adding new dependencies
+- Update `registry.toml` when adding, removing, or changing the active status of a config
