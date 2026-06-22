@@ -2,3 +2,5 @@
 go = "latest"
 node = "20"
 shellcheck = "latest"
+ruby = "3"
+lua = "5.1"
