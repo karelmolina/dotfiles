@@ -4,6 +4,9 @@ if not status then
 end
 
 rosepine.setup({
+  styles = {
+    transparency = true,
+  },
   highlight_groups = {
     TelescopeBorder = { fg = "highlight_high", bg = "none" },
     TelescopeNormal = { bg = "none" },
@@ -16,5 +19,5 @@ rosepine.setup({
   },
   groups = {
     git_untracked = "#55FF1E",
-  }
+  },
 })
