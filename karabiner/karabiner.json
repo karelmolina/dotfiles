@@ -3,6 +3,61 @@
     {
       "name": "Default profile",
       "selected": true,
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "caps_lock to left_option + left_control",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": { "key_code": "caps_lock" },
+                "to": [
+                  {
+                    "key_code": "left_option",
+                    "modifiers": ["left_control"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Swap command and option on external keyboards",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": { "key_code": "left_command" },
+                "to": [{ "key_code": "left_option" }],
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [
+                      { "is_built_in_keyboard": true }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": { "key_code": "left_option" },
+                "to": [{ "key_code": "left_command" }],
+                "conditions": [
+                  {
+                    "type": "device_unless",
+                    "identifiers": [
+                      { "is_built_in_keyboard": true }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+    },
+    {
+      "name": "Caps only",
+      "selected": false,
       "simple_modifications": [
         {
           "from": { "key_code": "caps_lock" },
@@ -18,4 +73,3 @@
     }
   ]
 }
-
