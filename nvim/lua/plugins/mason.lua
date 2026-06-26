@@ -26,6 +26,7 @@ return {
         "gopls",
         "intelephense",
         "ruby-lsp",
+        "bash-language-server",
 
         -- Formatters
         "stylua",
