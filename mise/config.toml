@@ -1,6 +1,8 @@
 [tools]
 go = "latest"
-node = "20"
+node = "22"
 shellcheck = "latest"
 ruby = "3"
 lua = "5.1"
+sqlite = "latest"
+java = "latest"
