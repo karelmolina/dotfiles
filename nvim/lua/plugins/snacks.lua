@@ -14,6 +14,7 @@ return {
           { section = "startup" },
         },
       },
+      image = { enabled = true },
       explorer = { enabled = false },
       indent = { enabled = false },
       input = { enabled = true },
